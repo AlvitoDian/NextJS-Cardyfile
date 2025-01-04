@@ -3,14 +3,14 @@
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image"; /* 
-import Avatar from "@/components/Avatar";
+import Image from "next/image";
+import Avatar from "@/components/Avatar"; /* 
 import Sidebar from "./Sidebar"; */
 
 export default function Navbar() {
   /*   const { data: session } = useSession() as any; */
 
-  const [session, setSession] = useState(false);
+  const [session, setSession] = useState(true);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -38,13 +38,16 @@ export default function Navbar() {
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <Image src="/logo.png" alt="Nimbrunk Logo" width={30} height={30} />
-          <span className="self-center text-2xl font-bold whitespace-nowrap text-[#6F3EFC]">
-            Nimbrunk
-          </span>
+          <Image
+            src="/assets/images/logo.png"
+            alt="Nimbrunk Logo"
+            width={150}
+            height={150}
+          />
         </Link>
+
         {/* Mobile Menu */}
-        {/*  <button
+        <button
           type="button"
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden"
           onClick={toggleSidebar}
@@ -74,12 +77,7 @@ export default function Navbar() {
             ></span>
           </div>
         </button>
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          session={session}
-          handleLogout={handleLogout}
-        /> */}
+
         {/* Mobile Menu End */}
 
         <div className="hidden w-full lg:flex md:w-auto" id="navbar-default">
@@ -96,15 +94,6 @@ export default function Navbar() {
 
             {session ? (
               <>
-                <li>
-                  <Link
-                    href="/direct-message"
-                    className="block py-2 px-3 rounded md:bg-transparent md:p-0 "
-                    aria-current="page"
-                  >
-                    Pesan Pribadi
-                  </Link>
-                </li>
                 <li
                   className="relative"
                   onMouseEnter={handleDropdownOpen}
@@ -114,9 +103,15 @@ export default function Navbar() {
                     id="dropdownNavbarLink"
                     className="flex items-center justify-between w-full py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:w-auto "
                   >
-                    {session.user.username}
+                    {/*        {session.user.username} */}
+                    Abigail
                     <div className="ml-2.5">
-                      <Avatar image={session.user.profileImage} />
+                      {/*           <Avatar image={session.user.profileImage} /> */}
+                      <Avatar
+                        image={
+                          "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
+                        }
+                      />
                     </div>
                     <svg
                       className={`w-2.5 h-2.5 ms-2.5 ${
@@ -148,7 +143,7 @@ export default function Navbar() {
                       className="py-2 text-sm text-gray-700   "
                       aria-labelledby="dropdownLargeButton"
                     >
-                      {session.user.roles.includes("ADMIN") && (
+                      {/*  {session.user.roles.includes("ADMIN") && (
                         <li>
                           <Link
                             href="/admin"
@@ -157,10 +152,11 @@ export default function Navbar() {
                             Admin Page
                           </Link>
                         </li>
-                      )}
+                      )} */}
                       <li>
                         <Link
-                          href={`/user/edit/${session.user.id}`}
+                          /*    href={`/user/edit/${session.user.id}`} */
+                          href={`#`}
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Atur Profil
@@ -183,7 +179,7 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/auth/register"
-                    className="text-white bg-[#6F3EFC] border-[2px] border-[#6F3EFC] rounded-full text-sm px-4 py-[7px] text-center -mr-5"
+                    className="text-white bg-[#e44b37] border-[2px] border-[#e44b37] rounded-full text-sm px-4 py-[7px] text-center -mr-5"
                     aria-current="page"
                   >
                     Daftar
@@ -192,7 +188,7 @@ export default function Navbar() {
                 <li>
                   <Link
                     href="/auth/login"
-                    className="text-[#6F3EFC] hover:text-white bg-white hover:bg-[#6F3EFC] rounded-full border-[2px] border-[#6F3EFC] text-sm px-4 py-[7px] text-center transition-all duration-500"
+                    className="text-[#e44b37] hover:text-white bg-white hover:bg-[#e44b37] rounded-full border-[2px] border-[#e44b37] text-sm px-4 py-[7px] text-center transition-all duration-500"
                     aria-current="page"
                   >
                     Masuk
