@@ -43,7 +43,7 @@ export default function CardPreview({
   };
   return (
     <div
-      className={`w-[320px] h-[640px] rounded-3xl shadow-lg relative overflow-hidden`}
+      className={`w-[320px] h-[640px] rounded-3xl shadow-lg relative overflow-hidden select-none`}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
