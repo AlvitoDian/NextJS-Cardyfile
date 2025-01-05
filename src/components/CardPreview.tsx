@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import SocialMediaIcon from "./SocialMediaIcon";
 import MenuInCard from "./MenuInCard";
 import { useState } from "react";
 
 export default function CardPreview({
+  backgroundColor,
   username,
   description,
   profileImage,
@@ -40,17 +43,22 @@ export default function CardPreview({
   };
   return (
     <div
-      className="w-[320px] h-[640px] bg-white rounded-3xl shadow-lg relative overflow-hidden"
+      className={`w-[320px] h-[640px] rounded-3xl shadow-lg relative overflow-hidden`}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
+      style={{ backgroundColor: backgroundColor }}
     >
       <div className="flex justify-center">
         {/* Banner Section */}
         <div className="absolute top-0 left-0 w-full flex justify-center ">
           <Image
-            src={bannerImage}
+            src={
+              bannerImage
+                ? bannerImage
+                : "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1724570906/banner1_hmwcva.png"
+            }
             alt="Profile Banner"
             className="w-[900px] h-[150px] object-cover"
             width={100}
@@ -65,7 +73,11 @@ export default function CardPreview({
             {/* Profile Image */}
             <Image
               className="w-[90px] h-[90px] rounded-full z-10"
-              src={profileImage}
+              src={
+                profileImage
+                  ? profileImage
+                  : "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
+              }
               alt="Rounded avatar"
               width={100}
               height={100}
