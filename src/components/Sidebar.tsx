@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Gauge, SquareChartGantt } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { CreditCard } from "lucide-react";
 
 const menuItems = [
   {
@@ -16,6 +18,16 @@ const menuItems = [
     label: "Manage Card",
     icon: <SquareChartGantt color="#E44B37" strokeWidth={2.25} size={20} />,
     subItems: [{ label: "Card", href: "/dashboard/manage-card" }],
+  },
+  {
+    id: "subscription",
+    label: "Subscription",
+    icon: <CreditCard color="#E44B37" strokeWidth={2.25} size={20} />,
+    subItems: [
+      { label: "Plans", href: "/dashboard/subscription/plans" },
+      { label: "Billing", href: "/dashboard/subscription/billing" },
+      { label: "History", href: "/dashboard/subscription/history" },
+    ],
   },
 ];
 
@@ -35,6 +47,14 @@ export default function Sidebar() {
       className="fixed top-[70px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
       aria-label="Sidebar"
     >
+      <div className="flex items-center justify-center mt-[20px] mb-[10px]">
+        <Image
+          src="/assets/images/logo.png"
+          alt="Nimbrunk Logo"
+          width={150}
+          height={150}
+        />
+      </div>
       <div className="h-full px-3 py-4 overflow-y-auto bg-white text-sm">
         <ul className="space-y-2 font-medium">
           {menuItems.map((item) => (
@@ -42,7 +62,7 @@ export default function Sidebar() {
               {item.subItems ? (
                 <button
                   type="button"
-                  className="flex items-center w-full p-2 text-[#67748e] transition duration-75 rounded-lg group hover:bg-gray-100"
+                  className="flex items-center w-full p-2 text-[#67748e] transition-all duration-300 rounded-lg group hover:bg-gray-100"
                   onClick={() => toggleDropdown(item.id)}
                 >
                   {item.icon}
@@ -86,7 +106,7 @@ export default function Sidebar() {
                     <li key={index}>
                       <Link
                         href={subItem.href}
-                        className="flex items-center w-full p-2 text-[#67748e] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                        className="flex items-center w-full p-2 text-[#67748e] transition-all duration-300 rounded-lg pl-11 group hover:bg-gray-100"
                       >
                         {subItem.label}
                       </Link>

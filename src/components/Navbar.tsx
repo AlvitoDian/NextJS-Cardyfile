@@ -38,12 +38,12 @@ export default function Navbar() {
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <Image
+          {/*  <Image
             src="/assets/images/logo.png"
             alt="Nimbrunk Logo"
             width={150}
             height={150}
-          />
+          /> */}
         </Link>
 
         {/* Mobile Menu */}

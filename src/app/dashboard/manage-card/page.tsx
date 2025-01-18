@@ -5,6 +5,7 @@ import CardPreview from "@/components/CardPreview";
 import CardFormInput from "@/components/CardFormInput";
 import ModalAddField from "@/components/ModalAddField";
 import { getFormFields } from "@/utils/cardFormFields";
+import { NotepadText, Plus, Trash2 } from "lucide-react";
 
 export default function ManageCard() {
   const [cardData, setCardData] = useState({
@@ -56,10 +57,11 @@ export default function ManageCard() {
   };
 
   const handleCardDataChange = (field, value) => {
-    setCardData((prevData) => ({ ...prevData, [field]: value.value }));
+    setCardData((prevData) => ({ ...prevData, [field]: value }));
   };
 
   const handleCardFileImgChange = (field: string, file: File | null) => {
+    console.log(file, "file");
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -69,6 +71,11 @@ export default function ManageCard() {
         }));
       };
       reader.readAsDataURL(file);
+    } else {
+      setCardData((prevData) => ({
+        ...prevData,
+        [field]: "",
+      }));
     }
   };
 
@@ -80,7 +87,7 @@ export default function ManageCard() {
   ) => {
     setCardData((prevData) => {
       const updatedItems = [...prevData[type]];
-      updatedItems[index][key] = value.value;
+      updatedItems[index][key] = value;
       return { ...prevData, [type]: updatedItems };
     });
   };
@@ -96,12 +103,23 @@ export default function ManageCard() {
     }));
   };
 
-  const removeItem = (type: "menu" | "socialMedia", index) => {
-    setCardData((prevData) => ({
-      ...prevData,
-      [type]: prevData[type].filter((_, i) => i !== index),
-    }));
+  const removeItem = (type: "menu" | "socialMedia", index: number) => {
+    setCardData((prevData) => {
+      const newData = {
+        ...prevData,
+        [type]: prevData[type].filter((_, i) => i !== index),
+      };
+
+      if (newData[type].length === 0) {
+        setCurrentFields((prevFields) =>
+          prevFields.filter((field) => field.id !== type)
+        );
+      }
+
+      return newData;
+    });
   };
+
   const [currentFields, setCurrentFields] = useState([
     { id: "username" },
     { id: "description" },
@@ -117,14 +135,17 @@ export default function ManageCard() {
     removeItem
   );
 
+  console.log(cardData, "cardData");
+
   return (
     <div className="p-4 sm:ml-64">
       <div className="flex">
-        <div className="w-1/2 p-4 bg-blue-100">
+        <div className="w-1/2 p-4 bg-white">
           <button
             onClick={handleAddModal}
-            className="mt-2 p-2 bg-green-500 text-white"
+            className="mt-2 px-[15px] py-[6px] text-sm font-semibold bg-[#E44B37] text-white rounded-[8px] mb-[16px] flex items-center gap-[5px]"
           >
+            <NotepadText size={16} />
             Add Field
           </button>
 
@@ -139,10 +160,21 @@ export default function ManageCard() {
             .map((field, index) => {
               if (field.type === "array") {
                 return (
-                  <div key={index} className="mb-4">
-                    <h3 className="font-semibold text-lg">{field.label}</h3>
+                  <div key={index} className="mb-4 ">
+                    <div className="flex items-center gap-[10px] pb-[7px]">
+                      <h3 className="text-[#333333] font-semibold">
+                        {field.label}
+                      </h3>
+                      <button
+                        onClick={field.addItem}
+                        className="px-[10px] py-[4px] font-semibold bg-[#E44B37] text-white rounded-[8px] text-xs flex items-center gap-[3px]"
+                      >
+                        <Plus size={15} />
+                        Add
+                      </button>
+                    </div>
                     {field.value.map((item, idx) => (
-                      <div key={idx} className="flex gap-2 mb-2">
+                      <div key={idx} className="flex gap-2 mb-2 items-center">
                         {field.keys.map((key, i) => (
                           <CardFormInput
                             key={i}
@@ -158,18 +190,12 @@ export default function ManageCard() {
                         ))}
                         <button
                           onClick={() => field.removeItem(field.id, idx)}
-                          className="self-center text-red-500"
+                          className="self-center text-red-500 pt-[10px]"
                         >
-                          Remove
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))}
-                    <button
-                      onClick={field.addItem}
-                      className="mt-2 p-2 bg-green-500 text-white"
-                    >
-                      Add {field.label}
-                    </button>
                   </div>
                 );
               }
@@ -187,7 +213,7 @@ export default function ManageCard() {
             })}
         </div>
 
-        <div className="w-1/2 p-4 bg-green-100 flex justify-center">
+        <div className="w-1/2 p-4 bg-white flex justify-center">
           <CardPreview
             backgroundColor={cardData.backgroundColor}
             username={cardData.username}
