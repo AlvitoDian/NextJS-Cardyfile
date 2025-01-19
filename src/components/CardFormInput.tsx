@@ -2,7 +2,14 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Image as LucideImage } from "lucide-react";
+import {
+  Image as LucideImage,
+  Contact,
+  AlignLeft,
+  MessageSquare,
+  PaintBucket,
+  Logs,
+} from "lucide-react";
 import { X } from "lucide-react";
 import Select from "react-select";
 
@@ -13,6 +20,7 @@ export default function CardFormInput({
   value,
   onChange,
   options = [],
+  icon: Icon,
 }) {
   const profileInput = useRef<HTMLInputElement | null>(null);
   const bannerInput = useRef<HTMLInputElement | null>(null);
@@ -20,6 +28,38 @@ export default function CardFormInput({
   const [profilePreview, setProfilePreview] = useState("");
   const [bannerPreview, setBannerPreview] = useState("");
 
+  const renderIcon =
+    id === "username" ? (
+      <div className="icon-container">
+        <Contact size={14} color="#333333" />
+      </div>
+    ) : id === "description" ? (
+      <div className="icon-container">
+        <AlignLeft size={14} color="#333333" />
+      </div>
+    ) : id === "profileImage" ? (
+      <div className="icon-container">
+        <LucideImage size={14} color="#333333" />
+      </div>
+    ) : id === "bannerImage" ? (
+      <div className="icon-container">
+        <LucideImage size={14} color="#333333" />
+      </div>
+    ) : id === "socialMedia" ? (
+      <div className="icon-container">
+        <MessageSquare size={14} color="#333333" />
+      </div>
+    ) : id === "menu" ? (
+      <div className="icon-container">
+        <Logs size={14} color="#333333" />
+      </div>
+    ) : id === "bgColor" ? (
+      <div className="icon-container">
+        <PaintBucket size={14} color="#333333" />
+      </div>
+    ) : Icon ? (
+      <div className="icon-container">{<Icon />}</div>
+    ) : null;
   const dropdownStyle = {
     control: (provided, state) => ({
       ...provided,
@@ -109,12 +149,15 @@ export default function CardFormInput({
 
     return (
       <div className="mb-4 flex flex-col gap-[8px] text-sm">
-        <label
-          htmlFor={id}
-          className={`text-[#333333] font-semibold ${labelClass}`}
-        >
-          {label}
-        </label>
+        <div className="flex items-center gap-[5px]">
+          {renderIcon}
+          <label
+            htmlFor={id}
+            className={`text-[#333333] font-semibold ${labelClass}`}
+          >
+            {label}
+          </label>
+        </div>
         <Select
           id={id}
           value={selectOption.find((option) => option.value === value)}
@@ -131,9 +174,12 @@ export default function CardFormInput({
   if (type === "textarea") {
     return (
       <div className="mb-4 flex flex-col gap-[8px] text-sm">
-        <label htmlFor={id} className="text-[#333333] font-semibold">
-          {label}
-        </label>
+        <div className="flex items-center gap-[5px]">
+          {renderIcon}
+          <label htmlFor={id} className="text-[#333333] font-semibold">
+            {label}
+          </label>
+        </div>
         <textarea
           id={id}
           value={value}
@@ -147,9 +193,12 @@ export default function CardFormInput({
   if (type === "color") {
     return (
       <div className="mb-4 flex flex-col gap-[8px] text-sm">
-        <label htmlFor={id} className="text-[#333333] font-semibold ">
-          {label}
-        </label>
+        <div className="flex items-center gap-[5px]">
+          {renderIcon}
+          <label htmlFor={id} className="text-[#333333] font-semibold ">
+            {label}
+          </label>
+        </div>
         <input
           type={type}
           id={id}
@@ -165,9 +214,12 @@ export default function CardFormInput({
   if (type === "file" && id === "profileImage") {
     return (
       <div className="mb-4 flex flex-col gap-[8px] text-sm">
-        <label htmlFor={id} className="text-[#333333] font-semibold">
-          {label}
-        </label>
+        <div className="flex items-center gap-[5px]">
+          {renderIcon}
+          <label htmlFor={id} className="text-[#333333] font-semibold">
+            {label}
+          </label>
+        </div>
 
         <input
           type="file"
@@ -216,9 +268,12 @@ export default function CardFormInput({
   if (type === "file" && id === "bannerImage") {
     return (
       <div className="mb-4 flex flex-col gap-[8px] text-sm">
-        <label htmlFor={id} className="text-[#333333] font-semibold">
-          {label}
-        </label>
+        <div className="flex items-center gap-[5px]">
+          {renderIcon}
+          <label htmlFor={id} className="text-[#333333] font-semibold">
+            {label}
+          </label>
+        </div>
 
         <input
           type="file"
@@ -266,14 +321,17 @@ export default function CardFormInput({
 
   return (
     <div className="mb-4 flex flex-col gap-[8px] text-sm">
-      <label
-        htmlFor={id}
-        className={`text-[#333333] font-semibold ${
-          id.includes("_") ? "opacity-60 text-xs" : ""
-        }`}
-      >
-        {label}
-      </label>
+      <div className="flex items-center gap-[5px]">
+        {renderIcon}
+        <label
+          htmlFor={id}
+          className={`text-[#333333] font-semibold ${
+            id.includes("_") ? "opacity-60 text-xs" : ""
+          }`}
+        >
+          {label}
+        </label>
+      </div>
       <input
         type={type}
         id={id}
