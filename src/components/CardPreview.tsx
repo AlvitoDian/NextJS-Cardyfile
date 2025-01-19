@@ -43,12 +43,15 @@ export default function CardPreview({
   };
   return (
     <div
-      className={`w-[320px] h-[640px] rounded-3xl shadow-lg relative overflow-hidden select-none`}
+      className={`w-[320px] h-[640px] rounded-3xl relative overflow-hidden select-none backdrop-blur-sm shadow-xl`}
       onMouseDown={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
-      style={{ backgroundColor: backgroundColor }}
+      style={{
+        backgroundColor: backgroundColor,
+        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+      }}
     >
       <div className="flex justify-center">
         {/* Banner Section */}
@@ -123,8 +126,8 @@ export default function CardPreview({
 
           {/* Footer Section */}
           <span className="text-center mt-6 text-[#67748e] text-sm px-2 font-normal">
-            Made with{" "}
-            <span className="text-[#E44B37] font-semibold">Cardyfile</span>
+            Made with
+            <span className="text-[#E44B37] font-semibold"> Cardyfile</span>
           </span>
           {/* Footer Section End */}
         </div>

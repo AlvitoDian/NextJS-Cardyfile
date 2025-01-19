@@ -46,6 +46,7 @@ export default function Sidebar() {
       id="sidebar-multi-level-sidebar"
       className="fixed top-[70px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
       aria-label="Sidebar"
+      style={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 25px 50px -12px" }}
     >
       <div className="flex items-center justify-center mt-[20px] mb-[10px]">
         <Image
@@ -55,7 +56,7 @@ export default function Sidebar() {
           height={150}
         />
       </div>
-      <div className="h-full px-3 py-4 overflow-y-auto bg-white text-sm">
+      <div className="h-full px-3 py-4 overflow-y-auto bg-white text-sm shadow-sm">
         <ul className="space-y-2 font-medium">
           {menuItems.map((item) => (
             <li key={item.id}>

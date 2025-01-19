@@ -6,8 +6,14 @@ import CardFormInput from "@/components/CardFormInput";
 import ModalAddField from "@/components/ModalAddField";
 import { getFormFields } from "@/utils/cardFormFields";
 import { NotepadText, Plus, Trash2 } from "lucide-react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export default function ManageCard() {
+  const breadcrumb = [
+    { label: "Home", href: "/" },
+    { label: "Manage Card", href: "/dashboard/manage-card" },
+  ];
+
   const [cardData, setCardData] = useState({
     backgroundColor: "#ffffff",
     username: "Leikha Mandasari",
@@ -138,82 +144,111 @@ export default function ManageCard() {
   console.log(cardData, "cardData");
 
   return (
-    <div className="p-4 sm:ml-64">
+    <div className="p-6 sm:ml-64">
+      <Breadcrumb breadcrumb={breadcrumb} title={"Sunting Card"} />
       <div className="flex">
-        <div className="w-1/2 p-4 bg-white">
+        <div className="w-1/2 p-[10px] bg-white">
           <button
             onClick={handleAddModal}
-            className="mt-2 px-[15px] py-[6px] text-sm font-semibold bg-[#E44B37] text-white rounded-[8px] mb-[16px] flex items-center gap-[5px]"
+            className="mt-2 px-[15px] py-[6px] text-sm font-semibold bg-gradient-to-r from-[#E44B37] to-pink-500 text-white rounded-[8px] mb-[16px] flex items-center gap-[5px]"
           >
             <NotepadText size={16} />
             Add Field
           </button>
 
-          {isModalAddOpen && (
-            <ModalAddField onClose={handleCloseModal} onAdd={handleAddField} />
-          )}
-
-          {formFields
-            .filter((field) =>
-              currentFields.some((currentField) => currentField.id === field.id)
-            )
-            .map((field, index) => {
-              if (field.type === "array") {
-                return (
-                  <div key={index} className="mb-4 ">
-                    <div className="flex items-center gap-[10px] pb-[7px]">
-                      <h3 className="text-[#333333] font-semibold">
-                        {field.label}
-                      </h3>
-                      <button
-                        onClick={field.addItem}
-                        className="px-[10px] py-[4px] font-semibold bg-[#E44B37] text-white rounded-[8px] text-xs flex items-center gap-[3px]"
-                      >
-                        <Plus size={15} />
-                        Add
-                      </button>
-                    </div>
-                    {field.value.map((item, idx) => (
-                      <div key={idx} className="flex gap-2 mb-2 items-center">
-                        {field.keys.map((key, i) => (
-                          <CardFormInput
-                            key={i}
-                            label={key.charAt(0).toUpperCase() + key.slice(1)}
-                            id={`${field.id}_${key}_${idx}`}
-                            type={key === "platform" ? "select" : "text"}
-                            value={item[key]}
-                            onChange={(value: string) =>
-                              field.onChange(value, idx, key)
-                            }
-                            options={key === "platform" ? platforms : undefined}
-                          />
+          <div
+            className="bg-white rounded-xl p-6"
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px",
+            }}
+          >
+            {isModalAddOpen && (
+              <ModalAddField
+                onClose={handleCloseModal}
+                onAdd={handleAddField}
+              />
+            )}
+            <div className="grid grid-cols-1 gap-[5px]">
+              {formFields
+                .filter((field) =>
+                  currentFields.some(
+                    (currentField) => currentField.id === field.id
+                  )
+                )
+                .map((field, index) => {
+                  if (field.type === "array") {
+                    return (
+                      <div key={index} className="mb-4 ">
+                        <div className="flex items-center gap-[10px] pb-[7px]">
+                          <h3 className="text-[#333333] font-semibold">
+                            {field.label}
+                          </h3>
+                          <button
+                            onClick={field.addItem}
+                            className="px-[10px] py-[4px] font-semibold bg-[#E44B37] text-white rounded-[8px] text-xs flex items-center gap-[3px]"
+                          >
+                            <Plus size={15} />
+                            Add
+                          </button>
+                        </div>
+                        {field.value.map((item, idx) => (
+                          <div
+                            key={idx}
+                            className="flex gap-2 mb-2 items-center"
+                          >
+                            {field.keys.map((key, i) => (
+                              <CardFormInput
+                                key={i}
+                                label={
+                                  key.charAt(0).toUpperCase() + key.slice(1)
+                                }
+                                id={`${field.id}_${key}_${idx}`}
+                                type={key === "platform" ? "select" : "text"}
+                                value={item[key]}
+                                onChange={(value: string) =>
+                                  field.onChange(value, idx, key)
+                                }
+                                options={
+                                  key === "platform" ? platforms : undefined
+                                }
+                              />
+                            ))}
+                            <button
+                              onClick={() => field.removeItem(field.id, idx)}
+                              className="self-center text-red-500 pt-[10px]"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         ))}
-                        <button
-                          onClick={() => field.removeItem(field.id, idx)}
-                          className="self-center text-red-500 pt-[10px]"
-                        >
-                          <Trash2 size={16} />
-                        </button>
                       </div>
-                    ))}
-                  </div>
-                );
-              }
-              return (
-                <CardFormInput
-                  key={index}
-                  label={field.label}
-                  id={field.id}
-                  type={field.type}
-                  value={field.value}
-                  onChange={field.onChange}
-                  options={field.type === "select" ? platforms : undefined}
-                />
-              );
-            })}
+                    );
+                  }
+                  return (
+                    <CardFormInput
+                      key={index}
+                      label={field.label}
+                      id={field.id}
+                      type={field.type}
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={field.type === "select" ? platforms : undefined}
+                    />
+                  );
+                })}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full px-[15px] py-[6px] bg-gradient-to-r from-[#E44B37] to-pink-500 text-white rounded-[8px] hover:opacity-90 transition-opacity font-semibold"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
 
-        <div className="w-1/2 p-4 bg-white flex justify-center">
+        <div className="w-1/2 bg-white flex justify-center">
           <CardPreview
             backgroundColor={cardData.backgroundColor}
             username={cardData.username}

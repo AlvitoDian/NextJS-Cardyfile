@@ -35,13 +35,6 @@ export const getFormFields = (
     onChange: (value) => handleCardFileImgChange("bannerImage", value),
   },
   {
-    label: "Background Color",
-    id: "bgColor",
-    type: "color",
-    value: cardData.backgroundColor,
-    onChange: (value) => handleCardDataChange("backgroundColor", value),
-  },
-  {
     label: "Menu Items",
     id: "menu",
     type: "array",
@@ -62,5 +55,12 @@ export const getFormFields = (
     addItem: () => addItem("socialMedia"),
     removeItem: removeItem,
     keys: ["platform", "href"],
+  },
+  {
+    label: "Background Color",
+    id: "bgColor",
+    type: "color",
+    value: cardData.backgroundColor,
+    onChange: (value) => handleCardDataChange("backgroundColor", value),
   },
 ];

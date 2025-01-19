@@ -32,7 +32,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-[#e6defc] border-b-[1px] sticky top-0 z-[999]">
+    <nav className="bg-white border-[#f7eae9] border-b-[1px] sticky top-0 z-[999]">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           href="/"

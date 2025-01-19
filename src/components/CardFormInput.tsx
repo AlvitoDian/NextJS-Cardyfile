@@ -20,6 +20,37 @@ export default function CardFormInput({
   const [profilePreview, setProfilePreview] = useState("");
   const [bannerPreview, setBannerPreview] = useState("");
 
+  const dropdownStyle = {
+    control: (provided, state) => ({
+      ...provided,
+      boxShadow: state.isFocused ? "0 0 8px rgba(228, 75, 55, 0.3)" : "none",
+      borderColor: state.isFocused ? "#E44B37" : provided.borderColor,
+      borderRadius: "8px",
+      "&:hover": {
+        borderColor: "#E44B37",
+      },
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused
+        ? "#E44B37"
+        : state.isSelected
+        ? "#FBC5B4"
+        : "white",
+      color: state.isFocused || state.isSelected ? "white" : "#333",
+      boxShadow: state.isFocused ? "0 0 8px rgba(228, 75, 55, 0.3)" : "none",
+      "&:active": {
+        backgroundColor: "#F78E7F",
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      boxShadow:
+        "0 0 8px rgba(228, 75, 55, 0.3), rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+      borderRadius: "8px",
+    }),
+  };
+
   const handleProfileChange = (target: EventTarget & HTMLInputElement) => {
     if (target.files && target.files[0]) {
       const file = target.files[0];
@@ -91,6 +122,7 @@ export default function CardFormInput({
           options={selectOption}
           className="w-full"
           classNamePrefix="react-select"
+          styles={dropdownStyle}
         />
       </div>
     );
@@ -106,7 +138,7 @@ export default function CardFormInput({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.5)] focus:ring-0 transition-all duration-500"
+          className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
         />
       </div>
     );
@@ -123,7 +155,7 @@ export default function CardFormInput({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_8px_rgba(228,75,55,0.5)] transition-all duration-500"
+          className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_8px_rgba(228,75,55,0.3)] transition-all duration-500"
           title="Choose your color"
         />
       </div>
@@ -147,11 +179,16 @@ export default function CardFormInput({
 
         <div
           onClick={handleProfileClick}
-          className={`w-[100px] h-[100px] border border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:shadow-[0_0_8px_rgba(228,75,55,0.5)] transition-all duration-500
+          className={`w-[100px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500
              ${profilePreview ? "bg-gray-100" : "bg-white"}`}
         >
           {!profilePreview ? (
-            <LucideImage color="#DDDDDD" />
+            <div className="flex flex-col items-center">
+              <LucideImage color="#DDDDDD" />
+              <span className="text-[10px] font-[600] text-[#67748e]">
+                100 x 100 (px)
+              </span>
+            </div>
           ) : (
             <div className="relative w-full h-full rounded-[8px]">
               <Image
@@ -161,6 +198,7 @@ export default function CardFormInput({
                 height={100}
                 className="w-full h-full object-cover rounded-[8px]"
               />
+
               <button
                 type="button"
                 onClick={handleDeleteProfile}
@@ -192,12 +230,17 @@ export default function CardFormInput({
 
         <div
           onClick={handleBannerClick}
-          className={`w-[200px] h-[100px] border border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:shadow-[0_0_8px_rgba(228,75,55,0.5)] transition-all duration-500 ${
+          className={`w-[200px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500 ${
             bannerPreview ? "bg-gray-100" : "bg-white"
           }`}
         >
           {!bannerPreview ? (
-            <LucideImage color="#DDDDDD" />
+            <div className="flex flex-col items-center">
+              <LucideImage color="#DDDDDD" />
+              <span className="text-[10px] font-[600] text-[#67748e]">
+                100 x 100 (px)
+              </span>
+            </div>
           ) : (
             <div className="relative w-full h-full">
               <Image
@@ -220,6 +263,7 @@ export default function CardFormInput({
       </div>
     );
   }
+
   return (
     <div className="mb-4 flex flex-col gap-[8px] text-sm">
       <label
@@ -235,7 +279,7 @@ export default function CardFormInput({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.5)] focus:ring-0 transition-all duration-500"
+        className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
       />
     </div>
   );
