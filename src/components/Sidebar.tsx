@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Gauge, SquareChartGantt } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -32,6 +33,9 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
+  const pathname = usePathname();
+  const isDashboard = pathname.startsWith("/dashboard");
+
   const [dropdowns, setDropdowns] = useState({});
 
   const toggleDropdown = (dropdownId) => {
@@ -40,6 +44,8 @@ export default function Sidebar() {
       [dropdownId]: !prev[dropdownId],
     }));
   };
+
+  if (!isDashboard) return null;
 
   return (
     <aside

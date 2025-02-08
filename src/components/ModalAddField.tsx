@@ -68,7 +68,11 @@ export default function ModalAddField({ onClose, onAdd }) {
             <div
               key={index}
               className="flex gap-[10px] items-center p-[8px] bg-slate-100 rounded-[4px] cursor-pointer hover:bg-slate-200 transition-all duration-200"
-              onClick={() => onAdd(field.id)}
+              onClick={() => {
+                onAdd(field.id);
+                setIsVisible(false);
+                setTimeout(onClose, 300);
+              }}
             >
               <div>{field.icon}</div>
               <span className="text-[#67748e] font-semibold text-sm">

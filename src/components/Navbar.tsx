@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Avatar from "@/components/Avatar"; /* 
 import Sidebar from "./Sidebar"; */
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   /*   const { data: session } = useSession() as any; */
@@ -30,6 +31,10 @@ export default function Navbar() {
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" });
   };
+
+  const pathname = usePathname();
+  const isInLogin = pathname.startsWith("/login");
+  if (isInLogin) return null;
 
   return (
     <nav className="bg-white border-[#f7eae9] border-b-[1px] sticky top-0 z-[999]">
