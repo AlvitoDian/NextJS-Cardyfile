@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Montserrat", "sans-serif"], // Set Montserrat sebagai default font
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

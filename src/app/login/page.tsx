@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import DiscordSignInButton from "@/components/DiscordSignInButton";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Login() {
   const router = useRouter();
@@ -78,6 +79,13 @@ export default function Login() {
           background: "linear-gradient(135deg, #E44B37 0%, #ff8575 100%)",
         }}
       >
+        <div className="absolute left-1/2 transform bottom-[70px] -translate-x-1/2 text-white z-10 text-center">
+          <h1 className="text-4xl font-bold mb-2">Card Maker</h1>
+          <p className="text-lg opacity-90">
+            Create beautiful cards in minutes
+          </p>
+        </div>
+
         {/* Decorative floating cards */}
         <div
           className="absolute top-1/4 left-1/4 w-40 h-56 bg-white rounded-lg shadow-xl transform -rotate-12 opacity-80"
@@ -132,25 +140,26 @@ export default function Login() {
         {/* Decorative circles */}
         <div className="absolute top-20 right-20 w-20 h-20 rounded-full bg-white opacity-10"></div>
         <div className="absolute bottom-40 left-10 w-32 h-32 rounded-full bg-white opacity-10"></div>
-
-        {/* Content overlay */}
-        <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="text-white text-center">
-            <h1 className="text-4xl font-bold mb-4">Card Maker</h1>
-            <p className="text-lg opacity-90">
-              Create beautiful cards in minutes
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Right side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 text-center">
-              Masuk
-            </h2>
+          <div className="flex justify-start mb-[50px]">
+            <Image
+              src="/assets/images/logo.png"
+              alt="Nimbrunk Logo"
+              className="w-[230px]"
+              width={200}
+              height={200}
+            />
+          </div>
+
+          <div className="flex flex-col gap-[10px] justify-start">
+            <span className="font-semibold text-gray-700 text-4xl">Masuk</span>
+            <span className="font-medium text-gray-400 text-sm">
+              Buat Kartu Profil-mu sendiri hanya dengan kurang dari 5 menit.
+            </span>
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -169,7 +178,7 @@ export default function Login() {
                   required
                   value={user.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                  className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
                   placeholder="Alamat Email"
                 />
               </div>
@@ -188,7 +197,7 @@ export default function Login() {
                   required
                   value={user.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
+                  className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
                   placeholder="Password"
                 />
               </div>
