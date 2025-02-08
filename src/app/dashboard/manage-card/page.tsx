@@ -41,32 +41,11 @@ export default function ManageCard() {
   const inputs = useMemo(
     () => [
       {
-        name: "cardid",
-        label: "Bin ID",
+        name: "card_link",
+        label: "Link Kartu",
         type: "text",
         required: true,
         maxLength: "20",
-        onChange: (e) => handleChange(e.target.name, e.target.value),
-      },
-      {
-        name: "werks",
-        label: "Gudang",
-        type: "select",
-        options: [
-          { value: "MST", label: "Master Data" },
-          { value: "REP", label: "Laporan" },
-          { value: "TRN", label: "Transaksi" },
-          { value: "SET", label: "Pengaturan" },
-        ],
-        required: true,
-        onChange: (e) => handleChange(e.target.name, e.target.value),
-      },
-      {
-        name: "name1",
-        required: true,
-        maxLength: "40",
-        label: "Deskripsi",
-        type: "text",
         onChange: (e) => handleChange(e.target.name, e.target.value),
       },
     ],

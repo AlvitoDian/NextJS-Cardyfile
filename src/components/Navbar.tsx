@@ -33,7 +33,9 @@ export default function Navbar() {
   };
 
   const pathname = usePathname();
-  const isInLogin = pathname.startsWith("/login");
+  const isInLogin =
+    pathname.startsWith("/login") || pathname.startsWith("/register");
+
   if (isInLogin) return null;
 
   return (

@@ -7,18 +7,20 @@ import { signIn } from "next-auth/react";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import DiscordSignInButton from "@/components/DiscordSignInButton";
 import Link from "next/link";
-import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
   /*   const { data: session, status } = useSession(); */
   const [user, setUser] = useState({
     email: "",
     password: "",
+    confPassword: "",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   /*   useEffect(() => {
     if (session && status === "authenticated") {
@@ -146,17 +148,19 @@ export default function Login() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="max-w-md w-full space-y-8">
           <div className="flex justify-start mb-[50px]">
-            <Image
+            {/*   <Image
               src="/assets/images/logo.png"
               alt="Nimbrunk Logo"
               className="w-[230px]"
               width={200}
               height={200}
-            />
+            /> */}
           </div>
 
           <div className="flex flex-col gap-[10px] justify-start">
-            <span className="font-semibold text-gray-700 text-4xl">Masuk</span>
+            <span className="font-semibold text-gray-700 text-4xl">
+              Daftar Akun
+            </span>
             <span className="font-medium text-gray-400 text-sm">
               Buat Kartu Profil-mu sendiri hanya dengan kurang dari 5 menit.
             </span>
@@ -190,16 +194,61 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={user.password}
-                  onChange={handleChange}
-                  className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
-                  placeholder="Password"
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={user.password}
+                    onChange={handleChange}
+                    className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500 pr-10"
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-1/2 mt-[2px] right-3 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <EyeOff color="#E44B37" size={20} />
+                    ) : (
+                      <Eye color="#E44B37" size={20} />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confPassword"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Konfirmasi Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="confPassword"
+                    name="confPassword"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={user.confPassword}
+                    onChange={handleChange}
+                    className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500 pr-10"
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-1/2 mt-[2px] right-3 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <EyeOff color="#E44B37" size={20} />
+                    ) : (
+                      <Eye color="#E44B37" size={20} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -236,32 +285,18 @@ export default function Login() {
                   <span className="sr-only">Loading...</span>
                 </div>
               ) : (
-                "Masuk"
+                "Daftar"
               )}
             </button>
 
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">atau</span>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <GoogleSignInButton />
-              <DiscordSignInButton />
-            </div>
-
             <div className="text-center">
-              <span className="text-gray-600">Belum punya akun? </span>
+              <span className="text-gray-600">Sudah punya akun ? </span>
               <Link
-                href="/register"
+                href="/login"
                 style={{ color: "#E44B37" }}
                 className="font-medium hover:text-red-600"
               >
-                Daftar
+                Masuk
               </Link>
             </div>
           </form>
