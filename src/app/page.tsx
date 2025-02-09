@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div>Ini test</div>;
+  return <div>Ini Home</div>;
 }

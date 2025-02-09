@@ -3,15 +3,16 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-/* import { useSession } from "next-auth/react"; */
+import { useSession } from "next-auth/react";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import DiscordSignInButton from "@/components/DiscordSignInButton";
 import Link from "next/link";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const router = useRouter();
-  /*   const { data: session, status } = useSession(); */
+  const { data: session, status } = useSession();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -19,14 +20,15 @@ export default function Login() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
-  /*   useEffect(() => {
+  useEffect(() => {
     if (session && status === "authenticated") {
       router.push("/");
     } else {
       setIsLoadingPage(false);
     }
-  }, [session, status]); */
+  }, [session, status]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -52,8 +54,10 @@ export default function Login() {
         redirect: false,
       });
 
+      console.log(res, "res");
+
       if (res && res.error) {
-        setError("Invalid Credentials.");
+        setError(res.error);
         setIsLoading(false);
         return;
       }
@@ -66,9 +70,9 @@ export default function Login() {
     }
   };
 
-  /*  if (isLoadingPage) {
+  if (isLoadingPage) {
     return;
-  } */
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -190,16 +194,29 @@ export default function Login() {
                 >
                   Password
                 </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={user.password}
-                  onChange={handleChange}
-                  className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
-                  placeholder="Password"
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={user.password}
+                    onChange={handleChange}
+                    className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500 pr-10"
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-1/2 mt-[2px] right-3 transform -translate-y-1/2 text-gray-500"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <EyeOff color="#E44B37" size={20} />
+                    ) : (
+                      <Eye color="#E44B37" size={20} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 

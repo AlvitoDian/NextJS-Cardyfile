@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { createUser, getAllUsers } from "../models/User";
+import { createUser, getAllUsers, findUserByEmail } from "../models/User";
 
 export async function fetchAllUsers() {
   try {
-    const users = await getAllUsers();
+    const data = await getAllUsers();
     return NextResponse.json(
-      { message: "User fetch successfully", data: users, success: true },
+      { message: "User fetch successfully", data: data, success: true },
       { status: 201 }
     );
   } catch (error) {
@@ -20,18 +20,18 @@ export async function registerUser(req: Request) {
 
     if (!email || !password) {
       return NextResponse.json(
-        { message: "All fields are required" },
+        { message: "Harap isi email atau password" },
         { status: 400 }
       );
     }
 
-    /*  const existingUser = await findUserByEmail(email);
+    const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return NextResponse.json(
-        { message: "Email already exists" },
+        { message: "Email sudah dipakai" },
         { status: 400 }
       );
-    } */
+    }
 
     const newUser = await createUser(email, password);
 

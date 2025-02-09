@@ -9,9 +9,7 @@ import Sidebar from "./Sidebar"; */
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  /*   const { data: session } = useSession() as any; */
-
-  const [session, setSession] = useState(true);
+  const { data: session } = useSession() as any;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -95,7 +93,25 @@ export default function Navbar() {
                 className="block py-2 px-3 rounded md:bg-transparent md:p-0 "
                 aria-current="page"
               >
-                Home
+                Beranda
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/"
+                className="block py-2 px-3 rounded md:bg-transparent md:p-0 "
+                aria-current="page"
+              >
+                Harga
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/"
+                className="block py-2 px-3 rounded md:bg-transparent md:p-0 "
+                aria-current="page"
+              >
+                Tentang Kami
               </Link>
             </li>
 
@@ -110,8 +126,7 @@ export default function Navbar() {
                     id="dropdownNavbarLink"
                     className="flex items-center justify-between w-full py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:w-auto "
                   >
-                    {/*        {session.user.username} */}
-                    Abigail
+                    {session.user.email}
                     <div className="ml-2.5">
                       {/*           <Avatar image={session.user.profileImage} /> */}
                       <Avatar
@@ -163,6 +178,15 @@ export default function Navbar() {
                       <li>
                         <Link
                           /*    href={`/user/edit/${session.user.id}`} */
+                          href={`/dashboard`}
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >
+                          Buat Kartu
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          /*    href={`/user/edit/${session.user.id}`} */
                           href={`#`}
                           className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
@@ -185,7 +209,7 @@ export default function Navbar() {
               <>
                 <li>
                   <Link
-                    href="/auth/register"
+                    href="/register"
                     className="text-white bg-[#e44b37] border-[2px] border-[#e44b37] rounded-full text-sm px-4 py-[7px] text-center -mr-5"
                     aria-current="page"
                   >
@@ -194,7 +218,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <Link
-                    href="/auth/login"
+                    href="/login"
                     className="text-[#e44b37] hover:text-white bg-white hover:bg-[#e44b37] rounded-full border-[2px] border-[#e44b37] text-sm px-4 py-[7px] text-center transition-all duration-500"
                     aria-current="page"
                   >

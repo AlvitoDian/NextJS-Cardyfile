@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-/* import { useSession } from "next-auth/react"; */
-import GoogleSignInButton from "@/components/GoogleSignInButton";
-import DiscordSignInButton from "@/components/DiscordSignInButton";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import { userRegist } from "@/lib/api/user";
 
 export default function Register() {
   const router = useRouter();
@@ -22,14 +20,6 @@ export default function Register() {
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
-  /*   useEffect(() => {
-    if (session && status === "authenticated") {
-      router.push("/");
-    } else {
-      setIsLoadingPage(false);
-    }
-  }, [session, status]); */
-
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setUser((prevState) => ({
@@ -42,35 +32,36 @@ export default function Register() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!user.email || !user.password) {
-      setError("Must provide all the credentials");
+      setError("Harap isi email atau password");
+      return;
+    }
+
+    if (user.password !== user.confPassword) {
+      setError("Password harus sama");
+      return;
     }
 
     try {
       setIsLoading(true);
 
-      const res = await signIn("credentials", {
+      const res = await userRegist({
         email: user.email,
         password: user.password,
-        redirect: false,
       });
 
       if (res && res.error) {
-        setError("Invalid Credentials.");
+        setError(res.error);
         setIsLoading(false);
         return;
       }
 
-      router.replace("/");
+      router.replace("/login");
     } catch (error: any) {
       setError(error.response.data.message);
       setIsLoading(false);
       console.log("Signup failed", error.message);
     }
   };
-
-  /*  if (isLoadingPage) {
-    return;
-  } */
 
   return (
     <div className="min-h-screen flex">

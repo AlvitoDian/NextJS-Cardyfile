@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import Breadcrumb from "@/components/Breadcrumb";
 import FormCard from "@/components/CardSelect";
 import Modal from "@/components/Modal";
+import { fetchCards } from "@/lib/api/card";
 
 export default function ManageCard() {
   const breadcrumb = [
@@ -11,8 +12,10 @@ export default function ManageCard() {
     { label: "Card", href: "/dashboard/manage-card" },
   ];
 
+  const [data, setData] = useState(null);
   const [formData, setFormData] = useState({});
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //? Common Handle Change
   const handleChange = useCallback((name, value) => {
@@ -22,6 +25,24 @@ export default function ManageCard() {
     }));
   }, []);
   //? Common Handle Change End
+
+  //? Fetch Data
+  useEffect(() => {
+    const loadAllData = async () => {
+      setIsLoading(true);
+      try {
+        const [cardsData] = await Promise.all([fetchCards()]);
+        setData(cardsData);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAllData();
+  }, []);
+  //? Fetch Data End
 
   const imageUrl =
     "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1714122464/cld-sample-5.jpg";
@@ -77,21 +98,28 @@ export default function ManageCard() {
           inputs={inputs}
         />
       )}
-      <div className="flex">
-        <div className="flex gap-[30px] flex-wrap">
-          {cards.map((card, index) => (
-            <div key={index}>
-              <FormCard
-                isPlus={card.isPlus}
-                image={card.image}
-                title={card.title}
-                id={card.id}
-                onClick={() => setIsModalAddOpen(true)}
-              />
-            </div>
-          ))}
+
+      {isLoading ? (
+        <div className="flex items-center justify-center w-full pt-[200px]">
+          <span className="loading loading-bars loading-lg text-[#E34D39]"></span>
         </div>
-      </div>
+      ) : (
+        <div className="flex">
+          <div className="flex gap-[30px] flex-wrap">
+            {cards.map((card, index) => (
+              <div key={index}>
+                <FormCard
+                  isPlus={card.isPlus}
+                  image={card.image}
+                  title={card.title}
+                  id={card.id}
+                  onClick={() => setIsModalAddOpen(true)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
