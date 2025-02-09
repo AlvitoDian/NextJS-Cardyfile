@@ -1,8 +1,8 @@
 import { fetchAllCards } from "@/lib/controllers/CardController";
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const token = await getToken({ req });
 
   if (!token) {

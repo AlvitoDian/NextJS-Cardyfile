@@ -9,13 +9,15 @@ export async function getAllCards() {
     client.release();
   }
 }
-
-/* export async function insertCard(card_link: string, usrnm: string, desc1) {
+export async function getCardByLink(card_link: string) {
   const client = await pool.connect();
   try {
-    const result = await client.query("SELECT * FROM m_card");
+    const result = await client.query(
+      "SELECT * FROM m_card WHERE card_link = $1",
+      [card_link]
+    );
     return result.rows[0];
   } finally {
     client.release();
   }
-} */
+}

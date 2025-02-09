@@ -21,3 +21,13 @@ export const addCard = async (cardData: { card_link: string }) => {
     throw error;
   }
 };
+
+export const getCardLink = async (cardData: { card_link: string }) => {
+  try {
+    const response = await axios.get(`${API_URL}/cards/${cardData.card_link}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding card:", error);
+    throw error;
+  }
+};
