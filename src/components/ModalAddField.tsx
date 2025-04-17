@@ -1,4 +1,4 @@
-import { MessageSquare, Logs, Image, PaintBucket } from "lucide-react";
+import { MessageSquare, Logs, Image, PaintBucket, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 export default function ModalAddField({ onClose, onAdd }) {
@@ -7,6 +7,10 @@ export default function ModalAddField({ onClose, onAdd }) {
 
   useEffect(() => {
     setIsVisible(true);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, []);
 
   useEffect(() => {
@@ -16,9 +20,17 @@ export default function ModalAddField({ onClose, onAdd }) {
       }
     };
 
+    const handleEscKey = (event) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscKey);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscKey);
     };
   }, []);
 
@@ -26,22 +38,30 @@ export default function ModalAddField({ onClose, onAdd }) {
     {
       id: "bannerImage",
       label: "Add Banner Image",
-      icon: <Image color="#67748e" strokeWidth={2.25} size={20} />,
+      description: "Upload a banner image for your page",
+      icon: <Image className="text-indigo-600" strokeWidth={2} size={20} />,
     },
     {
       id: "bgColor",
       label: "Add Background Color",
-      icon: <PaintBucket color="#67748e" strokeWidth={2.25} size={20} />,
+      description: "Choose a background color for your page",
+      icon: (
+        <PaintBucket className="text-green-600" strokeWidth={2} size={20} />
+      ),
     },
     {
       id: "socialMedia",
       label: "Add Social Media",
-      icon: <MessageSquare color="#67748e" strokeWidth={2.25} size={20} />,
+      description: "Connect your social media accounts",
+      icon: (
+        <MessageSquare className="text-blue-600" strokeWidth={2} size={20} />
+      ),
     },
     {
       id: "menu",
       label: "Add Menu",
-      icon: <Logs color="#67748e" strokeWidth={2.25} size={20} />,
+      description: "Create navigation menu for your page",
+      icon: <Logs className="text-amber-600" strokeWidth={2} size={20} />,
     },
   ];
 
@@ -50,38 +70,65 @@ export default function ModalAddField({ onClose, onAdd }) {
     setTimeout(onClose, 300);
   };
 
+  const handleFieldSelect = (fieldId) => {
+    onAdd(fieldId);
+    handleClose();
+  };
+
   return (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999] transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
+      aria-modal="true"
+      role="dialog"
     >
       <div
         ref={modalRef}
-        className={`py-[30px] px-[30px] bg-white rounded-lg shadow-lg w-[400px] transition-all duration-300 transform flex flex-col gap-[20px] ${
-          isVisible ? "translate-y-[0px]" : "-translate-y-[30px]"
+        className={`py-6 px-6 bg-white rounded-xl shadow-xl w-full max-w-md transition-all duration-300 transform ${
+          isVisible ? "translate-y-0 scale-100" : "-translate-y-8 scale-95"
         }`}
       >
-        <div className="font-semibold text-[18px]">Add Input</div>
-        <div className="flex flex-col gap-[15px]">
-          {fields.map((field, index) => (
-            <div
-              key={index}
-              className="flex gap-[10px] items-center p-[8px] bg-slate-100 rounded-[4px] cursor-pointer hover:bg-slate-200 transition-all duration-200"
-              onClick={() => {
-                onAdd(field.id);
-                setIsVisible(false);
-                setTimeout(onClose, 300);
-              }}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="font-bold text-xl text-gray-800">
+            Add Content Element
+          </h2>
+          <button
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+            aria-label="Close modal"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="mb-6">
+          <p className="text-gray-500 text-sm">
+            Select an element to add to your page
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {fields.map((field) => (
+            <button
+              key={field.id}
+              className="flex w-full items-center p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => handleFieldSelect(field.id)}
             >
-              <div>{field.icon}</div>
-              <span className="text-[#67748e] font-semibold text-sm">
-                {field.label}
-              </span>
-            </div>
+              <div className="p-2 rounded-lg bg-gray-100 group-hover:bg-white transition-colors">
+                {field.icon}
+              </div>
+              <div className="ml-4 text-left">
+                <p className="font-medium text-gray-800">{field.label}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {field.description}
+                </p>
+              </div>
+            </button>
           ))}
         </div>
-        <div>
+
+        <div className="mt-8 flex justify-end">
           <button
             onClick={handleClose}
             className="mt-2 px-[15px] py-[6px] text-sm font-semibold bg-[#E44B37] text-white rounded-[8px] flex items-center gap-[5px]"

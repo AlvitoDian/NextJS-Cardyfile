@@ -24,11 +24,7 @@ const menuItems = [
     id: "subscription",
     label: "Subscription",
     icon: <CreditCard color="#E44B37" strokeWidth={2.25} size={20} />,
-    subItems: [
-      { label: "Plans", href: "/dashboard/subscription/plans" },
-      { label: "Billing", href: "/dashboard/subscription/billing" },
-      { label: "History", href: "/dashboard/subscription/history" },
-    ],
+    subItems: [{ label: "Billing", href: "/dashboard/billing" }],
   },
 ];
 

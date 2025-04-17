@@ -362,12 +362,7 @@ export default function ManageCard({ params }: PageProps) {
                 })}
             </div>
 
-            {/*   <button
-              type="submit"
-              className="w-full px-[15px] py-[6px] bg-gradient-to-r from-[#E44B37] to-pink-500 text-white rounded-[8px] hover:opacity-90 transition-opacity font-semibold"
-            >
-              Save Changes
-            </button> */}
+         
             <Button
               type="submit"
               style="w-full px-[15px] py-[6px] bg-gradient-to-r from-[#E44B37] to-pink-500 text-white rounded-[8px] hover:opacity-90 transition-opacity font-semibold"
