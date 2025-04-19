@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Gauge, SquareChartGantt } from "lucide-react";
+import { Gauge, SquareChartGantt, CreditCard, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { CreditCard } from "lucide-react";
 
 const menuItems = [
   {
@@ -32,7 +31,24 @@ export default function Sidebar() {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith("/dashboard");
 
+  // Initialize dropdown state based on current path
   const [dropdowns, setDropdowns] = useState({});
+
+  useEffect(() => {
+    // Auto-expand dropdown if a child route is active
+    const initialDropdowns = {};
+    menuItems.forEach((item) => {
+      if (item.subItems) {
+        const isActive = item.subItems.some(
+          (subItem) => pathname === subItem.href
+        );
+        if (isActive) {
+          initialDropdowns[item.id] = true;
+        }
+      }
+    });
+    setDropdowns(initialDropdowns);
+  }, [pathname]);
 
   const toggleDropdown = (dropdownId) => {
     setDropdowns((prev) => ({
@@ -41,340 +57,105 @@ export default function Sidebar() {
     }));
   };
 
+  const isActive = (href) => {
+    return pathname === href;
+  };
+
   if (!isDashboard) return null;
 
   return (
     <aside
-      id="sidebar-multi-level-sidebar"
-      className="fixed top-[70px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+      id="sidebar"
+      className="fixed top-[55px] left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
       aria-label="Sidebar"
-      style={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 25px 50px -12px" }}
     >
-      <div className="flex items-center justify-center mt-[20px] mb-[10px]">
-        <Image
-          src="/assets/images/logo.png"
-          alt="Nimbrunk Logo"
-          width={150}
-          height={150}
-        />
-      </div>
-      <div className="h-full px-3 py-4 overflow-y-auto bg-white text-sm shadow-sm">
-        <ul className="space-y-2 font-medium">
-          {menuItems.map((item) => (
-            <li key={item.id}>
-              {item.subItems ? (
-                <button
-                  type="button"
-                  className="flex items-center w-full p-2 text-[#67748e] transition-all duration-300 rounded-lg group hover:bg-gray-100"
-                  onClick={() => toggleDropdown(item.id)}
-                >
-                  {item.icon}
-                  <span className="flex-1 ms-3 text-left whitespace-nowrap">
-                    {item.label}
-                  </span>
-                  <svg
-                    className={`w-3 h-3 transform transition-transform ${
-                      dropdowns[item.id] ? "rotate-180" : ""
-                    }`}
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <Link
-                  href={item.href}
-                  className="flex items-center p-2 text-[#67748e] rounded-lg group"
-                >
-                  {item.icon}
-                  <span className="ms-3">{item.label}</span>
-                </Link>
-              )}
-              {item.subItems && (
-                <ul
-                  className={`py-2 space-y-2 ${
-                    dropdowns[item.id] ? "block" : "hidden"
-                  }`}
-                >
-                  {item.subItems.map((subItem, index) => (
-                    <li key={index}>
-                      <Link
-                        href={subItem.href}
-                        className="flex items-center w-full p-2 text-[#67748e] transition-all duration-300 rounded-lg pl-11 group hover:bg-gray-100"
-                      >
-                        {subItem.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <div className="flex flex-col h-full bg-white shadow-lg">
+        <div className="flex items-center justify-center py-5 border-b border-gray-100">
+          <Image
+            src="/assets/images/logo.png"
+            alt="Nimbrunk Logo"
+            width={130}
+            height={40}
+            className="h-10 w-auto"
+          />
+        </div>
 
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
+        <div className="flex-1 px-4 py-5 overflow-y-auto scrollbar-thin">
+          <ul className="space-y-1.5">
+            {menuItems.map((item) => (
+              <li key={item.id}>
+                {item.subItems ? (
+                  <div className="mb-1">
+                    <button
+                      type="button"
+                      className="flex items-center justify-between w-full p-2.5 text-[#67748e] rounded-lg group hover:bg-gray-50 transition-colors"
+                      onClick={() => toggleDropdown(item.id)}
+                    >
+                      <div className="flex items-center">
+                        <span className="mr-3">{item.icon}</span>
+                        <span className="font-medium text-sm">
+                          {item.label}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform duration-200 ease-in-out ${
+                          dropdowns[item.id] ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    <div
+                      className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                        dropdowns[item.id]
+                          ? "max-h-40 opacity-100"
+                          : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      <ul className="pl-9 mt-1 space-y-1">
+                        {item.subItems.map((subItem, index) => (
+                          <li key={index}>
+                            <Link
+                              href={subItem.href}
+                              className={`flex items-center p-2 text-sm rounded-md transition-colors ${
+                                isActive(subItem.href)
+                                  ? "bg-gray-50 text-[#E44B37] font-medium"
+                                  : "text-[#67748e] hover:bg-gray-50"
+                              }`}
+                            >
+                              {subItem.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`flex items-center p-2.5 rounded-lg transition-colors ${
+                      isActive(item.href)
+                        ? "bg-gray-50 text-[#E44B37] font-medium"
+                        : "text-[#67748e] hover:bg-gray-50"
+                    }`}
+                  >
+                    <span className="mr-3">{item.icon}</span>
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="px-4 py-4 border-t border-gray-100">
+          <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+              <span className="text-xs font-medium text-gray-600">UN</span>
             </div>
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p className="text-2xl text-gray-400 dark:text-gray-500">
-              <svg
-                className="w-3.5 h-3.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 1v16M1 9h16"
-                />
-              </svg>
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p className="text-2xl text-gray-400 dark:text-gray-500">
-              <svg
-                className="w-3.5 h-3.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 1v16M1 9h16"
-                />
-              </svg>
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
-            </div>
-            <div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-              <p className="text-2xl text-gray-400 dark:text-gray-500">
-                <svg
-                  className="w-3.5 h-3.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 1v16M1 9h16"
-                  />
-                </svg>
-              </p>
+            <div className="ml-3">
+              <p className="text-xs font-medium text-gray-700">User Name</p>
+              <p className="text-xs text-gray-500">user@nimbrunk.com</p>
             </div>
           </div>
         </div>

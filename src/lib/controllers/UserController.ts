@@ -1,16 +1,13 @@
-import { NextResponse } from "next/server";
 import { createUser, getAllUsers, findUserByEmail } from "../models/User";
+import { successResponse, errorResponse } from "@/utils/apiResponse";
 
 export async function fetchAllUsers() {
   try {
     const data = await getAllUsers();
-    return NextResponse.json(
-      { message: "User fetch successfully", data: data, success: true },
-      { status: 201 }
-    );
+    return successResponse("User fetched successfully", data, 201);
   } catch (error) {
     console.error("Error fetching users:", error);
-    return { status: 500, error: "Internal Server Error" };
+    return errorResponse("Internal Server Error", 500, error);
   }
 }
 
@@ -19,31 +16,18 @@ export async function registerUser(req: Request) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json(
-        { message: "Harap isi email atau password" },
-        { status: 400 }
-      );
+      return errorResponse("Harap isi email atau password", 400);
     }
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
-      return NextResponse.json(
-        { message: "Email sudah dipakai" },
-        { status: 400 }
-      );
+      return errorResponse("Email sudah dipakai", 400);
     }
 
     const newUser = await createUser(email, password);
-
-    return NextResponse.json(
-      { message: "User registered successfully", data: newUser, success: true },
-      { status: 201 }
-    );
+    return successResponse("User registered successfully", newUser, 201);
   } catch (error) {
     console.error("Error registering user:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
+    return errorResponse("Internal Server Error", 500, error);
   }
 }

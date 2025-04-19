@@ -31,13 +31,13 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession();
   return (
-    <html lang="en">
+    <html lang="en" className="scrool-smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <SessionProvider session={session}>
-          <Navbar />
-          <Sidebar />
+          {/*   <Navbar />
+          <Sidebar /> */}
           {children}
         </SessionProvider>
       </body>

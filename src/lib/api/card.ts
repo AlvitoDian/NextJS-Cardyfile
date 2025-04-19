@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 export const fetchCards = async () => {
   try {
     const response = await axios.get(`${API_URL}/cards`);
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching cards:", error);
     throw error;

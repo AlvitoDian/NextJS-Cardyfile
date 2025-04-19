@@ -7,7 +7,6 @@ export const userRegist = async (payload: {
   password: string;
 }) => {
   try {
-    console.log(payload, "payload");
     const response = await axios.post(`${API_URL}/register`, payload);
     return response.data;
   } catch (error) {

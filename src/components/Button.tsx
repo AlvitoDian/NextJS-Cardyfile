@@ -1,57 +1,184 @@
 import * as lucideIcons from "lucide-react";
 import { ButtonHTMLAttributes } from "react";
 
+// Define button variants
+type ButtonVariant =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "gradient"
+  | "outlinePrimary"
+  | "outlineDanger"
+  | "dark"
+  | "light"
+  | "disabled";
+
+// Define button sizes
+type ButtonSize = "sm" | "md" | "lg";
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
   label: string;
-  style?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
   isLoading?: boolean;
   icon?: string;
+  iconPosition?: "left" | "right";
+  fullWidth?: boolean;
 }
 
 export default function Button({
   onClick = () => {},
   label,
-  style = "",
+  variant = "default",
+  size = "md",
+  className = "",
   isLoading = false,
   type = "button",
   icon,
+  iconPosition = "left",
+  fullWidth = false,
   disabled = false,
   ...rest
 }: ButtonProps) {
-  const IconComponent = icon ? lucideIcons[icon] : null;
-  const disabledStyle =
-    "bg-gray-500 text-gray-700 opacity-40 cursor-not-allowed";
+  // Get the icon component dynamically if it exists
+  const IconComponent = icon && lucideIcons[icon] ? lucideIcons[icon] : null;
+
+  // Updated variant styles with #e44b37 theme
+  const variantStyles = {
+    default:
+      "bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-sm",
+
+    primary:
+      "bg-[#e44b37] hover:bg-[#d03e2b] text-white border border-[#e44b37] shadow-sm",
+
+    secondary:
+      "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 shadow-sm",
+
+    tertiary:
+      "bg-transparent hover:bg-gray-100 text-gray-700 border border-gray-300",
+
+    success:
+      "bg-green-600 hover:bg-green-700 text-white border border-green-600 shadow-sm",
+
+    warning:
+      "bg-amber-500 hover:bg-amber-600 text-white border border-amber-500 shadow-sm",
+
+    danger:
+      "bg-red-600 hover:bg-red-700 text-white border border-red-600 shadow-sm",
+
+    info: "bg-sky-500 hover:bg-sky-600 text-white border border-sky-500 shadow-sm",
+
+    gradient:
+      "bg-gradient-to-r from-[#e44b37] to-[#f86d5d] text-white border-0 shadow-sm hover:from-[#d03e2b] hover:to-[#e85c4c]",
+
+    outlinePrimary:
+      "bg-white hover:bg-[#fff8f7] text-[#e44b37] border border-[#e44b37]",
+
+    outlineDanger:
+      "bg-transparent hover:bg-red-50 text-red-600 border border-red-600",
+
+    dark: "bg-gray-800 hover:bg-gray-900 text-white border border-gray-800 shadow-sm",
+
+    light: "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200",
+
+    disabled:
+      "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed",
+  };
+
+  // Define size styles
+  const sizeStyles = {
+    sm: "px-3 py-1 text-xs",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
+  };
+
+  // Base styles for all buttons
+  const baseStyle =
+    "font-medium rounded-lg transition-all duration-200 ease-in-out flex items-center justify-center gap-2 focus:ring-2 focus:ring-offset-2 focus:outline-none";
+
+  // Disabled style
+  const disabledStyle = "opacity-60 cursor-not-allowed pointer-events-none";
+
+  // Focus ring colors based on variant (updated for #e44b37 theme)
+  const focusRingColors = {
+    default: "focus:ring-gray-200",
+    primary: "focus:ring-[#e44b37]/30",
+    secondary: "focus:ring-gray-200",
+    tertiary: "focus:ring-gray-200",
+    success: "focus:ring-green-300",
+    warning: "focus:ring-amber-300",
+    danger: "focus:ring-red-300",
+    info: "focus:ring-sky-300",
+    gradient: "focus:ring-[#e44b37]/30",
+    outlinePrimary: "focus:ring-[#e44b37]/30",
+    outlineDanger: "focus:ring-red-300",
+    dark: "focus:ring-gray-500",
+    light: "focus:ring-gray-200",
+    disabled: "",
+  };
+
+  // Combine all styles
+  const buttonClasses = [
+    baseStyle,
+    variantStyles[variant],
+    sizeStyles[size],
+    focusRingColors[variant],
+    fullWidth ? "w-full" : "",
+    isLoading || disabled ? disabledStyle : "",
+    className,
+  ].join(" ");
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={isLoading || disabled}
-      className={`${style} ${isLoading || disabled ? disabledStyle : ""}`}
+      className={buttonClasses}
+      aria-busy={isLoading}
       {...rest}
     >
       {isLoading ? (
-        <svg
-          aria-hidden="true"
-          className="inline w-4 h-4 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-200"
-          viewBox="0 0 100 101"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-            fill="currentColor"
-          />
-          <path
-            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-            fill="currentFill"
-          />
-        </svg>
+        <span className="inline-flex items-center">
+          <svg
+            className="animate-spin -ml-1 mr-2 h-4 w-4 text-current"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span>{label}</span>
+        </span>
       ) : (
-        IconComponent && <IconComponent className="w-4 h-4" />
+        <>
+          {IconComponent && iconPosition === "left" && (
+            <IconComponent className="w-4 h-4" />
+          )}
+          <span>{label}</span>
+          {IconComponent && iconPosition === "right" && (
+            <IconComponent className="w-4 h-4" />
+          )}
+        </>
       )}
-      {label}
     </button>
   );
 }

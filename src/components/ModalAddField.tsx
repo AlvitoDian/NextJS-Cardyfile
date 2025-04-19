@@ -1,5 +1,6 @@
 import { MessageSquare, Logs, Image, PaintBucket, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import Button from "./Button";
 
 export default function ModalAddField({ onClose, onAdd }) {
   const [isVisible, setIsVisible] = useState(false);
@@ -98,7 +99,7 @@ export default function ModalAddField({ onClose, onAdd }) {
             className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
             aria-label="Close modal"
           >
-            <X size={20} />
+            <X size={20} color="#e44b37" />
           </button>
         </div>
 
@@ -129,12 +130,12 @@ export default function ModalAddField({ onClose, onAdd }) {
         </div>
 
         <div className="mt-8 flex justify-end">
-          <button
+          <Button
             onClick={handleClose}
-            className="mt-2 px-[15px] py-[6px] text-sm font-semibold bg-[#E44B37] text-white rounded-[8px] flex items-center gap-[5px]"
-          >
-            Close
-          </button>
+            variant="primary"
+            label="Cancel"
+            icon="Undo"
+          />
         </div>
       </div>
     </div>
