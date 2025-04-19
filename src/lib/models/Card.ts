@@ -1,4 +1,5 @@
 import pool from "../db";
+import { sanitizeInput } from "@/utils/sanitizeInput";
 
 export async function getAllCards() {
   const client = await pool.connect();
@@ -27,14 +28,14 @@ export async function createCard(data) {
   try {
     const { card_link, title } = data;
 
-    const safeCardLink = card_link ?? "";
-    const safeCardTitle = title ?? "";
+    const prepare_card_link = sanitizeInput(card_link, "string");
+    const prepare_title = sanitizeInput(title, "string");
 
     const result = await client.query(
       `INSERT INTO m_card (card_link, title, crtdt)
        VALUES ($1, $2, CURRENT_TIMESTAMP)
        RETURNING *`,
-      [safeCardLink, safeCardTitle]
+      [prepare_card_link, prepare_title]
     );
 
     return result.rows[0];
