@@ -115,7 +115,7 @@ export default function ManageCard() {
     [formData, router]
   );
   return (
-    <div className="p-6 sm:ml-64">
+    <div className="p-6 sm:ml-64 min-h-screen">
       <Breadcrumb breadcrumb={breadcrumb} title={"Card"} />
 
       {isModalAddOpen && (
@@ -147,7 +147,7 @@ export default function ManageCard() {
                 <FormCard
                   /*      image={card.primg} */
                   title={card.title}
-                  id={card.id}
+                  id={card.card_link}
                   onClick={() => setIsModalAddOpen(true)}
                 />
               </div>

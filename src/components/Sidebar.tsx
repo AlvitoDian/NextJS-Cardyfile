@@ -2,7 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Gauge, SquareChartGantt, CreditCard, ChevronDown } from "lucide-react";
+import {
+  Gauge,
+  SquareChartGantt,
+  CreditCard,
+  ChevronDown,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -24,6 +30,12 @@ const menuItems = [
     label: "Subscription",
     icon: <CreditCard color="#E44B37" strokeWidth={2.25} size={20} />,
     subItems: [{ label: "Billing", href: "/dashboard/billing" }],
+  },
+  {
+    id: "account-settings",
+    label: "Account Settings",
+    icon: <User color="#E44B37" strokeWidth={2.25} size={20} />,
+    href: "/dashboard/account-settings", // Atur URL yang sesuai
   },
 ];
 
