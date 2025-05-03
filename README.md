@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## CardyFile
+<p align="center">
+<img src="public/assets/images/logo.png" alt="Logo" width="300px">
+</p> 
 
-## Getting Started
+## Description
 
-First, run the development server:
+**CardyFile** is a web application that allows users to create personalized profile cards with flexible customization options to reflect their personality and preferences. Users can showcase their profile information in an eye-catching design and share it through a unique URL.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **User registration and login**: Users can create an account and log in to access personalized features, save their profile cards, and manage visibility settings.
+- **Card builder**: Drag-and-drop editor and real-time preview to customize layout, colors, text, avatar, and social media links.
+- **Template gallery**: A variety of ready-to-use templates that users can further customize to their liking.
+- **Custom URL sharing**: Every profile card can be shared using a unique link such as `cardyfile.com/username`.
+- **Responsive design**: Optimized layout for various screen sizes including desktop, tablet, and mobile devices.
+- **Dark/Light Mode**: Users can toggle between light and dark themes for a more comfortable visual experience.
+- **Export options**: Users can download their profile card as an image or PDF file.
+- **Public/Private Mode**: Users can set their card visibility to public or private.
+- **Admin Panel**: Admins can moderate content, manage users, and view usage statistics.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Screenshots
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Home Page
+  ![image](https://github.com/user-attachments/assets/ee2a394d-01a0-417f-b498-24fbbe211cbd)
 
-## Learn More
+- Login Page
+  ![image](https://github.com/user-attachments/assets/c5583942-c193-41ee-94b5-e9bc3d29f961)
 
-To learn more about Next.js, take a look at the following resources:
+- Register Page
+  ![image](https://github.com/user-attachments/assets/fc09d3ce-3e16-4cd8-9e94-65890ca509c8)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Card Creation Page
+  soon...
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Dashboard
+  soon...
+  
+more UI soon...
 
-## Deploy on Vercel
+## License
+CardyFile is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
