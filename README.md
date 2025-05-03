@@ -10,13 +10,10 @@
 ## Features
 
 - **User registration and login**: Users can create an account and log in to access personalized features, save their profile cards, and manage visibility settings.
-- **Card builder**: Drag-and-drop editor and real-time preview to customize layout, colors, text, avatar, and social media links.
+- **Card builder**: Real-time preview to customize layout, colors, text, avatar, and social media links.
 - **Template gallery**: A variety of ready-to-use templates that users can further customize to their liking.
 - **Custom URL sharing**: Every profile card can be shared using a unique link such as `cardyfile.com/username`.
 - **Responsive design**: Optimized layout for various screen sizes including desktop, tablet, and mobile devices.
-- **Dark/Light Mode**: Users can toggle between light and dark themes for a more comfortable visual experience.
-- **Export options**: Users can download their profile card as an image or PDF file.
-- **Public/Private Mode**: Users can set their card visibility to public or private.
 - **Admin Panel**: Admins can moderate content, manage users, and view usage statistics.
 
 ## Screenshots
