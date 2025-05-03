@@ -62,7 +62,7 @@ export default function Button({
       "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 shadow-sm",
 
     tertiary:
-      "bg-transparent hover:bg-gray-100 text-gray-700 border border-gray-300",
+      "bg-transparent hover:bg-gray-100 text-gray-700 border border-gray-400",
 
     success:
       "bg-green-600 hover:bg-green-700 text-white border border-green-600 shadow-sm",

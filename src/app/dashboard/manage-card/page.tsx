@@ -86,6 +86,8 @@ export default function ManageCard() {
       try {
         setIsSubmitting(true);
 
+        console.log(formData, "formData");
+
         const payload = {
           card_link: formData.card_link || "",
           title: formData.title || "",

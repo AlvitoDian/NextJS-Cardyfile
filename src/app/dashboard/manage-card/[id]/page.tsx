@@ -1,19 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import CardPreview from "@/components/CardPreview";
 import CardFormInput from "@/components/CardFormInput";
 import ModalAddField from "@/components/ModalAddField";
 import { getFormFields } from "@/utils/cardFormFields";
-import {
-  NotepadText,
-  Plus,
-  Trash2,
-  Grip,
-  Info,
-  Smartphone,
-  Eye,
-} from "lucide-react";
+import { Plus, Trash2, Grip, Info, Smartphone, Eye } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
 import { use } from "react";
 import {
@@ -23,29 +15,13 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { CardPayload } from "@/types/card";
 
 interface PageProps {
   params: Promise<{ id: string }>;
-}
-
-interface MenuItem {
-  label: string;
-  href: string;
-}
-
-interface SocialMediaItem {
-  platform: string;
-  href: string;
-}
-
-interface CardData {
-  backgroundColor: string;
-  username: string;
-  description: string;
-  profileImage: string;
-  bannerImage: string;
-  socialMedia: SocialMediaItem[];
-  menu: MenuItem[];
 }
 
 interface CurrentField {
@@ -54,13 +30,15 @@ interface CurrentField {
 
 export default function ManageCard({ params }: PageProps) {
   const { id } = use(params);
+  const router = useRouter();
+
   const breadcrumb = [
     { label: "Home", href: "/" },
     { label: "Card", href: "/dashboard/manage-card" },
     { label: `${id}`, href: `/dashboard/manage-card/${id}` },
   ];
 
-  const [cardData, setCardData] = useState<CardData>({
+  const [cardData, setCardData] = useState<CardPayload>({
     backgroundColor: "#ffffff",
     username: "Leikha Mandasari",
     description:
@@ -216,6 +194,32 @@ export default function ManageCard({ params }: PageProps) {
     removeItem
   );
 
+  const handleModalSubmit = useCallback(async () => {
+    try {
+      setIsSubmitting(true);
+
+      /* console.log(cardData, "cardData");
+      return; */
+
+      const response = await axios.put(`/api/cards/${id}`, cardData);
+
+      setIsModalAddOpen(false);
+
+      router.push(`/dashboard/manage-card/${id}`);
+    } catch (err: any) {
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "An unexpected error has occurred.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [cardData, router, id]);
+
   return (
     <div className="p-6 sm:ml-64 min-h-screen ">
       <div className="mb-6">
@@ -244,13 +248,23 @@ export default function ManageCard({ params }: PageProps) {
               <h2 className="text-lg font-semibold text-gray-800">
                 Kolom Informasi
               </h2>
-              <Button
-                onClick={handleAddModal}
-                label="Tambah Kolom"
-                icon="NotepadText"
-                variant="gradient"
-                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
-              />
+
+              <div className="flex gap-[10px]">
+                <Button
+                  onClick={handleAddModal}
+                  label="Tambah Kolom"
+                  icon="ClipboardPlus"
+                  variant="secondary"
+                />
+                <Button
+                  onClick={handleModalSubmit}
+                  variant="primary"
+                  icon="CheckCheck"
+                  isLoading={isSubmitting}
+                  label="Simpan"
+                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
+                />
+              </div>
             </div>
 
             {isModalAddOpen && (
@@ -322,9 +336,7 @@ export default function ManageCard({ params }: PageProps) {
                                           className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm"
                                         >
                                           <div className="flex items-center justify-between mb-2">
-                                            <span className="text-sm font-medium text-gray-500">
-                                              Item #{idx + 1}
-                                            </span>
+                                            <span className="text-sm font-medium text-gray-500"></span>
                                             <div className="flex items-center gap-2">
                                               <button
                                                 onClick={() =>
@@ -421,18 +433,6 @@ export default function ManageCard({ params }: PageProps) {
                     </div>
                   );
                 })}
-            </div>
-
-            {/* Save Button */}
-            <div className="mt-8 flex justify-end">
-              <Button
-                type="submit"
-                variant="primary"
-                icon="CheckCheck"
-                isLoading={isSubmitting}
-                label="Simpan Perubahan"
-                className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
-              />
             </div>
           </div>
         </div>

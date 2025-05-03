@@ -54,7 +54,7 @@ export async function postCard(req: Request) {
   }
 }
 
-export async function updateCard(card_link: string, req: Request) {
+export async function updateCard(req: Request, card_link: string) {
   try {
     const body = await req.json();
     const { title, description, link } = body;

@@ -9,6 +9,7 @@ import DiscordSignInButton from "@/components/DiscordSignInButton";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
+import BadgeAlert from "@/components/BadgeAlert";
 
 export default function Login() {
   const router = useRouter();
@@ -220,11 +221,7 @@ export default function Login() {
               </div>
             </div>
 
-            {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                {error}
-              </div>
-            )}
+            {error && <BadgeAlert variant={"error"} message={error} />}
 
             <button
               type="submit"
