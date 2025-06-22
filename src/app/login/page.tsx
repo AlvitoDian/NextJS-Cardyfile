@@ -31,7 +31,7 @@ export default function Login() {
     }
   }, [session, status]);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prevState) => ({
       ...prevState,
@@ -40,7 +40,7 @@ export default function Login() {
   };
 
   //? Credential Provider
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user.email || !user.password) {
       setError("Must provide all the credentials");
@@ -55,8 +55,6 @@ export default function Login() {
         redirect: false,
       });
 
-      console.log(res, "res");
-
       if (res && res.error) {
         setError(res.error);
         setIsLoading(false);
@@ -64,7 +62,7 @@ export default function Login() {
       }
 
       router.replace("/");
-    } catch (error: any) {
+    } catch (error) {
       setError(error.response.data.message);
       setIsLoading(false);
       console.log("Signup failed", error.message);

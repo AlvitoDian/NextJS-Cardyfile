@@ -6,17 +6,21 @@ import Link from "next/link";
 import Image from "next/image";
 import Avatar from "@/components/Avatar";
 import { usePathname } from "next/navigation";
-import { Menu, User, LogOut, Plus, ChevronDown } from "lucide-react";
+import { Menu, User, LogOut, Plus, ChevronDown, X } from "lucide-react";
 
-export default function Navbar({ isDashboard }) {
+export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   const toggleDropdown = () => {
@@ -54,7 +58,7 @@ export default function Navbar({ isDashboard }) {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isDashboard]);
 
   if (isInLogin) return null;
 
@@ -70,46 +74,61 @@ export default function Navbar({ isDashboard }) {
         scrolled ? "shadow-md py-2" : "py-3"
       }`}
     >
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto px-4 md:px-6">
-        {!isDashboard ? (
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/assets/images/logo.png"
-              alt="Nimbrunk Logo"
-              width={130}
-              height={40}
-              className="h-10 w-auto"
-            />
-          </Link>
-        ) : (
-          <div></div>
-        )}
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto px-4 md:px-6 ">
+        <div className="flex items-center">
+          {/* Sidebar Toggle Button for Dashboard */}
+          {isDashboard && (
+            <button
+              type="button"
+              className="absolute left-[0px] items-center p-2 ml-5 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none transition-colors"
+              onClick={toggleSidebar}
+              aria-label="Toggle sidebar"
+            >
+              <Menu size={20} />
+            </button>
+          )}
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className="inline-flex items-center p-2 rounded-md text-gray-700 md:hidden hover:bg-gray-100 focus:outline-none transition-colors"
-          onClick={toggleSidebar}
-          aria-label="Toggle menu"
-        >
-          <div className="flex flex-col justify-center w-6 h-6 relative">
-            <span
-              className={`absolute h-0.5 w-6 bg-gray-700 transform transition-transform duration-300 ${
-                isSidebarOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
-              }`}
-            ></span>
-            <span
-              className={`absolute h-0.5 w-6 bg-gray-700 transition-opacity duration-300 ${
-                isSidebarOpen ? "opacity-0" : "opacity-100"
-              }`}
-            ></span>
-            <span
-              className={`absolute h-0.5 w-6 bg-gray-700 transform transition-transform duration-300 ${
-                isSidebarOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
-              }`}
-            ></span>
-          </div>
-        </button>
+          {/* Logo */}
+          {!isDashboard && (
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/assets/images/logo.png"
+                alt="Nimbrunk Logo"
+                width={130}
+                height={40}
+                className="h-10 w-auto"
+              />
+            </Link>
+          )}
+        </div>
+
+        {/* Mobile Menu Button (for non-dashboard pages) */}
+        {!isDashboard && (
+          <button
+            type="button"
+            className="inline-flex items-center p-2 rounded-md text-gray-700 md:hidden hover:bg-gray-100 focus:outline-none transition-colors"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+          >
+            <div className="flex flex-col justify-center w-6 h-6 relative">
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-700 transform transition-transform duration-300 ${
+                  mobileMenuOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
+                }`}
+              ></span>
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-700 transition-opacity duration-300 ${
+                  mobileMenuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              ></span>
+              <span
+                className={`absolute h-0.5 w-6 bg-gray-700 transform transition-transform duration-300 ${
+                  mobileMenuOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
+                }`}
+              ></span>
+            </div>
+          </button>
+        )}
 
         {/* Desktop Navigation */}
         <div className={`hidden md:flex items-center gap-1 lg:gap-2`}>
@@ -228,134 +247,120 @@ export default function Navbar({ isDashboard }) {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-50 transform transition-transform duration-300 ${
-          isSidebarOpen
-            ? "translate-x-0"
-            : "-translate-x-full pointer-events-none"
-        }`}
-        onClick={toggleSidebar}
-      >
+      {/* Mobile Menu (for non-dashboard pages) */}
+      {!isDashboard && (
         <div
-          className="h-full w-4/5 max-w-xs bg-white shadow-xl transform transition-transform duration-300"
-          onClick={(e) => e.stopPropagation()}
+          className={`md:hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-50 transform transition-transform duration-300 ${
+            mobileMenuOpen
+              ? "translate-x-0"
+              : "-translate-x-full pointer-events-none"
+          }`}
+          onClick={toggleMobileMenu}
         >
-          <div className="flex items-center justify-between p-4 border-b">
-            <Image
-              src="/assets/images/logo.png"
-              alt="Nimbrunk Logo"
-              width={120}
-              height={30}
-              className="h-8 w-auto"
-            />
-            <button
-              className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
-              onClick={toggleSidebar}
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div
+            className="h-full w-4/5 max-w-xs bg-white shadow-xl transform transition-transform duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b">
+              <Image
+                src="/assets/images/logo.png"
+                alt="Nimbrunk Logo"
+                width={120}
+                height={30}
+                className="h-8 w-auto"
+              />
+              <button
+                className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
+                onClick={toggleMobileMenu}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
+                <X size={24} />
+              </button>
+            </div>
 
-          {session && (
-            <div className="p-4 border-b">
-              <div className="flex items-center gap-3">
-                <Avatar
-                  image={
-                    "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
-                  }
-                />
-                <div>
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {session.user?.email}
-                  </p>
+            {session && (
+              <div className="p-4 border-b">
+                <div className="flex items-center gap-3">
+                  <Avatar
+                    image={
+                      "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
+                    }
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {session.user?.email}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="py-2">
-            {!isDashboard && (
-              <>
-                {navLinks.map((link) => (
+            <div className="py-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+                  onClick={toggleMobileMenu}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <Link
+                href="#contact"
+                className="flex items-center px-4 py-3 text-[#e44b37] font-medium"
+                onClick={toggleMobileMenu}
+              >
+                Hubungi Kami
+              </Link>
+
+              {session ? (
+                <>
                   <Link
-                    key={link.name}
-                    href={link.href}
+                    href="/dashboard"
                     className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
-                    onClick={toggleSidebar}
+                    onClick={toggleMobileMenu}
                   >
-                    {link.name}
+                    <Plus size={18} className="mr-3 text-[#e44b37]" />
+                    <span>Buat Kartu</span>
                   </Link>
-                ))}
-                <Link
-                  href="#contact"
-                  className="flex items-center px-4 py-3 text-[#e44b37] font-medium"
-                  onClick={toggleSidebar}
-                >
-                  Hubungi Kami
-                </Link>
-              </>
-            )}
-
-            {session ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
-                  onClick={toggleSidebar}
-                >
-                  <Plus size={18} className="mr-3 text-[#e44b37]" />
-                  <span>Buat Kartu</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
-                  onClick={toggleSidebar}
-                >
-                  <User size={18} className="mr-3 text-[#e44b37]" />
-                  <span>Atur Profil</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50"
-                >
-                  <LogOut size={18} className="mr-3" />
-                  <span>Sign out</span>
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2 p-4">
-                <Link
-                  href="/login"
-                  className="w-full py-2 text-center text-sm font-medium text-[#e44b37] bg-white border border-[#e44b37] rounded-md"
-                  onClick={toggleSidebar}
-                >
-                  Masuk
-                </Link>
-                <Link
-                  href="/register"
-                  className="w-full py-2 text-center text-sm font-medium text-white bg-[#e44b37] rounded-md"
-                  onClick={toggleSidebar}
-                >
-                  Daftar
-                </Link>
-              </div>
-            )}
+                  <Link
+                    href="#"
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+                    onClick={toggleMobileMenu}
+                  >
+                    <User size={18} className="mr-3 text-[#e44b37]" />
+                    <span>Atur Profil</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50"
+                  >
+                    <LogOut size={18} className="mr-3" />
+                    <span>Sign out</span>
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col gap-2 p-4">
+                  <Link
+                    href="/login"
+                    className="w-full py-2 text-center text-sm font-medium text-[#e44b37] bg-white border border-[#e44b37] rounded-md"
+                    onClick={toggleMobileMenu}
+                  >
+                    Masuk
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="w-full py-2 text-center text-sm font-medium text-white bg-[#e44b37] rounded-md"
+                    onClick={toggleMobileMenu}
+                  >
+                    Daftar
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }

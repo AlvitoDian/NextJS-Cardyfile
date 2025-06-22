@@ -221,7 +221,7 @@ export default function ManageCard({ params }: PageProps) {
   }, [cardData, router, id]);
 
   return (
-    <div className="p-6 sm:ml-64 min-h-screen ">
+    <div>
       <div className="mb-6">
         <Breadcrumb breadcrumb={breadcrumb} title="Kustomisasi Card" />
       </div>

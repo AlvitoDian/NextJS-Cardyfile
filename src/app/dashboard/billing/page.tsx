@@ -91,7 +91,7 @@ export default function Billing() {
   ];
 
   return (
-    <div className="p-6 sm:ml-64 relative">
+    <div>
       <Breadcrumb breadcrumb={breadcrumb} title="Subscription" />
       <div className=""></div>
       {/* Main Content */}

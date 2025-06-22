@@ -117,7 +117,7 @@ export default function ManageCard() {
     [formData, router]
   );
   return (
-    <div className="p-6 sm:ml-64 min-h-screen">
+    <div>
       <Breadcrumb breadcrumb={breadcrumb} title={"Card"} />
 
       {isModalAddOpen && (

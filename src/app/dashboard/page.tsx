@@ -63,7 +63,7 @@ export default function Dashboard() {
     },
   ];
   return (
-    <div className="p-6 sm:ml-64 relative">
+    <div>
       <Breadcrumb breadcrumb={breadcrumb} title="Dashboard" />
       <div className="">
         {/* Stats Overview */}
