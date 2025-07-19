@@ -6,7 +6,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // Fix: await the entire params object, then destructure
+  const { id } = await params;
   const token = await getToken({ req });
 
   if (!token) {
@@ -20,7 +20,7 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // Fix: await the entire params object, then destructure
+  const { id } = await params;
   const token = await getToken({ req });
 
   if (!token) {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MenuInCard({ label, href }) {
+export default function MenuInCard({ label = "", href = "" }) {
   return (
     <Link
       href={href}

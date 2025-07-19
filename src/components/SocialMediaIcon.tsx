@@ -1,7 +1,7 @@
 import { Instagram, Facebook, Twitter, Linkedin, Github } from "lucide-react";
 import Link from "next/link";
 
-export default function SocialMediaIcon({ platform, href }) {
+export default function SocialMediaIcon({ platform = "", href = "" }) {
   const getIcon = () => {
     switch (platform) {
       case "Instagram":

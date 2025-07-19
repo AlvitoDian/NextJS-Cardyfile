@@ -146,7 +146,9 @@ export default function ManageCard() {
             {data?.map((card, index) => (
               <div key={index}>
                 <FormCard
-                  /*      image={card.primg} */
+                  onView={() => {
+                    window.open(`/card/${card.card_link}`, "_blank");
+                  }}
                   title={card.title}
                   id={card.card_link}
                   onClick={() => setIsModalAddOpen(true)}
