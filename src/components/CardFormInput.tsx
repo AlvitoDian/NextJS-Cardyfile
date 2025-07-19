@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   Image as LucideImage,
@@ -27,6 +27,38 @@ export default function CardFormInput({
 
   const [profilePreview, setProfilePreview] = useState("");
   const [bannerPreview, setBannerPreview] = useState("");
+
+  useEffect(() => {
+    if (id === "profileImage" && value) {
+      if (typeof value === "string") {
+        setProfilePreview(value);
+      } else if (value instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setProfilePreview(reader.result as string);
+        };
+        reader.readAsDataURL(value);
+      }
+    } else if (id === "profileImage" && !value) {
+      setProfilePreview("");
+    }
+  }, [value, id]);
+
+  useEffect(() => {
+    if (id === "bannerImage" && value) {
+      if (typeof value === "string") {
+        setBannerPreview(value);
+      } else if (value instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setBannerPreview(reader.result as string);
+        };
+        reader.readAsDataURL(value);
+      }
+    } else if (id === "bannerImage" && !value) {
+      setBannerPreview("");
+    }
+  }, [value, id]);
 
   const renderIcon =
     id === "username" ? (

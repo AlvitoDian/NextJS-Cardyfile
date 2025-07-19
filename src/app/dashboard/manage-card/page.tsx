@@ -8,6 +8,7 @@ import { fetchCards } from "@/lib/api/card";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 
 export default function ManageCard() {
   const router = useRouter();
@@ -130,9 +131,7 @@ export default function ManageCard() {
       )}
 
       {isLoading ? (
-        <div className="flex items-center justify-center w-full pt-[200px]">
-          <span className="loading loading-bars loading-lg text-[#E34D39]"></span>
-        </div>
+        <Loader screen={true} />
       ) : (
         <div className="flex">
           <div className="flex gap-[30px] flex-wrap">
