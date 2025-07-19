@@ -39,12 +39,14 @@ export default function ModalAddField({ onClose, onAdd }) {
     {
       id: "bannerImage",
       label: "Add Banner Image",
+      label2: "Banner Image",
       description: "Upload a banner image for your page",
       icon: <Image className="text-indigo-600" strokeWidth={2} size={20} />,
     },
     {
       id: "bgColor",
       label: "Add Background Color",
+      label2: "Background Color",
       description: "Choose a background color for your page",
       icon: (
         <PaintBucket className="text-green-600" strokeWidth={2} size={20} />
@@ -53,6 +55,7 @@ export default function ModalAddField({ onClose, onAdd }) {
     {
       id: "socialMedia",
       label: "Add Social Media",
+      label2: "Social Media",
       description: "Connect your social media accounts",
       icon: (
         <MessageSquare className="text-blue-600" strokeWidth={2} size={20} />
@@ -61,6 +64,7 @@ export default function ModalAddField({ onClose, onAdd }) {
     {
       id: "menu",
       label: "Add Menu",
+      label2: "Menu",
       description: "Create navigation menu for your page",
       icon: <Logs className="text-amber-600" strokeWidth={2} size={20} />,
     },
@@ -71,8 +75,8 @@ export default function ModalAddField({ onClose, onAdd }) {
     setTimeout(onClose, 300);
   };
 
-  const handleFieldSelect = (fieldId) => {
-    onAdd(fieldId);
+  const handleFieldSelect = (fieldId, fieldLabel) => {
+    onAdd(fieldId, fieldLabel);
     handleClose();
   };
 
@@ -114,7 +118,7 @@ export default function ModalAddField({ onClose, onAdd }) {
             <button
               key={field.id}
               className="flex w-full items-center p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => handleFieldSelect(field.id)}
+              onClick={() => handleFieldSelect(field.id, field.label2)}
             >
               <div className="p-2 rounded-lg bg-gray-100 group-hover:bg-white transition-colors">
                 {field.icon}

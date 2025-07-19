@@ -106,7 +106,7 @@ export async function updateCard(req: Request, card_link: string) {
 
     return successResponse("Card updated successfully", updatedCard, 200);
   } catch (error) {
-    console.error("Error updating card:", error);
-    return errorResponse("Terjadi kesalahan pada server", 500, error);
+    console.error("Error updating cardsss:", error);
+    return errorResponse(error.message, 500, error);
   }
 }

@@ -4,9 +4,9 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await Promise.resolve(context.params);
+  const { id } = await params; // Fix: await the entire params object, then destructure
   const token = await getToken({ req });
 
   if (!token) {
@@ -18,9 +18,9 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = context.params;
+  const { id } = await params; // Fix: await the entire params object, then destructure
   const token = await getToken({ req });
 
   if (!token) {

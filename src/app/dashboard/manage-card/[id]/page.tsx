@@ -17,10 +17,10 @@ import {
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { CardPayload } from "@/types/card";
 import { fetchCardById } from "@/lib/api/card";
 import Loader from "@/components/Loader";
+import toast from "react-hot-toast";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -82,6 +82,10 @@ export default function ManageCard({ params }: PageProps) {
 
     if (data.bannerImage && data.bannerImage != "") {
       conditionalFields.push({ id: "bannerImage" });
+    }
+
+    if (data.backgroundColor && data.backgroundColor != "") {
+      conditionalFields.push({ id: "bgColor" });
     }
 
     return [...baseFields, ...conditionalFields];
@@ -158,7 +162,7 @@ export default function ManageCard({ params }: PageProps) {
     setIsModalAddOpen(false);
   };
 
-  const handleAddField = (id: string): void => {
+  const handleAddField = (id: string, label: string): void => {
     try {
       if (!formFields || formFields.length === 0) {
         throw new Error("No form fields available.");
@@ -171,7 +175,7 @@ export default function ManageCard({ params }: PageProps) {
       }
 
       if (currentFields.some((field) => field.id === id)) {
-        alert(`Field with ID "${id}" already exists.`);
+        toast.error(`Field ${label} already exists.`);
       } else {
         setCurrentFields((prevFields) => [...prevFields, { id }]);
 
@@ -277,27 +281,21 @@ export default function ManageCard({ params }: PageProps) {
     try {
       setIsSubmitting(true);
 
-      /*   console.log(cardData, "cardData");
-      return; */
+      await axios.put(`/api/cards/${id}`, cardData);
 
-      const response = await axios.put(`/api/cards/${id}`, cardData);
-
-      setIsModalAddOpen(false);
-
-      router.push(`/dashboard/manage-card/${id}`);
+      toast.success("Kartu berhasil diperbarui!");
+      fetchCardById(id);
     } catch (err: any) {
-      await Swal.fire({
-        icon: "error",
-        title: "Error",
-        text:
-          err.response?.data?.message ||
+      console.log(err, "err");
+      toast.error(
+        err.response?.data?.message ||
           err.message ||
-          "An unexpected error has occurred.",
-      });
+          "Terjadi kesalahan tak terduga. Silakan coba lagi."
+      );
     } finally {
       setIsSubmitting(false);
     }
-  }, [cardData, router, id]);
+  }, [cardData, id]);
 
   return (
     <div>
