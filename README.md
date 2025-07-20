@@ -28,10 +28,11 @@
   ![image](https://github.com/user-attachments/assets/fc09d3ce-3e16-4cd8-9e94-65890ca509c8)
 
 - Card Creation Page
-  soon...
+  <img width="1893" height="758" alt="image" src="https://github.com/user-attachments/assets/735144ad-4fee-4d13-9f94-fd7ea2d066d2" />
 
 - Dashboard
-  soon...
+  <img width="1902" height="908" alt="image" src="https://github.com/user-attachments/assets/4366cd19-898d-414e-b7e9-749e2079f580" />
+
   
 more UI soon...
 
