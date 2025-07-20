@@ -50,7 +50,7 @@ export default function ManageCard({ params }: PageProps) {
     profileImage: "",
     bannerImage: "",
     socialMedia: [{ platform: "Instagram", href: "" }],
-    menu: [{ label: "Home", href: "", backgroundColor: "" }],
+    menu: [{ label: "Home", href: "", backgroundColor: "", textColor: "" }],
   });
 
   const [isModalAddOpen, setIsModalAddOpen] = useState<boolean>(false);
@@ -109,6 +109,8 @@ export default function ManageCard({ params }: PageProps) {
 
         const remappedData: CardPayload = {
           backgroundColor: cardsData.backgroundColor || "#ffffff",
+          usernameTextColor: cardsData.usernameTextColor || "#000000",
+          descriptionTextColor: cardsData.descriptionTextColor || "#000000",
           username: cardsData.username || "",
           description: cardsData.description || "",
           profileImage: cardsData.profileImage || "",
@@ -122,6 +124,8 @@ export default function ManageCard({ params }: PageProps) {
             cardsData.menu?.map((m) => ({
               label: m.label,
               href: m.href,
+              backgroundColor: m.backgroundColor,
+              textColor: m.textColor,
             })) || [],
         };
 
@@ -288,7 +292,6 @@ export default function ManageCard({ params }: PageProps) {
       toast.success("Kartu berhasil diperbarui!");
       fetchCardById(id);
     } catch (err: any) {
-      console.log(err, "err");
       toast.error(
         err.response?.data?.message ||
           err.message ||

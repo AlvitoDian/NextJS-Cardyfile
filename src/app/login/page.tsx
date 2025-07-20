@@ -65,7 +65,6 @@ export default function Login() {
     } catch (error) {
       setError(error.response.data.message);
       setIsLoading(false);
-      console.log("Signup failed", error.message);
     }
   };
 

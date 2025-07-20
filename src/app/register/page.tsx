@@ -59,7 +59,6 @@ export default function Register() {
     } catch (error: any) {
       setError(error.response.data.message);
       setIsLoading(false);
-      console.log("Signup failed", error.message);
     }
   };
 
