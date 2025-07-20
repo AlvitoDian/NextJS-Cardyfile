@@ -313,9 +313,7 @@ export default function ManageCard({ params }: PageProps) {
         <div className="w-full lg:w-1/2">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-800">
-                Kolom Informasi
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-800">Field</h2>
 
               <div className="flex gap-[10px]">
                 <Button
