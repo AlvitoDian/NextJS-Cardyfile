@@ -520,7 +520,7 @@ export default function ManageCard({ params }: PageProps) {
           <div className="bg-white rounded-xl shadow-sm p-6 sticky top-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-gray-800">
-                Pratinjau Card
+                Preview Card
               </h2>
               <div className="flex gap-2">
                 <button
