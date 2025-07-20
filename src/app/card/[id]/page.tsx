@@ -7,12 +7,13 @@ import { fetchCardById } from "@/lib/api/card";
 import { CardPayload } from "@/types/card";
 import { use, useEffect, useState } from "react";
 import Loader from "@/components/Loader";
+import { postView } from "@/lib/api/view";
 
 export default function CardPreview({ params }: PageProps) {
   const { id } = use(params);
 
   const [cardData, setCardData] = useState<CardPayload>({
-    backgroundColor: "#ffffff",
+    backgroundColor: "",
     username: "Leikha Mandasari",
     description:
       "Leikha Mandasari is a professional in the field of information technology.",
@@ -22,7 +23,7 @@ export default function CardPreview({ params }: PageProps) {
     menu: [{ label: "Home", href: "" }],
   });
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   //? Fetch Data
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function CardPreview({ params }: PageProps) {
         const [cardsData] = await Promise.all([fetchCardById(id)]);
 
         setCardData(cardsData);
+        postView({ card_link: id });
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -45,20 +47,32 @@ export default function CardPreview({ params }: PageProps) {
 
   return (
     <div className="bg-gradient-to-r from-[#E44B37] to-pink-500 min-h-screen flex items-center justify-center p-8">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden relative">
+      <div
+        className={`max-w-md w-full ${
+          cardData.backgroundColor
+            ? `bg-[${cardData.backgroundColor}]`
+            : "bg-white"
+        } rounded-2xl shadow-2xl overflow-hidden relative`}
+      >
         {isLoading ? (
           <Loader screen={true} />
         ) : (
           <div className="flex justify-center">
             {/* Banner Section */}
             <div className="absolute top-0 left-0 w-full">
-              <Image
-                src={cardData.bannerImage}
-                alt="Profile Banner"
-                className="w-full h-[150px] object-cover rounded-t-2xl"
-                width={400}
-                height={150}
-              />
+              <div className="absolute top-0 left-0 w-full">
+                {cardData.bannerImage ? (
+                  <Image
+                    src={cardData.bannerImage}
+                    alt="Profile Banner"
+                    className="w-full h-[150px] object-cover rounded-t-2xl"
+                    width={400}
+                    height={150}
+                  />
+                ) : (
+                  <div className="w-full h-[150px] bg-gray-900 rounded-t-2xl"></div>
+                )}
+              </div>
             </div>
             {/* Banner Section End */}
 
@@ -66,13 +80,25 @@ export default function CardPreview({ params }: PageProps) {
               {/* Image Profile Section */}
               <div className="pt-[100px] flex justify-center items-center relative z-10">
                 {/* Profile Image */}
-                <Image
-                  className="w-[90px] h-[90px] rounded-full border-4 border-white shadow-lg"
-                  src={cardData.profileImage}
-                  alt="Rounded avatar"
-                  width={90}
-                  height={90}
-                />
+                {cardData.profileImage ? (
+                  <Image
+                    className="w-[90px] h-[90px] rounded-full border-4 border-white shadow-lg"
+                    src={cardData.profileImage}
+                    alt="Rounded avatar"
+                    width={90}
+                    height={90}
+                  />
+                ) : (
+                  <div className="w-[90px] h-[90px] rounded-full bg-[#e44b37] border-4 border-white shadow-lg flex items-center justify-center">
+                    <svg
+                      className="w-[50px] h-[50px] text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </div>
+                )}
               </div>
               {/* Image Profile Section End */}
 

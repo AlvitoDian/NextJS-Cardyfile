@@ -42,3 +42,13 @@ export const updateCard = async (payload: CardPayload, card_link: string) => {
     throw error;
   }
 };
+
+export const deleteCard = async (card_link: string) => {
+  try {
+    const response = await axios.delete(`${API_URL}/cards/${card_link}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding card:", error);
+    throw error;
+  }
+};

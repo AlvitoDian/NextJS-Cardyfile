@@ -2,10 +2,31 @@ import { CardPayload } from "@/types/card";
 import pool from "../db";
 import { sanitizeInput } from "@/utils/sanitizeInput";
 
-export async function getAllCards() {
+export async function getAllCards(session) {
   const client = await pool.connect();
   try {
-    const result = await client.query("SELECT * FROM m_card");
+    const result = await client.query(
+      `SELECT 
+        a.card_link, 
+        a.title, 
+        COUNT(b.card_link) AS total_views, 
+        TO_CHAR(a.crtdt, 'YYYY-MM-DD HH24:MI:SS') AS crtdt, 
+        TO_CHAR(a.chgdt, 'YYYY-MM-DD HH24:MI:SS') AS chgdt 
+      FROM 
+        m_card a 
+        LEFT JOIN t_view b ON b.card_link = a.card_link 
+      WHERE 
+        a.crtby = $1
+      GROUP BY 
+        a.card_link, 
+        a.title, 
+        a.crtdt, 
+        a.chgdt 
+      ORDER BY 
+        a.chgdt DESC
+      `,
+      [session.user.usrid]
+    );
     return result.rows;
   } finally {
     client.release();
@@ -61,8 +82,8 @@ export async function getCardDetailById(
 
     const payload: CardPayload = {
       ...baseData,
-      socialMedia: socmedResult.rows || [],
-      menu: menuResult.rows || [],
+      socialMedia: socmedResult?.rows?.length > 0 ? socmedResult.rows : [],
+      menu: menuResult?.rows?.length > 0 ? menuResult.rows : [],
     };
 
     return payload;
@@ -74,7 +95,7 @@ export async function getCardDetailById(
   }
 }
 
-export async function createCard(data) {
+export async function createCard(data, session) {
   const client = await pool.connect();
   try {
     const { card_link, title } = data;
@@ -83,10 +104,10 @@ export async function createCard(data) {
     const prepare_title = sanitizeInput(title, "string");
 
     const result = await client.query(
-      `INSERT INTO m_card (card_link, title, crtdt)
-       VALUES ($1, $2, CURRENT_TIMESTAMP)
+      `INSERT INTO m_card (card_link, title, crtby, crtdt, chgdt)
+       VALUES ($1, $2, $3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
        RETURNING *`,
-      [prepare_card_link, prepare_title]
+      [prepare_card_link, prepare_title, session.user.usrid]
     );
 
     return result.rows[0];
@@ -95,20 +116,18 @@ export async function createCard(data) {
   }
 }
 
-export async function updateCardById(cardId, data) {
+export async function updateCardById(card_link, data) {
   const client = await pool.connect();
   try {
-    const { card_link, title } = data;
-
     const prepare_card_link = sanitizeInput(card_link, "string");
-    const prepare_title = sanitizeInput(title, "string");
+    const prepare_title = sanitizeInput(data.username, "string");
 
     const result = await client.query(
       `UPDATE m_card 
        SET title = $1, chgdt = CURRENT_TIMESTAMP
        WHERE card_link = $2
        RETURNING *`,
-      [prepare_title, prepare_card_link, cardId]
+      [prepare_title, prepare_card_link]
     );
 
     if (result.rows.length === 0) {
@@ -121,7 +140,11 @@ export async function updateCardById(cardId, data) {
   }
 }
 
-export async function upsertCardContentById(card_link, data: CardPayload) {
+export async function upsertCardContentById(
+  card_link,
+  data: CardPayload,
+  session
+) {
   const client = await pool.connect();
   try {
     const prepare_card_link = sanitizeInput(card_link, "string");
@@ -130,6 +153,8 @@ export async function upsertCardContentById(card_link, data: CardPayload) {
     const prepare_primg = sanitizeInput(data.profileImage, "string");
     const prepare_bnimg = sanitizeInput(data.bannerImage, "string");
     const prepare_bgclr = sanitizeInput(data.backgroundColor, "string");
+
+    await client.query("BEGIN");
 
     const result = await client.query(
       `INSERT INTO m_card_content 
@@ -155,7 +180,20 @@ export async function upsertCardContentById(card_link, data: CardPayload) {
       ]
     );
 
+    await client.query(
+      `UPDATE m_card
+       SET title = $1,
+           chgdt = CURRENT_TIMESTAMP
+       WHERE card_link = $2`,
+      [prepare_usrnm, prepare_card_link]
+    );
+
+    await client.query("COMMIT");
+
     return result.rows[0];
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
   } finally {
     client.release();
   }
@@ -220,6 +258,40 @@ export async function deleteSocmedByCardLink(card_link: string) {
     await client.query(`DELETE FROM m_card_socmed WHERE card_link = $1`, [
       card_link,
     ]);
+  } finally {
+    client.release();
+  }
+}
+
+export async function deleteCardById(card_link: string) {
+  const client = await pool.connect();
+  try {
+    const prepare_card_link = sanitizeInput(card_link, "string");
+
+    await client.query("BEGIN");
+
+    await client.query(`DELETE FROM m_card_menu WHERE card_link = $1`, [
+      prepare_card_link,
+    ]);
+
+    await client.query(`DELETE FROM m_card_socmed WHERE card_link = $1`, [
+      prepare_card_link,
+    ]);
+
+    await client.query(`DELETE FROM m_card_content WHERE card_link = $1`, [
+      prepare_card_link,
+    ]);
+
+    await client.query(`DELETE FROM m_card WHERE card_link = $1`, [
+      prepare_card_link,
+    ]);
+
+    await client.query("COMMIT");
+    return { success: true };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error deleting card data:", error);
+    return { success: false, error };
   } finally {
     client.release();
   }

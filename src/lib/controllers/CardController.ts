@@ -9,13 +9,15 @@ import {
   insertCardSocmed,
   getCardDetailById,
   getCardById,
+  deleteCardById,
+  updateCardById,
 } from "../models/Card";
 import { successResponse, errorResponse } from "@/utils/apiResponse";
 import { resizeImage } from "@/utils/resizeImage";
 
-export async function fetchAllCards() {
+export async function fetchAllCards(session) {
   try {
-    const cards = await getAllCards();
+    const cards = await getAllCards(session);
     return successResponse("Cards fetched successfully", cards, 201);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -38,7 +40,7 @@ export async function fetchCardByLink(card_link: string) {
   }
 }
 
-export async function postCard(req: Request) {
+export async function postCard(req: Request, session) {
   try {
     const body = await req.json();
     const { card_link, title } = body;
@@ -52,7 +54,8 @@ export async function postCard(req: Request) {
       return errorResponse("Kartu dengan link ini sudah ada", 400);
     }
 
-    const newCard = await createCard({ card_link, title });
+    const newCard = await createCard({ card_link, title }, session);
+    const newCardDefault = await defaultingCard(card_link, session);
 
     return successResponse("Card created successfully", newCard, 201);
   } catch (error) {
@@ -60,9 +63,18 @@ export async function postCard(req: Request) {
     return errorResponse("Terjadi kesalahan pada server", 500, error);
   }
 }
-export async function updateCard(req: Request, card_link: string) {
+export async function defaultingCard(card_link: string, session) {
   try {
-    const payload = (await req.json()) as CardPayload;
+    const payload = {
+      backgroundColor: "#ffffff",
+      username: "Leikha Mandasari",
+      description:
+        "Leikha Mandasari is a professional in the field of information technology.",
+      profileImage: "",
+      bannerImage: "",
+      socialMedia: [{ platform: "Instagram", href: "" }],
+      menu: [{ label: "Home", href: "" }],
+    };
 
     // RESIZE images
     if (payload.bannerImage) {
@@ -74,7 +86,11 @@ export async function updateCard(req: Request, card_link: string) {
     }
 
     // UPDATE - Card Content
-    const updatedCard = await upsertCardContentById(card_link, payload);
+    const updatedCard = await upsertCardContentById(
+      card_link,
+      payload,
+      session
+    );
 
     if (!updatedCard) {
       return errorResponse("Kartu tidak ditemukan", 404);
@@ -106,7 +122,77 @@ export async function updateCard(req: Request, card_link: string) {
 
     return successResponse("Card updated successfully", updatedCard, 200);
   } catch (error) {
-    console.error("Error updating cardsss:", error);
+    console.error("Error:", error);
     return errorResponse(error.message, 500, error);
+  }
+}
+
+export async function updateCard(req: Request, card_link: string, session) {
+  try {
+    const payload = (await req.json()) as CardPayload;
+
+    // RESIZE images
+    if (payload.bannerImage) {
+      payload.bannerImage = await resizeImage(payload.bannerImage);
+    }
+
+    if (payload.profileImage) {
+      payload.profileImage = await resizeImage(payload.profileImage);
+    }
+
+    // UPDATE - Card Content
+    const updatedCard = await upsertCardContentById(
+      card_link,
+      payload,
+      session
+    );
+
+    if (!updatedCard) {
+      return errorResponse("Kartu tidak ditemukan", 404);
+    }
+
+    // DELETE INSERT - Card Menu
+    await deleteMenusByCardLink(card_link);
+    await Promise.all(
+      payload.menu.map((item, index) =>
+        insertCardMenu(card_link, {
+          label: item.label,
+          href: item.href,
+          seq: index + 1,
+        })
+      )
+    );
+
+    // DELETE INSERT - Social Media
+    await deleteSocmedByCardLink(card_link);
+    await Promise.all(
+      payload.socialMedia.map((item, index) =>
+        insertCardSocmed(card_link, {
+          platform: item.platform,
+          href: item.href,
+          seq: index + 1,
+        })
+      )
+    );
+
+    return successResponse("Card updated successfully", updatedCard, 200);
+  } catch (error) {
+    console.error("Error:", error);
+    return errorResponse(error.message, 500, error);
+  }
+}
+
+export async function removeCardById(card_link: string) {
+  try {
+    const card = await deleteCardById(card_link);
+
+    if (!card) {
+      return errorResponse("Kartu tidak ditemukan!", 404);
+    }
+
+    return successResponse("Card deleted successfully", card, 201);
+  } catch (error) {
+    console.error("Error:", error);
+    return errorResponse("Internal Server Error", 500, error);
   }
 }

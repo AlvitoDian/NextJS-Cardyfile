@@ -63,9 +63,9 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
   if (isInLogin) return null;
 
   const navLinks = [
-    { name: "Beranda", href: "/" },
-    { name: "Harga", href: "#pricing" },
-    { name: "Tentang Kami", href: "#about" },
+    { name: "Home", href: "/" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "About Us", href: "#about" },
   ];
 
   return (
@@ -151,7 +151,7 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                     href="#contact"
                     className="ml-2 px-4 py-2 text-sm font-medium text-white bg-[#e44b37] hover:bg-[#d43d2a] rounded-md shadow-sm transition-colors"
                   >
-                    Hubungi Kami
+                    Contact Us
                   </Link>
                 </li>
               </ul>
@@ -203,7 +203,7 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                       onClick={() => setDropdownOpen(false)}
                     >
                       <Plus size={18} className="mr-3 text-[#e44b37]" />
-                      <span className="font-medium">Buat Kartu</span>
+                      <span className="font-medium">Make a Card</span>
                     </Link>
                   </li>
                   <li>
@@ -213,7 +213,7 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                       onClick={() => setDropdownOpen(false)}
                     >
                       <User size={18} className="mr-3 text-[#e44b37]" />
-                      <span className="font-medium">Atur Profil</span>
+                      <span className="font-medium">Profile Settings</span>
                     </Link>
                   </li>
                   <li>

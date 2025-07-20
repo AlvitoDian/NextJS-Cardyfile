@@ -56,17 +56,17 @@ export default function CardPreview({
       <div className="flex justify-center">
         {/* Banner Section */}
         <div className="absolute top-0 left-0 w-full flex justify-center ">
-          <Image
-            src={
-              bannerImage
-                ? bannerImage
-                : "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1724570906/banner1_hmwcva.png"
-            }
-            alt="Profile Banner"
-            className="w-[900px] h-[150px] object-cover"
-            width={100}
-            height={100}
-          />
+          {bannerImage ? (
+            <Image
+              src={bannerImage}
+              alt="Profile Banner"
+              className="w-[900px] h-[150px] object-cover"
+              width={900}
+              height={150}
+            />
+          ) : (
+            <div className="w-[900px] h-[150px] bg-gray-900"></div>
+          )}
         </div>
         {/* Banner Section End */}
 
@@ -74,17 +74,25 @@ export default function CardPreview({
           {/* Image Profile Section */}
           <div className="pt-[100px] flex justify-center items-center">
             {/* Profile Image */}
-            <Image
-              className="w-[90px] h-[90px] rounded-full z-10"
-              src={
-                profileImage
-                  ? profileImage
-                  : "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
-              }
-              alt="Rounded avatar"
-              width={100}
-              height={100}
-            />
+            {profileImage ? (
+              <Image
+                className="w-[90px] h-[90px] rounded-full z-10"
+                src={profileImage}
+                alt="Profile Avatar"
+                width={90}
+                height={90}
+              />
+            ) : (
+              <div className="w-[90px] h-[90px] rounded-full bg-[#e44b37] flex items-center justify-center z-10">
+                <svg
+                  className="w-[50px] h-[50px] text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+            )}
           </div>
           {/* Image Profile Section End */}
 

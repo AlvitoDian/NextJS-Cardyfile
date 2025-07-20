@@ -300,7 +300,7 @@ export default function ManageCard({ params }: PageProps) {
   return (
     <div>
       <div className="mb-6">
-        <Breadcrumb breadcrumb={breadcrumb} title="Kustomisasi Card" />
+        <Breadcrumb breadcrumb={breadcrumb} title={cardData?.username} />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">

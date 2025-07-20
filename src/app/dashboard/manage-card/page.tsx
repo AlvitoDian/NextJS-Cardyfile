@@ -34,19 +34,18 @@ export default function ManageCard() {
   //? Common Handle Change End
 
   //? Fetch Data
+  const loadAllData = async () => {
+    setIsLoading(true);
+    try {
+      const [cardsData] = await Promise.all([fetchCards()]);
+      setData(cardsData);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
-    const loadAllData = async () => {
-      setIsLoading(true);
-      try {
-        const [cardsData] = await Promise.all([fetchCards()]);
-        setData(cardsData);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadAllData();
   }, []);
   //? Fetch Data End
@@ -55,23 +54,21 @@ export default function ManageCard() {
     () => [
       {
         name: "card_link",
-        label: "Link Kartu",
+        label: "Card Link",
         type: "text",
         required: true,
         maxLength: 20,
-        tooltip: "Masukkan link unik untuk kartu ini. Maksimal 20 karakter.",
-        /* checkUrl: "/api/check-email", */
+        tooltip: "Enter a unique link for this card. Maximum 20 characters.",
         onChange: (e) => handleChange(e.target.name, e.target.value),
       },
       {
         name: "title",
-        label: "Nama Kartu",
+        label: "Card Name",
         type: "text",
         required: true,
         maxLength: 100,
         tooltip:
-          "Masukkan nama kartu yang mudah dikenali. Maksimal 100 karakter.",
-        /* checkUrl: "/api/check-email", */
+          "Enter a recognizable name for the card. Maximum 100 characters.",
         onChange: (e) => handleChange(e.target.name, e.target.value),
       },
     ],
@@ -82,41 +79,58 @@ export default function ManageCard() {
     setIsModalAddOpen(false);
   };
 
-  const handleModalSubmit = useCallback(
-    async (modalPayload) => {
-      try {
-        setIsSubmitting(true);
+  const handleModalSubmit = useCallback(async () => {
+    try {
+      setIsSubmitting(true);
 
-        console.log(formData, "formData");
+      const payload = {
+        card_link: formData.card_link || "",
+        title: formData.title || "",
+      };
 
-        const payload = {
-          card_link: formData.card_link || "",
-          title: formData.title || "",
-        };
+      await axios.post("/api/cards", payload);
 
-        const response = await axios.post("/api/cards", payload);
+      setFormData({});
+      setIsModalAddOpen(false);
 
-        setFormData({});
-        setIsModalAddOpen(false);
+      const cardLink = payload.card_link;
 
-        const cardLink = payload.card_link;
+      router.push(`/dashboard/manage-card/${cardLink}`);
+    } catch (err: any) {
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "An unexpected error has occurred.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData, router]);
 
-        router.push(`/dashboard/manage-card/${cardLink}`);
-      } catch (err: any) {
-        await Swal.fire({
-          icon: "error",
-          title: "Error",
-          text:
-            err.response?.data?.message ||
-            err.message ||
-            "An unexpected error has occurred.",
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [formData, router]
-  );
+  const handleDeleteCard = useCallback(async (id) => {
+    try {
+      setIsSubmitting(true);
+
+      await axios.delete(`/api/cards/${id}`);
+
+      await loadAllData();
+    } catch (err) {
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "An unexpected error has occurred.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, []);
+
   return (
     <div>
       <Breadcrumb breadcrumb={breadcrumb} title={"Card"} />
@@ -133,29 +147,34 @@ export default function ManageCard() {
       {isLoading ? (
         <Loader screen={true} />
       ) : (
-        <div className="flex">
-          <div className="flex gap-[30px] flex-wrap">
-            <FormCard
-              isPlus={true}
-              image={
-                "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1714122464/cld-sample-5.jpg"
-              }
-              title={"Add New"}
-              onClick={() => setIsModalAddOpen(true)}
-            />
-            {data?.map((card, index) => (
-              <div key={index}>
-                <FormCard
-                  onView={() => {
-                    window.open(`/card/${card.card_link}`, "_blank");
-                  }}
-                  title={card.title}
-                  id={card.card_link}
-                  onClick={() => setIsModalAddOpen(true)}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="flex gap-[10px] flex-wrap flex-col">
+          <FormCard
+            isPlus={true}
+            image={
+              "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1714122464/cld-sample-5.jpg"
+            }
+            title={"Add New"}
+            onClick={() => setIsModalAddOpen(true)}
+          />
+          {data?.map((card, index) => (
+            <div key={index}>
+              <FormCard
+                title={card.title}
+                id={card.card_link}
+                onClick={() => setIsModalAddOpen(true)}
+                createdAt={card.crtdt}
+                viewCount={card.total_views}
+                lastModified={card.chgdt}
+                onView={() => {
+                  window.open(`/card/${card.card_link}`, "_blank");
+                }}
+                onDelete={() => handleDeleteCard(card.card_link)}
+                onEdit={() => {
+                  router.push(`/dashboard/manage-card/${card.card_link}`);
+                }}
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>
