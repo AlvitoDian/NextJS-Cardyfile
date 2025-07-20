@@ -6,7 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Avatar from "@/components/Avatar";
 import { usePathname } from "next/navigation";
-import { Menu, User, LogOut, Plus, ChevronDown, X } from "lucide-react";
+import {
+  Menu,
+  User,
+  LogOut,
+  Plus,
+  ChevronDown,
+  X,
+  LayoutDashboard,
+} from "lucide-react";
 
 export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
   const { data: session } = useSession();
@@ -202,20 +210,24 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                       className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      <Plus size={18} className="mr-3 text-[#e44b37]" />
-                      <span className="font-medium">Make a Card</span>
+                      <LayoutDashboard
+                        size={18}
+                        className="mr-3 text-[#e44b37]"
+                      />
+                      <span className="font-medium">Dashboard</span>
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/dashboard/manage-card"
                       className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      <User size={18} className="mr-3 text-[#e44b37]" />
-                      <span className="font-medium">Profile Settings</span>
+                      <Plus size={18} className="mr-3 text-[#e44b37]" />
+                      <span className="font-medium">Make a Card</span>
                     </Link>
                   </li>
+
                   <li>
                     <button
                       onClick={handleLogout}
