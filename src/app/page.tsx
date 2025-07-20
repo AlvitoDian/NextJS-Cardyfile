@@ -6,8 +6,8 @@ import {
   Star,
   User,
   Image,
-  Download,
   ShieldCheck,
+  ExternalLink,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
@@ -162,7 +162,7 @@ export default function Home() {
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md text-gray-800">
               <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
-                <Download className="text-[#e44b37]" size={24} />
+                <ExternalLink className="text-[#e44b37]" size={24} />
               </div>
               <h3 className="font-bold text-xl mb-2">Share Anywhere</h3>
               <p className="text-gray-600">
@@ -204,7 +204,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold mb-2">Share everywhere</h3>
               <p className="text-gray-600">
-                Download your card or share it directly to your networks.
+                Download your card directly to your networks.
               </p>
             </div>
           </div>
