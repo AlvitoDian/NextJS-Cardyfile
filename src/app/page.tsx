@@ -137,7 +137,7 @@ export default function Home() {
         <div className="container mx-auto px-6 md:px-12">
           <h2 className="text-3xl font-bold text-center mb-12">
             Why choose{" "}
-            <span className="underline decoration-white">ProfilMaker</span>?
+            <span className="underline decoration-white">Cardyfile</span>?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md text-gray-800">
@@ -164,10 +164,10 @@ export default function Home() {
               <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
                 <Download className="text-[#e44b37]" size={24} />
               </div>
-              <h3 className="font-bold text-xl mb-2">Export Anywhere</h3>
+              <h3 className="font-bold text-xl mb-2">Share Anywhere</h3>
               <p className="text-gray-600">
-                Download your profile cards or share them directly to social
-                media and professional networks.
+                Share your profile cards or share them directly to social media
+                and professional networks.
               </p>
             </div>
           </div>
@@ -275,9 +275,9 @@ export default function Home() {
                 <Star size={20} fill="#e44b37" />
               </div>
               <p className="text-gray-600 mb-6">
-                "ProfilMaker helped me create professional digital business
-                cards that really impressed my clients. The templates are
-                beautiful and so easy to customize!"
+                "Cardyfile helped me create professional digital business cards
+                that really impressed my clients. The templates are beautiful
+                and so easy to customize!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 rounded-full bg-[#e44b37] flex items-center justify-center text-white mr-3">
@@ -298,7 +298,7 @@ export default function Home() {
                 <Star size={20} fill="#e44b37" />
               </div>
               <p className="text-gray-600 mb-6">
-                "I needed profile cards for my team quickly, and ProfilMaker
+                "I needed profile cards for my team quickly, and Cardyfile
                 delivered. The platform is intuitive and the results look like
                 they were made by professional designers."
               </p>
@@ -453,7 +453,7 @@ export default function Home() {
             Ready to create stunning profile cards?
           </h2>
           <p className="mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who trust ProfilMaker for their
+            Join thousands of professionals who trust Cardyfile for their
             digital identity needs.
           </p>
           <div className="max-w-md mx-auto">
@@ -481,7 +481,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="font-bold text-xl mb-4 text-[#e44b37]">
-                ProfilMaker
+                Cardyfile
               </h3>
               <p className="text-gray-400">
                 Create stunning profile cards and digital business cards in
@@ -593,7 +593,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2025 ProfilMaker. All rights reserved.</p>
+            <p>&copy; 2025 Cardyfile. All rights reserved.</p>
           </div>
         </div>
       </footer>
