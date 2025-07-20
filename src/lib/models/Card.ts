@@ -55,7 +55,7 @@ export async function getCardDetailById(
 
     const contentResult = await client.query(
       `SELECT usrnm AS username, desc1 AS description, primg AS "profileImage",
-              bnimg AS "bannerImage", bgclr AS "backgroundColor"
+              bnimg AS "bannerImage", bgclr AS "backgroundColor", txclr1 AS "usernameTextColor", txclr2 AS "descriptionTextColor"
        FROM m_card_content
        WHERE card_link = $1`,
       [sanitizedLink]
@@ -73,7 +73,7 @@ export async function getCardDetailById(
     );
 
     const menuResult = await client.query(
-      `SELECT desc1 AS label, href1 AS href
+      `SELECT desc1 AS label, href1 AS href, bgclr AS "backgroundColor", txclr AS "textColor"
        FROM m_card_menu
        WHERE card_link = $1
        ORDER BY seq ASC`,
@@ -153,14 +153,16 @@ export async function upsertCardContentById(
     const prepare_primg = sanitizeInput(data.profileImage, "string");
     const prepare_bnimg = sanitizeInput(data.bannerImage, "string");
     const prepare_bgclr = sanitizeInput(data.backgroundColor, "string");
+    const prepare_txclr1 = sanitizeInput(data.usernameTextColor, "string");
+    const prepare_txclr2 = sanitizeInput(data.descriptionTextColor, "string");
 
     await client.query("BEGIN");
 
     const result = await client.query(
       `INSERT INTO m_card_content 
-        (card_link, usrnm, desc1, primg, bnimg, bgclr, crtdt, chgdt)
+        (card_link, usrnm, desc1, primg, bnimg, bgclr, crtdt, chgdt, txclr1, txclr2)
        VALUES 
-        ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7, $8)
        ON CONFLICT (card_link) DO UPDATE
        SET 
          usrnm = EXCLUDED.usrnm,
@@ -168,7 +170,9 @@ export async function upsertCardContentById(
          primg = EXCLUDED.primg,
          bnimg = EXCLUDED.bnimg,
          bgclr = EXCLUDED.bgclr,
-         chgdt = CURRENT_TIMESTAMP
+         chgdt = CURRENT_TIMESTAMP,
+         txclr1 = EXCLUDED.txclr1,
+         txclr2 = EXCLUDED.txclr2
        RETURNING *`,
       [
         prepare_card_link,
@@ -177,6 +181,8 @@ export async function upsertCardContentById(
         prepare_primg,
         prepare_bnimg,
         prepare_bgclr,
+        prepare_txclr1,
+        prepare_txclr2,
       ]
     );
 
@@ -206,12 +212,21 @@ export async function insertCardMenu(card_link, data) {
     const prepare_seq = sanitizeInput(data.seq, "number");
     const prepare_label = sanitizeInput(data.label, "string");
     const prepare_href = sanitizeInput(data.href, "string");
+    const prepare_bgclr = sanitizeInput(data.bgclr, "string");
+    const prepare_txclr = sanitizeInput(data.txclr, "string");
 
     const result = await client.query(
-      `INSERT INTO m_card_menu (card_link, seq, desc1, href1)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO m_card_menu (card_link, seq, desc1, href1, bgclr, txclr)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [prepare_card_link, prepare_seq, prepare_label, prepare_href]
+      [
+        prepare_card_link,
+        prepare_seq,
+        prepare_label,
+        prepare_href,
+        prepare_bgclr,
+        prepare_txclr,
+      ]
     );
 
     return result.rows[0];

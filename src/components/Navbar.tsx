@@ -246,13 +246,13 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                 href="/login"
                 className="px-4 py-2 text-sm font-medium text-[#e44b37] bg-white border border-[#e44b37] rounded-md hover:bg-[#fff8f7] transition-colors"
               >
-                Masuk
+                Sign In
               </Link>
               <Link
                 href="/register"
                 className="px-4 py-2 text-sm font-medium text-white bg-[#e44b37] rounded-md hover:bg-[#d43d2a] transition-colors"
               >
-                Daftar
+                Sign Up
               </Link>
             </div>
           )}

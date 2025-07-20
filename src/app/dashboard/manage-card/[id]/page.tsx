@@ -42,13 +42,15 @@ export default function ManageCard({ params }: PageProps) {
 
   const [cardData, setCardData] = useState<CardPayload>({
     backgroundColor: "#ffffff",
+    usernameTextColor: "#000000",
+    descriptionTextColor: "#000000",
     username: "Leikha Mandasari",
     description:
       "Leikha Mandasari is a professional in the field of information technology.",
     profileImage: "",
     bannerImage: "",
     socialMedia: [{ platform: "Instagram", href: "" }],
-    menu: [{ label: "Home", href: "" }],
+    menu: [{ label: "Home", href: "", backgroundColor: "" }],
   });
 
   const [isModalAddOpen, setIsModalAddOpen] = useState<boolean>(false);
@@ -430,16 +432,19 @@ export default function ManageCard({ params }: PageProps) {
                                               {field.keys.map((key, i) => (
                                                 <CardFormInput
                                                   key={i}
-                                                  label={
-                                                    key
-                                                      .charAt(0)
-                                                      .toUpperCase() +
-                                                    key.slice(1)
-                                                  }
+                                                  label={key
+                                                    .replace(/([A-Z])/g, " $1")
+                                                    .replace(/^./, (str) =>
+                                                      str.toUpperCase()
+                                                    )}
                                                   id={`${field.id}_${key}_${idx}`}
                                                   type={
                                                     key === "platform"
                                                       ? "select"
+                                                      : key ===
+                                                          "backgroundColor" ||
+                                                        key === "textColor"
+                                                      ? "color"
                                                       : "text"
                                                   }
                                                   value={
@@ -497,6 +502,7 @@ export default function ManageCard({ params }: PageProps) {
                             field.type === "select" ? platforms : undefined
                           }
                           icon={field.icon}
+                          subInput={field.subInput}
                         />
                       </div>
                     );
@@ -542,6 +548,8 @@ export default function ManageCard({ params }: PageProps) {
                     bannerImage={cardData.bannerImage}
                     menu={cardData.menu}
                     socialMedia={cardData.socialMedia}
+                    usernameTextColor={cardData.usernameTextColor}
+                    descriptionTextColor={cardData.descriptionTextColor}
                   />
                 </div>
 

@@ -12,6 +12,16 @@ export const getFormFields = (
     type: "text",
     value: cardData.username,
     onChange: (value) => handleCardDataChange("username", value),
+    subInput: [
+      {
+        label: "Username Text Color",
+        id: "usernameTextColor",
+        type: "color",
+        icon: "PaintBucket",
+        value: cardData.usernameTextColor,
+        onChange: (value) => handleCardDataChange("usernameTextColor", value),
+      },
+    ],
   },
   {
     label: "Description",
@@ -19,6 +29,16 @@ export const getFormFields = (
     type: "textarea",
     value: cardData.description,
     onChange: (value) => handleCardDataChange("description", value),
+    subInput: [
+      {
+        label: "Text Color",
+        id: "descriptionTextColor",
+        type: "color",
+        value: cardData.descriptionTextColor,
+        onChange: (value) =>
+          handleCardDataChange("descriptionTextColor", value),
+      },
+    ],
   },
   {
     label: "Profile Image",
@@ -43,7 +63,7 @@ export const getFormFields = (
       handleArrayChange("menu", index, key, value),
     addItem: () => addItem("menu"),
     removeItem: removeItem,
-    keys: ["label", "href"],
+    keys: ["label", "href", "backgroundColor", "textColor"],
   },
   {
     label: "Social Media",

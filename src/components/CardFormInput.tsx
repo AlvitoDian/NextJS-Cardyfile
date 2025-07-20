@@ -21,12 +21,16 @@ export default function CardFormInput({
   onChange,
   options = [],
   icon: Icon,
+  subInput = {},
 }) {
   const profileInput = useRef<HTMLInputElement | null>(null);
   const bannerInput = useRef<HTMLInputElement | null>(null);
 
   const [profilePreview, setProfilePreview] = useState("");
   const [bannerPreview, setBannerPreview] = useState("");
+
+  // Check if subInput is an array with items
+  const hasSubInput = Array.isArray(subInput) && subInput.length > 0;
 
   useEffect(() => {
     if (id === "profileImage" && value) {
@@ -92,6 +96,7 @@ export default function CardFormInput({
     ) : Icon ? (
       <div className="icon-container">{<Icon />}</div>
     ) : null;
+
   const dropdownStyle = {
     control: (provided, state) => ({
       ...provided,
@@ -171,6 +176,83 @@ export default function CardFormInput({
     }
   };
 
+  // Render SubInput Component
+  const renderSubInput = () => {
+    if (!hasSubInput) return null;
+
+    return (
+      <div className="flex items-center gap-2">
+        {subInput.map((subInputItem, index) => (
+          <div key={subInputItem.id || index}>
+            <div className="flex items-center gap-[5px] mb-2">
+              {subInputItem.icon && (
+                <div className="icon-container">
+                  <subInputItem.icon size={12} color="#666666" />
+                </div>
+              )}
+              <label
+                htmlFor={subInputItem.id}
+                className="text-[#666666] font-medium text-xs"
+              >
+                {subInputItem.label}
+              </label>
+            </div>
+
+            {subInputItem.type === "select" ? (
+              <Select
+                id={subInputItem.id}
+                value={
+                  subInputItem.options?.find(
+                    (option) => option.value === subInputItem.value
+                  ) || null
+                }
+                onChange={(selectedOption) =>
+                  subInputItem.onChange?.(selectedOption?.value)
+                }
+                options={subInputItem.options || []}
+                className="w-full"
+                classNamePrefix="react-select"
+                styles={{
+                  ...dropdownStyle,
+                  control: (provided, state) => ({
+                    ...provided,
+                    minHeight: "32px",
+                    fontSize: "12px",
+                    boxShadow: state.isFocused
+                      ? "0 0 8px rgba(228, 75, 55, 0.3)"
+                      : "none",
+                    borderColor: state.isFocused
+                      ? "#E44B37"
+                      : provided.borderColor,
+                    borderRadius: "6px",
+                  }),
+                }}
+              />
+            ) : subInputItem.type === "color" ? (
+              <input
+                type="color"
+                id={subInputItem.id}
+                value={subInputItem.value || "#ffffff"}
+                onChange={(e) => subInputItem.onChange?.(e.target.value)}
+                className="p-1 h-8 w-12 block bg-white border border-gray-200 cursor-pointer rounded-md disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_8px_rgba(228,75,55,0.3)] transition-all duration-500"
+                title={subInputItem.title || "Choose color"}
+              />
+            ) : (
+              <input
+                type={subInputItem.type || "text"}
+                id={subInputItem.id}
+                value={subInputItem.value || ""}
+                onChange={(e) => subInputItem.onChange?.(e.target.value)}
+                placeholder={subInputItem.placeholder}
+                className="outline-none border border-[#DDDDDD] p-1.5 w-full rounded-[6px] text-xs focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   if (type === "select") {
     const selectOption = options.map((option) => ({
       label: option,
@@ -199,6 +281,7 @@ export default function CardFormInput({
           classNamePrefix="react-select"
           styles={dropdownStyle}
         />
+        {renderSubInput()}
       </div>
     );
   }
@@ -218,6 +301,7 @@ export default function CardFormInput({
           onChange={(e) => onChange(e.target.value)}
           className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
         />
+        {renderSubInput()}
       </div>
     );
   }
@@ -231,14 +315,18 @@ export default function CardFormInput({
             {label}
           </label>
         </div>
-        <input
-          type={type}
-          id={id}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_8px_rgba(228,75,55,0.3)] transition-all duration-500"
-          title="Choose your color"
-        />
+        <div className={hasSubInput ? "flex gap-3 items-start" : ""}>
+          <input
+            type={type}
+            id={id}
+            value={value || "#ffffff"}
+            onChange={(e) => onChange(e.target.value)}
+            className="p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none hover:shadow-[0_0_8px_rgba(228,75,55,0.3)] transition-all duration-500"
+            title="Choose your color"
+          />
+          {hasSubInput && <div className="flex-1">{renderSubInput()}</div>}
+        </div>
+        {!hasSubInput && renderSubInput()}
       </div>
     );
   }
@@ -261,38 +349,44 @@ export default function CardFormInput({
           className="hidden"
         />
 
-        <div
-          onClick={handleProfileClick}
-          className={`w-[100px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500
-             ${profilePreview ? "bg-gray-100" : "bg-white"}`}
-        >
-          {!profilePreview ? (
-            <div className="flex flex-col items-center">
-              <LucideImage color="#DDDDDD" />
-              <span className="text-[10px] font-[600] text-[#67748e]">
-                100 x 100 (px)
-              </span>
-            </div>
-          ) : (
-            <div className="relative w-full h-full rounded-[8px]">
-              <Image
-                src={profilePreview}
-                alt="Preview"
-                width={100}
-                height={100}
-                className="w-full h-full object-cover rounded-[8px]"
-              />
+        <div className={hasSubInput ? "flex gap-3 items-start" : ""}>
+          <div
+            onClick={handleProfileClick}
+            className={`w-[100px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500
+               ${profilePreview ? "bg-gray-100" : "bg-white"}`}
+          >
+            {!profilePreview ? (
+              <div className="flex flex-col items-center">
+                <LucideImage color="#DDDDDD" />
+                <span className="text-[10px] font-[600] text-[#67748e]">
+                  100 x 100 (px)
+                </span>
+              </div>
+            ) : (
+              <div className="relative w-full h-full rounded-[8px]">
+                <Image
+                  src={profilePreview}
+                  alt="Preview"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover rounded-[8px]"
+                />
 
-              <button
-                type="button"
-                onClick={handleDeleteProfile}
-                className="absolute top-[-10px] right-[-10px] bg-red-500 text-white p-1 rounded-full"
-              >
-                <X size={14} />
-              </button>
-            </div>
-          )}
+                <button
+                  type="button"
+                  onClick={handleDeleteProfile}
+                  className="absolute top-[-10px] right-[-10px] bg-red-500 text-white p-1 rounded-full"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {hasSubInput && <div className="flex-1">{renderSubInput()}</div>}
         </div>
+
+        {!hasSubInput && renderSubInput()}
       </div>
     );
   }
@@ -315,38 +409,44 @@ export default function CardFormInput({
           className="hidden"
         />
 
-        <div
-          onClick={handleBannerClick}
-          className={`w-[200px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500 ${
-            bannerPreview ? "bg-gray-100" : "bg-white"
-          }`}
-        >
-          {!bannerPreview ? (
-            <div className="flex flex-col items-center">
-              <LucideImage color="#DDDDDD" />
-              <span className="text-[10px] font-[600] text-[#67748e]">
-                100 x 100 (px)
-              </span>
-            </div>
-          ) : (
-            <div className="relative w-full h-full">
-              <Image
-                src={bannerPreview}
-                alt="Preview"
-                width={100}
-                height={100}
-                className="w-full h-full object-cover rounded-[8px]"
-              />
-              <button
-                type="button"
-                onClick={handleDeleteBanner}
-                className="absolute top-[-10px] right-[-10px] bg-red-500 text-white p-1 rounded-full"
-              >
-                <X size={14} />
-              </button>
-            </div>
-          )}
+        <div className={hasSubInput ? "flex gap-3 items-start" : ""}>
+          <div
+            onClick={handleBannerClick}
+            className={`w-[200px] h-[100px] border-[1.5px] border-dashed border-gray-300 flex justify-center items-center cursor-pointer rounded-[8px] hover:border-[#E44B37] transition-all duration-500 ${
+              bannerPreview ? "bg-gray-100" : "bg-white"
+            }`}
+          >
+            {!bannerPreview ? (
+              <div className="flex flex-col items-center">
+                <LucideImage color="#DDDDDD" />
+                <span className="text-[10px] font-[600] text-[#67748e]">
+                  100 x 100 (px)
+                </span>
+              </div>
+            ) : (
+              <div className="relative w-full h-full">
+                <Image
+                  src={bannerPreview}
+                  alt="Preview"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover rounded-[8px]"
+                />
+                <button
+                  type="button"
+                  onClick={handleDeleteBanner}
+                  className="absolute top-[-10px] right-[-10px] bg-red-500 text-white p-1 rounded-full"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {hasSubInput && <div className="flex-1">{renderSubInput()}</div>}
         </div>
+
+        {!hasSubInput && renderSubInput()}
       </div>
     );
   }
@@ -364,13 +464,18 @@ export default function CardFormInput({
           {label}
         </label>
       </div>
-      <input
-        type={type}
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
-      />
+      <div className={hasSubInput ? "flex gap-3 items-start" : ""}>
+        <input
+          type={type}
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500 ${
+            hasSubInput ? "flex-1" : ""
+          }`}
+        />
+      </div>
+      {hasSubInput && <div className="flex-1 flex-row">{renderSubInput()}</div>}
     </div>
   );
 }

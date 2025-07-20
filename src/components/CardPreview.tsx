@@ -13,6 +13,8 @@ export default function CardPreview({
   bannerImage,
   menu,
   socialMedia,
+  usernameTextColor = "#E44B37",
+  descriptionTextColor = "#67748e",
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -98,7 +100,12 @@ export default function CardPreview({
 
           {/* Username Section */}
           <div className="flex flex-wrap justify-center max-w-full">
-            <span className="text-center mt-4 text-[#E44B37] font-semibold px-2 text-xl break-words max-w-full">
+            <span
+              className="text-center mt-4  font-semibold px-2 text-xl break-words max-w-full"
+              style={{
+                color: usernameTextColor,
+              }}
+            >
               {username}
             </span>
           </div>
@@ -106,7 +113,12 @@ export default function CardPreview({
 
           {/* Description Section */}
           <div className="flex flex-wrap justify-center max-w-full">
-            <span className="text-center mt-4 text-[#67748e] text-sm px-2 font-normal break-words max-w-full">
+            <span
+              className="text-center mt-4 text-sm px-2 font-normal break-words max-w-full"
+              style={{
+                color: descriptionTextColor,
+              }}
+            >
               {description}
             </span>
           </div>
@@ -127,7 +139,13 @@ export default function CardPreview({
           {/* Menu Section */}
           <div className="mt-8 flex flex-col gap-[10px] w-full px-[20px]">
             {menu.map((item, index) => (
-              <MenuInCard key={index} label={item.label} href={item.href} />
+              <MenuInCard
+                key={index}
+                label={item.label}
+                href={item.href}
+                bgColor={item.backgroundColor}
+                textColor={item.textColor}
+              />
             ))}
           </div>
           {/* Menu Section End */}

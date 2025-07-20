@@ -13,11 +13,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const token = await getToken({ req });
-
-  if (!token) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
 
   return fetchCardByLink(id);
 }

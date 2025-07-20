@@ -158,6 +158,8 @@ export async function updateCard(req: Request, card_link: string, session) {
         insertCardMenu(card_link, {
           label: item.label,
           href: item.href,
+          bgclr: item.backgroundColor,
+          txclr: item.textColor,
           seq: index + 1,
         })
       )
