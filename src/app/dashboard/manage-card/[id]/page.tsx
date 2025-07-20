@@ -313,12 +313,12 @@ export default function ManageCard({ params }: PageProps) {
         <div className="w-full lg:w-1/2">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-800">Field</h2>
+              <h2 className="text-lg font-semibold text-gray-800">Fields</h2>
 
               <div className="flex gap-[10px]">
                 <Button
                   onClick={handleAddModal}
-                  label="Tambah Kolom"
+                  label="Add Field"
                   icon="ClipboardPlus"
                   variant="secondary"
                 />
@@ -327,7 +327,7 @@ export default function ManageCard({ params }: PageProps) {
                   variant="primary"
                   icon="CheckCheck"
                   isLoading={isSubmitting}
-                  label="Simpan"
+                  label="Save"
                   className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
                 />
               </div>
