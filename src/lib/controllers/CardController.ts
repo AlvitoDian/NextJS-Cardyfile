@@ -10,7 +10,6 @@ import {
   getCardDetailById,
   getCardById,
   deleteCardById,
-  updateCardById,
 } from "../models/Card";
 import { successResponse, errorResponse } from "@/utils/apiResponse";
 import { resizeImage } from "@/utils/resizeImage";
@@ -55,7 +54,7 @@ export async function postCard(req: Request, session) {
     }
 
     const newCard = await createCard({ card_link, title }, session);
-    const newCardDefault = await defaultingCard(card_link, session);
+    await defaultingCard(card_link);
 
     return successResponse("Card created successfully", newCard, 201);
   } catch (error) {
@@ -63,17 +62,19 @@ export async function postCard(req: Request, session) {
     return errorResponse("Terjadi kesalahan pada server", 500, error);
   }
 }
-export async function defaultingCard(card_link: string, session) {
+export async function defaultingCard(card_link: string) {
   try {
     const payload = {
       backgroundColor: "#ffffff",
+      usernameTextColor: "#000000",
+      descriptionTextColor: "#000000",
       username: "Leikha Mandasari",
       description:
         "Leikha Mandasari is a professional in the field of information technology.",
       profileImage: "",
       bannerImage: "",
       socialMedia: [{ platform: "Instagram", href: "" }],
-      menu: [{ label: "Home", href: "" }],
+      menu: [{ label: "Home", href: "", backgroundColor: "", textColor: "" }],
     };
 
     // RESIZE images
@@ -86,11 +87,7 @@ export async function defaultingCard(card_link: string, session) {
     }
 
     // UPDATE - Card Content
-    const updatedCard = await upsertCardContentById(
-      card_link,
-      payload,
-      session
-    );
+    const updatedCard = await upsertCardContentById(card_link, payload);
 
     if (!updatedCard) {
       return errorResponse("Kartu tidak ditemukan", 404);
@@ -127,7 +124,7 @@ export async function defaultingCard(card_link: string, session) {
   }
 }
 
-export async function updateCard(req: Request, card_link: string, session) {
+export async function updateCard(req: Request, card_link: string) {
   try {
     const payload = (await req.json()) as CardPayload;
 
@@ -141,11 +138,7 @@ export async function updateCard(req: Request, card_link: string, session) {
     }
 
     // UPDATE - Card Content
-    const updatedCard = await upsertCardContentById(
-      card_link,
-      payload,
-      session
-    );
+    const updatedCard = await upsertCardContentById(card_link, payload);
 
     if (!updatedCard) {
       return errorResponse("Kartu tidak ditemukan", 404);

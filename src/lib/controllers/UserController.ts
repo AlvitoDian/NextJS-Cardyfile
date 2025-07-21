@@ -1,5 +1,13 @@
-import { createUser, getAllUsers, findUserByEmail } from "../models/User";
+import { UserUpdatePayload } from "@/types/user";
+import {
+  createUser,
+  getAllUsers,
+  findUserByEmail,
+  updateUser,
+  checkOldPassword,
+} from "../models/User";
 import { successResponse, errorResponse } from "@/utils/apiResponse";
+import { resizeImage } from "@/utils/resizeImage";
 
 export async function fetchAllUsers() {
   try {
@@ -7,6 +15,21 @@ export async function fetchAllUsers() {
     return successResponse("User fetched successfully", data, 201);
   } catch (error) {
     console.error("Error fetching users:", error);
+    return errorResponse("Internal Server Error", 500, error);
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await findUserByEmail(email);
+
+    if (!user) {
+      return errorResponse("User tidak ditemukan!", 404);
+    }
+
+    return successResponse("user fetched successfully", user, 201);
+  } catch (error) {
+    console.error("Error:", error);
     return errorResponse("Internal Server Error", 500, error);
   }
 }
@@ -29,5 +52,38 @@ export async function registerUser(req: Request) {
   } catch (error) {
     console.error("Error registering user:", error);
     return errorResponse("Internal Server Error", 500, error);
+  }
+}
+
+export async function updateUserProfile(req: Request, usrid: string) {
+  try {
+    const payload = (await req.json()) as UserUpdatePayload;
+
+    // RESIZE images
+    if (payload.primg) {
+      payload.primg = await resizeImage(payload.primg);
+    }
+
+    // CHECK - Compare Old Password
+    if (payload.newpw) {
+      const checkOld = await checkOldPassword(payload);
+      if (!checkOld) {
+        return errorResponse(
+          "Password lama yang Anda masukkan tidak sesuai.",
+          500
+        );
+      }
+    }
+
+    // UPDATE - User
+    const updatedUser = await updateUser(payload, usrid);
+    if (!updatedUser) {
+      return errorResponse("User tidak ditemukan", 404);
+    }
+
+    return successResponse("User updated successfully", updatedUser, 200);
+  } catch (error) {
+    console.error("Error:", error);
+    return errorResponse(error.message, 500, error);
   }
 }

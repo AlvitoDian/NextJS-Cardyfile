@@ -139,9 +139,13 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
         )}
 
         {/* Desktop Navigation */}
-        <div className={`hidden md:flex items-center gap-1 lg:gap-2`}>
+        <div
+          className={`items-center gap-1 lg:gap-2 ${
+            !isDashboard ? "hidden md:flex" : ""
+          }`}
+        >
           {!isDashboard && (
-            <>
+            <div>
               <ul className="flex items-center space-x-1 lg:space-x-2">
                 {navLinks.map((link) => (
                   <li key={link.name}>
@@ -163,7 +167,7 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
                   </Link>
                 </li>
               </ul>
-            </>
+            </div>
           )}
 
           {session ? (
@@ -174,9 +178,7 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
               >
                 <div className="flex-shrink-0">
                   <Avatar
-                    image={
-                      "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
-                    }
+                    image={"https://www.w3schools.com/howto/img_avatar.png"}
                   />
                 </div>
                 <span className="hidden lg:block font-medium truncate max-w-[120px]">

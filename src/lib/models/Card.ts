@@ -140,11 +140,7 @@ export async function updateCardById(card_link, data) {
   }
 }
 
-export async function upsertCardContentById(
-  card_link,
-  data: CardPayload,
-  session
-) {
+export async function upsertCardContentById(card_link, data: CardPayload) {
   const client = await pool.connect();
   try {
     const prepare_card_link = sanitizeInput(card_link, "string");
