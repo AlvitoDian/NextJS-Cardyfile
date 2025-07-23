@@ -13,6 +13,60 @@ import Navbar from "@/components/Navbar";
 
 export default function Home() {
   const [email, setEmail] = useState("");
+
+  const plans = [
+    {
+      id: 1,
+      name: "Free",
+      description: "Start for free with basic features",
+      price: "Rp0",
+      highlight: false,
+      features: ["1 profile card", "Basic templates", "No export available"],
+      button: "Get Started",
+      buttonClass: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+      borderColor: "border-gray-200",
+      barColor: "bg-gray-200",
+    },
+    {
+      id: 2,
+      name: "Pro",
+      description: "For active users & professionals",
+      price: "Rp50,000/mo",
+      highlight: true,
+      badge: "Most Popular",
+      features: [
+        "Up to 10 profile cards",
+        "Export to PDF & PNG",
+        "Custom subdomain",
+      ],
+      button: "Get Pro",
+      buttonClass: "bg-[#e44b37] text-white hover:bg-opacity-90",
+      borderColor: "border-2 border-[#e44b37]",
+      barColor: "bg-[#e44b37]",
+    },
+    {
+      id: 3,
+      name: "Royal",
+      description: "All-inclusive for brands & businesses",
+      price: "Rp100,000/mo",
+      highlight: false,
+      features: [
+        "Unlimited profile cards",
+        "All premium templates",
+        "All export formats",
+        "Custom domain support",
+        "Visitor analytics",
+        "No watermark",
+        "Personal branding",
+        "Priority support",
+      ],
+      button: "Get Royal",
+      buttonClass: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+      borderColor: "border-gray-200",
+      barColor: "bg-gray-200",
+    },
+  ];
+
   return (
     <>
       <Navbar />
@@ -353,93 +407,39 @@ export default function Home() {
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-md">
-              <div className="w-full h-2 bg-gray-200 mb-8 rounded"></div>
-              <h3 className="text-xl font-bold mb-2">Free</h3>
-              <p className="text-gray-600 mb-4">Perfect for beginners</p>
-              <p className="text-4xl font-bold mb-6">$0</p>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>3 profile cards</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Basic templates</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>PNG export</span>
-                </li>
-              </ul>
-              <button className="w-full py-3 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition">
-                Get Started
-              </button>
-            </div>
-
-            <div className="bg-white p-8 rounded-lg border-2 border-[#e44b37] shadow-lg relative">
-              <div className="w-full h-2 bg-[#e44b37] mb-8 rounded"></div>
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#e44b37] text-white px-4 py-1 rounded-full text-sm font-bold">
-                Most Popular
+            {plans.map((plan, index) => (
+              <div
+                key={index}
+                className={`bg-white p-8 rounded-lg shadow-md relative ${
+                  plan.borderColor
+                } ${plan.highlight ? "shadow-lg" : ""}`}
+              >
+                <div
+                  className={`w-full h-2 ${plan.barColor} mb-8 rounded`}
+                ></div>
+                {plan.highlight && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#e44b37] text-white px-4 py-1 rounded-full text-sm font-bold">
+                    {plan.badge}
+                  </div>
+                )}
+                <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                <p className="text-gray-600 mb-4">{plan.description}</p>
+                <p className="text-4xl font-bold mb-6">{plan.price}</p>
+                <ul className="mb-8 space-y-3">
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center">
+                      <ShieldCheck className="text-green-500 mr-2" size={20} />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className={`w-full py-3 rounded-md transition ${plan.buttonClass}`}
+                >
+                  {plan.button}
+                </button>
               </div>
-              <h3 className="text-xl font-bold mb-2">Pro</h3>
-              <p className="text-gray-600 mb-4">For serious professionals</p>
-              <p className="text-4xl font-bold mb-6">
-                $9<span className="text-xl font-normal text-gray-500">/mo</span>
-              </p>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Unlimited cards</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Premium templates</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>All export formats</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Remove watermark</span>
-                </li>
-              </ul>
-              <button className="w-full py-3 bg-[#e44b37] text-white rounded-md hover:bg-opacity-90 transition">
-                Get Pro
-              </button>
-            </div>
-
-            <div className="bg-white p-8 rounded-lg border border-gray-200 shadow-md">
-              <div className="w-full h-2 bg-gray-200 mb-8 rounded"></div>
-              <h3 className="text-xl font-bold mb-2">Team</h3>
-              <p className="text-gray-600 mb-4">For teams and businesses</p>
-              <p className="text-4xl font-bold mb-6">
-                $29
-                <span className="text-xl font-normal text-gray-500">/mo</span>
-              </p>
-              <ul className="mb-8 space-y-3">
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Everything in Pro</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>5 team members</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Team templates</span>
-                </li>
-                <li className="flex items-center">
-                  <ShieldCheck className="text-green-500 mr-2" size={20} />
-                  <span>Priority support</span>
-                </li>
-              </ul>
-              <button className="w-full py-3 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition">
-                Get Team
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       </section>
