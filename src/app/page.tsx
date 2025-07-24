@@ -519,7 +519,7 @@ export default function Home() {
                         ? "opacity-80 cursor-not-allowed"
                         : ""
                     }`}
-                    onClick={() => handlePay(plan.id)}
+                    // onClick={() => handlePay(plan.id)}
                     disabled={loading}
                   >
                     {isCurrentPlanLoading ? (
