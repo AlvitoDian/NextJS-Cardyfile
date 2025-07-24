@@ -149,10 +149,10 @@ export default function Register() {
 
           <div className="flex flex-col gap-[10px] justify-start">
             <span className="font-semibold text-gray-700 text-4xl">
-              Daftar Akun
+              Sign Up
             </span>
             <span className="font-medium text-gray-400 text-sm">
-              Buat Kartu Profil-mu sendiri hanya dengan kurang dari 5 menit.
+              Create your own Profile Card in less than 5 minutes.
             </span>
           </div>
 
@@ -173,7 +173,7 @@ export default function Register() {
                   value={user.email}
                   onChange={handleChange}
                   className="mt-1 text-sm outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
-                  placeholder="Alamat Email"
+                  placeholder="Email Address"
                 />
               </div>
 
@@ -214,7 +214,7 @@ export default function Register() {
                   htmlFor="confPassword"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Konfirmasi Password
+                  Confirm Password
                 </label>
                 <div className="relative">
                   <input
@@ -275,18 +275,18 @@ export default function Register() {
                   <span className="sr-only">Loading...</span>
                 </div>
               ) : (
-                "Daftar"
+                "Sign up"
               )}
             </button>
 
             <div className="text-center">
-              <span className="text-gray-600">Sudah punya akun ? </span>
+              <span className="text-gray-600">Already have an account? </span>
               <Link
                 href="/login"
                 style={{ color: "#E44B37" }}
                 className="font-medium hover:text-red-600"
               >
-                Masuk
+                Sign in
               </Link>
             </div>
           </form>
