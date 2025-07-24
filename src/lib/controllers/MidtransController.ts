@@ -1,14 +1,17 @@
 import { PaymentPayload } from "@/types/payment";
 import { successResponse } from "@/utils/apiResponse";
 import { snap } from "@/utils/midtransClient";
+import { getPlanById } from "../models/Plans";
 
 export async function createSnapTransaction(req) {
   const body = (await req.json()) as PaymentPayload;
 
+  const plan = await getPlanById(body.plnid);
+
   const parameter = {
     transaction_details: {
       order_id: `ORD-${Date.now()}`,
-      gross_amount: Number(body.amount),
+      gross_amount: Number(plan.price),
     },
     customer_details: {
       first_name: body.firstName || "Alvito",

@@ -77,6 +77,7 @@ export default function Home() {
 
     try {
       const response = await axios.post("/api/midtrans", {
+        plnid: planId,
         amount: 150000,
         firstName: "John",
         lastName: "Doe",
@@ -88,18 +89,27 @@ export default function Home() {
 
       if (token) {
         window.snap.pay(token, {
-          onSuccess: function (result) {
-            toast.success("Payment success!");
-            console.log(result);
+          onSuccess: async function (result) {
+            try {
+              toast.loading("Finalizing payment...");
 
-            axios.post("/api/subscription", {
-              planId,
-              orderId: result.order_id,
-              transactionId: result.transaction_id,
-              amount: result.gross_amount,
-              paymentType: result.payment_type,
-              status: result.transaction_status,
-            });
+              const response = await axios.post("/api/plans", {
+                plnid: planId,
+                orderId: result.order_id,
+                transactionId: result.transaction_id,
+                amount: result.gross_amount,
+                paymentType: result.payment_type,
+                status: result.transaction_status,
+              });
+
+              toast.dismiss();
+              toast.success("Subscription created successfully!");
+              console.log("Subscription response:", response.data);
+            } catch (error) {
+              toast.dismiss();
+              toast.error("Failed to save subscription data");
+              console.error("Subscription error:", error);
+            }
           },
           onPending: function (result) {
             toast("Payment pending", { icon: "⏳" });

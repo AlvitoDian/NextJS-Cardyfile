@@ -1,4 +1,5 @@
 export interface PaymentPayload {
+  plnid: string;
   amount: number;
   firstName?: string;
   lastName?: string;
