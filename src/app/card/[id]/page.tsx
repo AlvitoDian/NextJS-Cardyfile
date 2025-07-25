@@ -56,6 +56,8 @@ export default async function CardPreview({ params, searchParams }: PageProps) {
     cardData = getDefaultCardData();
   }
 
+  console.log(cardData, "cardData");
+
   return (
     <div className="bg-gradient-to-r from-[#E44B37] to-pink-500 min-h-screen flex items-center justify-center p-8">
       {hasError && (
