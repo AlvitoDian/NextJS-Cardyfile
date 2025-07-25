@@ -72,8 +72,9 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "About Us", href: "#about" },
+    { name: "Pricing", href: "/#pricing" },
+    { name: "About Us", href: "/#about" },
+    { name: "Templates", href: "/templates" },
   ];
 
   return (

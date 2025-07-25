@@ -13,6 +13,7 @@ import {
 } from "../models/Card";
 import { successResponse, errorResponse } from "@/utils/apiResponse";
 import { resizeImage } from "@/utils/resizeImage";
+import { getTemplateById, updateCountTemplate } from "../models/Template";
 
 export async function fetchAllCards(session) {
   try {
@@ -42,19 +43,22 @@ export async function fetchCardByLink(card_link: string) {
 export async function postCard(req: Request, session) {
   try {
     const body = await req.json();
-    const { card_link, title } = body;
+    const { card_link, title, temp_id } = body;
 
-    if (!card_link || !title) {
+    if (!card_link || !title || !temp_id) {
       return errorResponse("Semua field wajib diisi", 400);
     }
 
     const existingCard = await getCardById(card_link);
     if (existingCard) {
-      return errorResponse("Kartu dengan link ini sudah ada", 400);
+      return errorResponse(
+        `A card with the link <strong>${card_link}</strong> already exists.`,
+        400
+      );
     }
 
     const newCard = await createCard({ card_link, title }, session);
-    await defaultingCard(card_link);
+    await defaultingCard(card_link, temp_id);
 
     return successResponse("Card created successfully", newCard, 201);
   } catch (error) {
@@ -62,20 +66,16 @@ export async function postCard(req: Request, session) {
     return errorResponse("Terjadi kesalahan pada server", 500, error);
   }
 }
-export async function defaultingCard(card_link: string) {
+export async function defaultingCard(card_link: string, temp_id: string) {
   try {
-    const payload = {
-      backgroundColor: "#ffffff",
-      usernameTextColor: "#000000",
-      descriptionTextColor: "#000000",
-      username: "Leikha Mandasari",
-      description:
-        "Leikha Mandasari is a professional in the field of information technology.",
-      profileImage: "",
-      bannerImage: "",
-      socialMedia: [{ platform: "Instagram", href: "" }],
-      menu: [{ label: "Home", href: "", backgroundColor: "", textColor: "" }],
-    };
+    const getTemplate = await getTemplateById(temp_id);
+    if (!getTemplate) {
+      return errorResponse("Template not found", 404);
+    }
+
+    await updateCountTemplate(temp_id);
+
+    const payload = getTemplate.template;
 
     // RESIZE images
     if (payload.bannerImage) {
@@ -100,6 +100,8 @@ export async function defaultingCard(card_link: string) {
         insertCardMenu(card_link, {
           label: item.label,
           href: item.href,
+          bgclr: item.backgroundColor,
+          txclr: item.textColor,
           seq: index + 1,
         })
       )

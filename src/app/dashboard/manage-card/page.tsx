@@ -71,6 +71,91 @@ export default function ManageCard() {
           "Enter a recognizable name for the card. Maximum 100 characters.",
         onChange: (e) => handleChange(e.target.name, e.target.value),
       },
+      {
+        name: "template",
+        label: "Choose Template",
+        type: "checkbox-image",
+        required: true,
+        multiple: false,
+        containerClassName: "grid-cols-2 sm:grid-cols-4",
+        imageClassName: "h-40",
+        options: [
+          {
+            id: "modern",
+            label: "Minimalist Elegance",
+            imageSrc: "/assets/images/basic.png",
+            description: "A minimalist template with elegant simplicity",
+          },
+          {
+            id: "classic",
+            label: "Modern Professional",
+            imageSrc: "/assets/images/vintage.png",
+            description: "A modern and professional looking template",
+          },
+          {
+            id: "creative",
+            label: "Creative Vibrant",
+            imageSrc: "/assets/images/creative.png",
+            description: "A vibrant template for creative minds",
+          },
+          {
+            id: "techinnovator",
+            label: "Tech Innovator",
+            imageSrc: "/assets/images/techinnovator.png",
+            description: "A template designed for tech enthusiasts",
+          },
+          {
+            id: "artisticvision",
+            label: "Artistic Vision",
+            imageSrc: "/assets/images/artisticvision.png",
+            description: "A visually rich template for artists",
+          },
+          {
+            id: "academicsage",
+            label: "Academic Sage",
+            imageSrc: "/assets/images/academicsage.png",
+            description: "An intellectual layout for academics",
+          },
+          {
+            id: "creativelens",
+            label: "Creative Lens",
+            imageSrc: "/assets/images/creativelens.png",
+            description: "A fresh creative style with perspective",
+          },
+          {
+            id: "educationalhub",
+            label: "Educational Hub",
+            imageSrc: "/assets/images/educationalhub.png",
+            description: "A perfect template for educators and trainers",
+          },
+          {
+            id: "strategicgrowth",
+            label: "Strategic Growth",
+            imageSrc: "/assets/images/strategicgrowth.png",
+            description: "Ideal for business and growth strategies",
+          },
+          {
+            id: "digitalcreator",
+            label: "Digital Creator",
+            imageSrc: "/assets/images/digitalcreator.png",
+            description: "A modern look for digital content creators",
+          },
+          {
+            id: "corporateprestige",
+            label: "Corporate Prestige",
+            imageSrc: "/assets/images/corporateprestige.png",
+            description: "Professional and prestigious template for corporates",
+          },
+          {
+            id: "neodesign",
+            label: "Neo Design",
+            imageSrc: "/assets/images/neodesign.png",
+            description:
+              "Sleek and professional template tailored for modern businesses and corporate portfolios. Clean layout, refined typography, and a strong visual hierarchy.",
+          },
+        ],
+        onChange: (e) => handleChange(e.target.name, e.target.value),
+      },
     ],
     [handleChange]
   );
@@ -86,6 +171,7 @@ export default function ManageCard() {
       const payload = {
         card_link: formData.card_link || "",
         title: formData.title || "",
+        temp_id: formData.template || "",
       };
 
       await axios.post("/api/cards", payload);

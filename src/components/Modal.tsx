@@ -1,16 +1,31 @@
 import { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 import Button from "./Button";
-import { HelpCircle, X } from "lucide-react";
+import { HelpCircle, X, Check } from "lucide-react";
 import Swal from "sweetalert2";
 import axios from "axios"; // Make sure to install axios if not already
+import Image from "next/image";
+
+interface ImageOption {
+  id: string;
+  label: string;
+  imageSrc: string;
+  description?: string;
+}
 
 interface InputField {
   name: string;
   label: string;
-  type: "text" | "select" | "textarea" | "file" | "multi-select" | "number";
+  type:
+    | "text"
+    | "select"
+    | "textarea"
+    | "file"
+    | "multi-select"
+    | "number"
+    | "checkbox-image";
   required?: boolean;
-  options?: string[];
+  options?: string[] | ImageOption[]; // For checkbox-image, use ImageOption[]
   maxLength?: number;
   onChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -21,6 +36,10 @@ interface InputField {
   checkUrl?: string; // URL to check field value availability
   value?: any;
   onCompress?: (file: File) => Promise<File>;
+  // Specific for checkbox-image
+  multiple?: boolean; // Allow multiple selection for checkbox-image
+  imageClassName?: string; // Custom CSS class for images
+  containerClassName?: string; // Custom CSS class for container
 }
 
 interface ModalProps {
@@ -103,14 +122,6 @@ export default function Modal({
           return newErrors;
         });
       }
-
-      /* setCheckResults((prev) => ({
-        ...prev,
-        [fieldName]: {
-          valid: true,
-          message: "Email is available",
-        },
-      })); */
     } catch (err: any) {
       Swal.fire({
         icon: err.message || "error",
@@ -119,6 +130,48 @@ export default function Modal({
       });
     } finally {
       setIsChecking((prev) => ({ ...prev, [fieldName]: false }));
+    }
+  };
+
+  const handleCheckboxImageChange = (
+    fieldName: string,
+    optionId: string,
+    isMultiple: boolean = false,
+    input: InputField
+  ) => {
+    const newValue = isMultiple
+      ? (() => {
+          const currentValues = formData[fieldName] || [];
+          const isSelected = currentValues.includes(optionId);
+
+          if (isSelected) {
+            return currentValues.filter((id: string) => id !== optionId);
+          } else {
+            return [...currentValues, optionId];
+          }
+        })()
+      : optionId;
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: newValue,
+    }));
+
+    if (input.onChange) {
+      const mockEvent = {
+        target: {
+          name: fieldName,
+          value: newValue,
+        },
+      } as React.ChangeEvent<HTMLInputElement>;
+      input.onChange(mockEvent);
+    }
+
+    if (errors[fieldName]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
     }
   };
 
@@ -284,21 +337,36 @@ export default function Modal({
             !dataToValidate[input.name] ||
             dataToValidate[input.name].length === 0
           ) {
-            newErrors[input.name] = `${input.label} harus diisi!`;
+            newErrors[input.name] = `${input.label} is required!`;
+          }
+        } else if (input.type === "checkbox-image") {
+          if (input.multiple) {
+            if (
+              !dataToValidate[input.name] ||
+              dataToValidate[input.name].length === 0
+            ) {
+              newErrors[
+                input.name
+              ] = `Please select at least one ${input.label}!`;
+            }
+          } else {
+            if (!dataToValidate[input.name]) {
+              newErrors[input.name] = `Please select a ${input.label}!`;
+            }
           }
         } else if (input.type === "file") {
           if (!dataToValidate[input.name] && !currentData?.[input.name]) {
-            newErrors[input.name] = `${input.label} harus diisi!`;
+            newErrors[input.name] = `${input.label} is required!`;
           }
         } else if (
           !dataToValidate[input.name] ||
           dataToValidate[input.name].toString().trim() === ""
         ) {
-          newErrors[input.name] = `${input.label} harus diisi!`;
+          newErrors[input.name] = `${input.label} is required!`;
         }
       }
 
-      // Add validation for fields with checkUrl that are not valid
+      // Validation for fields with checkUrl that are not valid
       if (
         input.checkUrl &&
         checkResults[input.name] &&
@@ -346,6 +414,117 @@ export default function Modal({
     }
   };
 
+  const renderCheckboxImageInput = (input: InputField) => {
+    const imageOptions = input.options as ImageOption[];
+    const currentValue = formDataParent?.[input.name] || formData[input.name];
+    const isMultiple = input.multiple || false;
+
+    return (
+      <div
+        className={`grid gap-4 ${
+          input.containerClassName || "grid-cols-2 sm:grid-cols-3"
+        }`}
+      >
+        {imageOptions.map((option) => {
+          const isSelected = isMultiple
+            ? Array.isArray(currentValue) && currentValue.includes(option.id)
+            : currentValue === option.id;
+
+          return (
+            <div
+              key={option.id}
+              className={`relative cursor-pointer rounded-lg group transition-all duration-200 ${
+                isSelected
+                  ? "ring-2 ring-[#e44b37] ring-offset-2"
+                  : "hover:ring-1 hover:ring-gray-300"
+              }`}
+              onClick={() =>
+                handleCheckboxImageChange(
+                  input.name,
+                  option.id,
+                  isMultiple,
+                  input
+                )
+              }
+            >
+              <div className="relative overflow-hidden rounded-lg bg-gray-100">
+                <Image
+                  src={option.imageSrc}
+                  alt={option.label}
+                  width={500}
+                  height={500}
+                  className={`w-full h-32 object-cover transition-transform duration-200 group-hover:scale-105 ${
+                    input.imageClassName || ""
+                  }`}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src =
+                      "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik04NyA2NEw5MyA3MEwxMDcgNTZMMTIzIDcySDc3TDg3IDY0WiIgZmlsbD0iI0Q1RDdEQSIvPgo8Y2lyY2xlIGN4PSI4NSIgY3k9IjUyIiByPSI0IiBmaWxsPSIjRDVEN0RBIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iOTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5Q0EzQUYiIGZvbnQtc2l6ZT0iMTIiPkltYWdlIE5vdCBGb3VuZDwvdGV4dD4KPC9zdmc+";
+                  }}
+                />
+
+                {/* Selection indicator */}
+                {isSelected && (
+                  <div className="absolute inset-0 bg-[#e44b37] bg-opacity-20 flex items-center justify-center">
+                    <div className="bg-[#e44b37] rounded-full p-1">
+                      <Check size={16} className="text-white" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200" />
+              </div>
+
+              {/* Label and description */}
+              <div className="mt-2 text-center">
+                <p
+                  className={`text-sm font-medium ${
+                    isSelected ? "text-[#e44b37]" : "text-gray-700"
+                  }`}
+                >
+                  {option.label}
+                </p>
+                {option.description && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    {option.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Checkbox indicator for multiple selection */}
+              {isMultiple && (
+                <div
+                  className={`absolute top-2 left-2 w-5 h-5 rounded border-2 flex items-center justify-center ${
+                    isSelected
+                      ? "bg-[#e44b37] border-[#e44b37]"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {isSelected && <Check size={12} className="text-white" />}
+                </div>
+              )}
+
+              {/* Radio indicator for single selection */}
+              {!isMultiple && (
+                <div
+                  className={`absolute top-2 left-2 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    isSelected
+                      ? "bg-[#e44b37] border-[#e44b37]"
+                      : "bg-white border-gray-300"
+                  }`}
+                >
+                  {isSelected && (
+                    <div className="w-2 h-2 rounded-full bg-white" />
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div
       className={`fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 ${
@@ -355,7 +534,7 @@ export default function Modal({
       <form
         ref={modalRef}
         onSubmit={handleSubmit}
-        className={`p-6 bg-white w-full max-w-xl rounded-xl shadow-xl transition-all duration-300 transform flex flex-col gap-5 ${
+        className={`p-6 bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl shadow-xl transition-all duration-300 transform flex flex-col gap-5 ${
           isVisible ? "translate-y-0 scale-100" : "-translate-y-8 scale-95"
         }`}
       >
@@ -393,7 +572,9 @@ export default function Modal({
                 )}
               </label>
 
-              {input.type === "textarea" ? (
+              {input.type === "checkbox-image" ? (
+                renderCheckboxImageInput(input)
+              ) : input.type === "textarea" ? (
                 <textarea
                   id={input.name}
                   name={input.name}

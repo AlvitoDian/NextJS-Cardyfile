@@ -12,6 +12,7 @@ import {
 import Navbar from "@/components/Navbar";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -169,9 +170,12 @@ export default function Home() {
             <button className="px-6 py-3 bg-[#e44b37] text-white rounded-md hover:bg-opacity-90 transition flex items-center justify-center">
               Get Started <ChevronRight className="ml-2 w-5 h-5" />
             </button>
-            <button className="px-6 py-3 border border-[#e44b37] text-[#e44b37] rounded-md hover:bg-red-50 transition">
+            <Link
+              href={"/templates"}
+              className="px-6 py-3 border border-[#e44b37] text-[#e44b37] rounded-md hover:bg-red-50 transition"
+            >
               View Templates
-            </button>
+            </Link>
           </div>
         </div>
         <div className="md:w-1/2 flex justify-center">

@@ -15,7 +15,6 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import Button from "@/components/Button";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { CardPayload } from "@/types/card";
 import { fetchCardById } from "@/lib/api/card";
@@ -32,7 +31,6 @@ interface CurrentField {
 
 export default function ManageCard({ params }: PageProps) {
   const { id } = use(params);
-  const router = useRouter();
 
   const breadcrumb = [
     { label: "Home", href: "/" },
@@ -41,16 +39,49 @@ export default function ManageCard({ params }: PageProps) {
   ];
 
   const [cardData, setCardData] = useState<CardPayload>({
-    backgroundColor: "#ffffff",
-    usernameTextColor: "#000000",
-    descriptionTextColor: "#000000",
-    username: "Leikha Mandasari",
-    description:
-      "Leikha Mandasari is a professional in the field of information technology.",
-    profileImage: "",
+    themename: "neobrutalism-designer",
+    menu: [
+      {
+        href: "#works",
+        label: "Works",
+        textColor: "#000000",
+        backgroundColor: "#ffcd29",
+      },
+      {
+        href: "#bio",
+        label: "Bio",
+        textColor: "#ffffff",
+        backgroundColor: "#111111",
+      },
+      {
+        href: "#contact",
+        label: "Let's Talk",
+        textColor: "#ffffff",
+        backgroundColor: "#e11d48",
+      },
+    ],
+    username: "Luca Moreno",
     bannerImage: "",
-    socialMedia: [{ platform: "Instagram", href: "" }],
-    menu: [{ label: "Home", href: "", backgroundColor: "", textColor: "" }],
+    description:
+      "Multidisciplinary designer breaking norms through bold layouts, loud color choices, and unapologetic visuals.",
+    socialMedia: [
+      {
+        href: "https://www.behance.net/lucamdesign",
+        platform: "Behance",
+      },
+      {
+        href: "https://www.instagram.com/lucabrutal",
+        platform: "Instagram",
+      },
+      {
+        href: "https://www.linkedin.com/in/lucamoreno",
+        platform: "LinkedIn",
+      },
+    ],
+    profileImage: "",
+    backgroundColor: "#ffffff",
+    usernameTextColor: "#111111",
+    descriptionTextColor: "#e11d48",
   });
 
   const [isModalAddOpen, setIsModalAddOpen] = useState<boolean>(false);
@@ -129,7 +160,7 @@ export default function ManageCard({ params }: PageProps) {
             })) || [],
         };
 
-        setCardData(remappedData);
+        // setCardData(remappedData);
 
         const updatedFields = updateCurrentFieldsBasedOnData(remappedData);
         setCurrentFields(updatedFields);
@@ -561,12 +592,12 @@ export default function ManageCard({ params }: PageProps) {
                     </div>
                     <div>
                       <h4 className="text-sm font-medium text-blue-700 mb-1">
-                        Tips Kustomisasi
+                        Customization Tips
                       </h4>
                       <p className="text-xs text-blue-600">
-                        Pastikan warna latar dan teks memiliki kontras yang baik
-                        untuk meningkatkan keterbacaan. Tambahkan menu dan
-                        sosial media untuk memaksimalkan engagement.
+                        Make sure the background and text colors have good
+                        contrast to improve readability. Add menu items and
+                        social media links to maximize engagement.
                       </p>
                     </div>
                   </div>
