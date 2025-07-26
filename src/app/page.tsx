@@ -325,10 +325,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/2">
               <Image
-                fill
-                src="/api/placeholder/540/400"
+                width={550}
+                height={550}
+                src="/assets/images/banner.png"
                 alt="Profile maker app showcase"
-                className="rounded-lg shadow-lg"
                 loading="lazy"
               />
             </div>
