@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import { Toaster } from "react-hot-toast";
@@ -21,7 +19,7 @@ export const metadata: Metadata = {
   title: "Cardyfile",
   description: "Your Profile, Your Card",
   icons: {
-    icon: "/assets/images/icon.svg",
+    icon: "/assets/images/logo.png",
   },
 };
 

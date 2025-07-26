@@ -264,114 +264,116 @@ export default function Navbar({ isDashboard, isSidebarOpen, setSidebarOpen }) {
 
       {/* Mobile Menu (for non-dashboard pages) */}
       {!isDashboard && (
-        <div
-          className={`md:hidden fixed inset-0 z-50 bg-gray-900 bg-opacity-50 transform transition-transform duration-300 ${
-            mobileMenuOpen
-              ? "translate-x-0"
-              : "-translate-x-full pointer-events-none"
-          }`}
-          onClick={toggleMobileMenu}
-        >
+        <div>
           <div
-            className="h-full w-4/5 max-w-xs bg-white shadow-xl transform transition-transform duration-300"
-            onClick={(e) => e.stopPropagation()}
+            className={`md:hidden fixed inset-0 z-50 transform transition-transform duration-300 ${
+              mobileMenuOpen ? "bg-gray-900 bg-opacity-50" : ""
+            }`}
+            onClick={toggleMobileMenu}
           >
-            <div className="flex items-center justify-between p-4 border-b">
-              <Image
-                src="/assets/images/logo.png"
-                alt="Nimbrunk Logo"
-                width={120}
-                height={30}
-                className="h-8 w-auto"
-              />
-              <button
-                className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
-                onClick={toggleMobileMenu}
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {session && (
-              <div className="p-4 border-b">
-                <div className="flex items-center gap-3">
-                  <Avatar
-                    image={
-                      "https://res.cloudinary.com/dgfcvu9ns/image/upload/v1735989130/Layer_1_uflkla.png"
-                    }
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {session.user?.email}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="py-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+            <div
+              className={`h-full w-4/5 max-w-xs bg-white shadow-xl transform transition-transform duration-300 ${
+                mobileMenuOpen
+                  ? "translate-x-0"
+                  : "-translate-x-full pointer-events-none"
+              }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-4 border-b">
+                <Image
+                  src="/assets/images/logo.png"
+                  alt="Nimbrunk Logo"
+                  width={120}
+                  height={30}
+                  className="h-8 w-auto"
+                />
+                <button
+                  className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
                   onClick={toggleMobileMenu}
                 >
-                  {link.name}
-                </Link>
-              ))}
-              <Link
-                href="#contact"
-                className="flex items-center px-4 py-3 text-[#e44b37] font-medium"
-                onClick={toggleMobileMenu}
-              >
-                Hubungi Kami
-              </Link>
+                  <X size={24} />
+                </button>
+              </div>
 
-              {session ? (
-                <>
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
-                    onClick={toggleMobileMenu}
-                  >
-                    <Plus size={18} className="mr-3 text-[#e44b37]" />
-                    <span>Buat Kartu</span>
-                  </Link>
-                  <Link
-                    href="#"
-                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
-                    onClick={toggleMobileMenu}
-                  >
-                    <User size={18} className="mr-3 text-[#e44b37]" />
-                    <span>Atur Profil</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50"
-                  >
-                    <LogOut size={18} className="mr-3" />
-                    <span>Sign out</span>
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-2 p-4">
-                  <Link
-                    href="/login"
-                    className="w-full py-2 text-center text-sm font-medium text-[#e44b37] bg-white border border-[#e44b37] rounded-md"
-                    onClick={toggleMobileMenu}
-                  >
-                    Masuk
-                  </Link>
-                  <Link
-                    href="/register"
-                    className="w-full py-2 text-center text-sm font-medium text-white bg-[#e44b37] rounded-md"
-                    onClick={toggleMobileMenu}
-                  >
-                    Daftar
-                  </Link>
+              {session && (
+                <div className="p-4 border-b">
+                  <div className="flex items-center gap-3">
+                    <Avatar
+                      image={"https://www.w3schools.com/howto/img_avatar.png"}
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {session.user?.email}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
+
+              <div className="py-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+                    onClick={toggleMobileMenu}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                <Link
+                  href="#contact"
+                  className="flex items-center px-4 py-3 text-[#e44b37] font-medium"
+                  onClick={toggleMobileMenu}
+                >
+                  Contact Us
+                </Link>
+
+                {session ? (
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+                      onClick={toggleMobileMenu}
+                    >
+                      <Plus size={18} className="mr-3 text-[#e44b37]" />
+                      <span>Buat Kartu</span>
+                    </Link>
+                    <Link
+                      href="#"
+                      className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50"
+                      onClick={toggleMobileMenu}
+                    >
+                      <User size={18} className="mr-3 text-[#e44b37]" />
+                      <span>Atur Profil</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50"
+                    >
+                      <LogOut size={18} className="mr-3" />
+                      <span>Sign out</span>
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-2 p-4">
+                    <Link
+                      href="/login"
+                      className="w-full py-2 text-center text-sm font-medium text-[#e44b37] bg-white border border-[#e44b37] rounded-md"
+                      onClick={toggleMobileMenu}
+                    >
+                      Masuk
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="w-full py-2 text-center text-sm font-medium text-white bg-[#e44b37] rounded-md"
+                      onClick={toggleMobileMenu}
+                    >
+                      Daftar
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

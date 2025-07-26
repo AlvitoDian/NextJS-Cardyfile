@@ -146,14 +146,10 @@ export default function Templates() {
                 </div>
 
                 <div className="p-4">
-                  <div className="flex justify-between items-center mb-2">
+                  <div className="flex justify-end items-center mb-2">
                     <div className="flex items-center text-sm text-gray-600">
                       <Users className="w-4 h-4 mr-1" />
                       <span>{template.usageCount.toLocaleString()} uses</span>
-                    </div>
-                    <div className="flex items-center text-sm text-yellow-600">
-                      <Star className="w-4 h-4 mr-1 fill-yellow-400" />
-                      <span>{template.rating}</span>
                     </div>
                   </div>
                   <Link

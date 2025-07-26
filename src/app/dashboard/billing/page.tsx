@@ -12,13 +12,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 export default function Billing() {
   const breadcrumb = [{ label: "Billing", href: "/" }];
 
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("pro");
-  const [paymentMethod, setPaymentMethod] = useState("credit-card");
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
 
   const plans = [
     {
@@ -144,89 +138,12 @@ export default function Billing() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <button className="px-4 py-2 bg-[#e44b37] text-white rounded-lg hover:bg-red-700 transition">
+            {/*       <button className="px-4 py-2 bg-[#e44b37] text-white rounded-lg hover:bg-red-700 transition">
               Manage Subscription
-            </button>
+            </button> */}
             <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
               Cancel Plan
             </button>
-          </div>
-        </div>
-
-        {/* Payment Method */}
-        <div className="bg-white rounded-lg shadow mb-6 p-6">
-          <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
-
-          <div className="flex items-center p-4 border rounded-lg">
-            <div className="p-2 bg-gray-100 rounded-lg">
-              <CreditCard className="w-8 h-8 text-gray-600" />
-            </div>
-            <div className="ml-4">
-              <div className="font-medium">Visa ending in 4242</div>
-              <div className="text-gray-500 text-sm">Expires 12/26</div>
-            </div>
-            <div className="ml-auto">
-              <button className="text-[#e44b37] hover:text-red-800 text-sm font-medium">
-                Edit
-              </button>
-            </div>
-          </div>
-
-          <button className="mt-4 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition flex items-center">
-            <CreditCard className="w-4 h-4 mr-2" />
-            Add Payment Method
-          </button>
-        </div>
-
-        {/* Available Plans */}
-        <div className="bg-white rounded-lg shadow mb-6 p-6">
-          <h2 className="text-lg font-semibold mb-6">Available Plans</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <div
-                key={plan.id}
-                className={`border rounded-lg p-5 cursor-pointer transition ${
-                  selectedPlan === plan.id
-                    ? "border-[#e44b37] ring-2 ring-red-200"
-                    : "hover:border-gray-300"
-                }`}
-                onClick={() => setSelectedPlan(plan.id)}
-              >
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-medium">{plan.name}</h3>
-                  {selectedPlan === plan.id && (
-                    <CheckCircle className="w-5 h-5 text-[#e44b37]" />
-                  )}
-                </div>
-
-                <div className="flex items-baseline mb-3">
-                  <span className="text-2xl font-bold">${plan.price}</span>
-                  <span className="text-gray-500 ml-1">/month</span>
-                </div>
-
-                <p className="text-gray-500 text-sm mb-4">{plan.description}</p>
-
-                <div className="space-y-2">
-                  {plan.features.map((feature, index) => (
-                    <div key={index} className="flex items-center">
-                      <CheckCircle className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  className={`w-full mt-4 py-2 rounded-lg transition ${
-                    selectedPlan === plan.id
-                      ? "bg-[#e44b37] text-white hover:bg-red-700"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {selectedPlan === plan.id ? "Current Plan" : "Select Plan"}
-                </button>
-              </div>
-            ))}
           </div>
         </div>
 
@@ -240,19 +157,16 @@ export default function Billing() {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3">
-                    Invoice
+                    Order Number
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Date
+                    Pay Time
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Amount
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Status
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Action
                   </th>
                 </tr>
               </thead>
@@ -274,12 +188,6 @@ export default function Billing() {
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
                         {invoice.status}
                       </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <button className="font-medium text-[#e44b37] hover:underline flex items-center">
-                        <Download className="w-4 h-4 mr-1" />
-                        PDF
-                      </button>
                     </td>
                   </tr>
                 ))}

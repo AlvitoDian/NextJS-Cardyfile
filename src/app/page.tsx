@@ -1,24 +1,17 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import {
   ChevronRight,
   Star,
   User,
-  Image,
-  ShieldCheck,
+  Image as ImageIcon,
   ExternalLink,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import axios from "axios";
-import toast from "react-hot-toast";
 import Link from "next/link";
+import PricingSection from "@/components/PricingSection";
+import EmailSection from "@/components/EmailSection";
+import Image from "next/image";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [selectedPlanId, setSelectedPlanId] = useState(null);
-
   const plans = [
     {
       id: 1,
@@ -72,112 +65,117 @@ export default function Home() {
     },
   ];
 
-  const handlePay = async (planId) => {
-    setLoading(true);
-    setSelectedPlanId(planId);
+  const testimonials = [
+    {
+      id: 1,
+      rating: 5,
+      text: "Cardyfile helped me create professional digital business cards that really impressed my clients. The templates are beautiful and so easy to customize!",
+      author: "Jane Doe",
+      role: "Freelance Designer",
+      initials: "JD",
+    },
+    {
+      id: 2,
+      rating: 5,
+      text: "I needed profile cards for my team quickly, and Cardyfile delivered. The platform is intuitive and the results look like they were made by professional designers.",
+      author: "Robert Johnson",
+      role: "Startup Founder",
+      initials: "RJ",
+    },
+    {
+      id: 3,
+      rating: 5,
+      text: "As someone with no design experience, I was able to create stunning profile cards in minutes. The customer support is also excellent!",
+      author: "Sarah Lee",
+      role: "Marketing Manager",
+      initials: "SL",
+    },
+  ];
 
-    try {
-      const response = await axios.post("/api/midtrans", {
-        plnid: planId,
-        amount: 150000,
-        firstName: "John",
-        lastName: "Doe",
-        email: "john.doe@mail.com",
-        phone: "081234567890",
-      });
+  const features = [
+    {
+      icon: ImageIcon,
+      title: "Beautiful Templates",
+      description:
+        "Choose from dozens of professionally designed templates and customize them to match your style.",
+    },
+    {
+      icon: User,
+      title: "Easy Customization",
+      description:
+        "Simple drag-and-drop editor makes it easy to create the perfect profile card in minutes.",
+    },
+    {
+      icon: ExternalLink,
+      title: "Share Anywhere",
+      description:
+        "Share your profile cards or share them directly to social media and professional networks.",
+    },
+  ];
 
-      const { token } = response.data.data;
+  const steps = [
+    {
+      number: 1,
+      title: "Choose a template",
+      description:
+        "Browse our collection of professional templates for any occasion.",
+    },
+    {
+      number: 2,
+      title: "Customize your card",
+      description:
+        "Add your information, photos, and adjust colors to match your style.",
+    },
+    {
+      number: 3,
+      title: "Share everywhere",
+      description: "Download your card directly to your networks.",
+    },
+  ];
 
-      if (token) {
-        window.snap.pay(token, {
-          onSuccess: async function (result) {
-            try {
-              toast.loading("Finalizing payment...");
-
-              const response = await axios.post("/api/plans", {
-                plnid: planId,
-                orderId: result.order_id,
-                transactionId: result.transaction_id,
-                amount: result.gross_amount,
-                paymentType: result.payment_type,
-                status: result.transaction_status,
-              });
-
-              toast.dismiss();
-              toast.success("Subscription created successfully!");
-              console.log("Subscription response:", response.data);
-            } catch (error) {
-              toast.dismiss();
-              toast.error("Failed to save subscription data");
-              console.error("Subscription error:", error);
-            }
-          },
-          onPending: function (result) {
-            toast("Payment pending", { icon: "⏳" });
-            console.log(result);
-          },
-          onError: function (result) {
-            toast.error("Payment error");
-            console.log(result);
-          },
-          onClose: function () {
-            toast("Payment window closed", { icon: "🛑" });
-          },
-        });
-      }
-    } catch (err) {
-      console.error("Midtrans token error:", err);
-      alert("Failed to create transaction");
-    } finally {
-      setLoading(false);
-      setSelectedPlanId(null);
-    }
-  };
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
-    script.setAttribute(
-      "data-client-key",
-      process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY!
-    );
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
-  const LoadingSpinner = () => (
-    <div className="inline-block w-5 h-5 mr-2 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-  );
+  const benefits = [
+    "Choose from 10+ professionally designed templates",
+    "Customize with your brand colors and logos",
+    "Add social media links and contact information",
+    "Export in multiple formats for any platform",
+  ];
 
   return (
     <>
       <Navbar />
+
+      {/* Hero Section */}
       <section className="py-16 md:py-24 px-6 md:px-12 flex flex-col md:flex-row items-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#e44b37] opacity-10 rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#e44b37] opacity-10 rounded-full -ml-48 -mb-48"></div>
 
         <div className="md:w-1/2 mb-10 md:mb-0 relative z-10">
           <div className="w-20 h-8 bg-[#e44b37] mb-6"></div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Create stunning{" "}
             <span className="text-[#e44b37]">profile cards</span> in minutes
-          </h2>
+          </h1>
           <p className="text-gray-600 text-lg mb-8">
             Design professional profile cards and digital business cards that
             stand out. Easy to use, fully customizable, and ready to share.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-6 py-3 bg-[#e44b37] text-white rounded-md hover:bg-opacity-90 transition flex items-center justify-center">
-              Get Started <ChevronRight className="ml-2 w-5 h-5" />
-            </button>
             <Link
-              href={"/templates"}
+              href={"/dashboard"}
+              className="px-6 py-3 bg-[#e44b37] text-white rounded-md hover:bg-opacity-90 transition flex items-center justify-center"
+            >
+              Get Started <ChevronRight className="ml-2 w-5 h-5" />
+            </Link>
+            <Link
+              href="/templates"
               className="px-6 py-3 border border-[#e44b37] text-[#e44b37] rounded-md hover:bg-red-50 transition"
             >
               View Templates
             </Link>
           </div>
         </div>
+
+        {/* Profile Cards Preview */}
         <div className="md:w-1/2 flex justify-center">
           <div className="relative w-full max-w-md">
             <div className="bg-white shadow-xl rounded-xl p-6 border border-gray-200 transform rotate-3 absolute top-4 right-4 z-10 w-64">
@@ -272,6 +270,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Features Section */}
       <section id="features" className="py-16 bg-[#e44b37] text-white">
         <div className="container mx-auto px-6 md:px-12">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -279,85 +279,57 @@ export default function Home() {
             <span className="underline decoration-white">Cardyfile</span>?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md text-gray-800">
-              <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
-                <Image className="text-[#e44b37]" size={24} />
-              </div>
-              <h3 className="font-bold text-xl mb-2">Beautiful Templates</h3>
-              <p className="text-gray-600">
-                Choose from dozens of professionally designed templates and
-                customize them to match your style.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md text-gray-800">
-              <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
-                <User className="text-[#e44b37]" size={24} />
-              </div>
-              <h3 className="font-bold text-xl mb-2">Easy Customization</h3>
-              <p className="text-gray-600">
-                Simple drag-and-drop editor makes it easy to create the perfect
-                profile card in minutes.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md text-gray-800">
-              <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
-                <ExternalLink className="text-[#e44b37]" size={24} />
-              </div>
-              <h3 className="font-bold text-xl mb-2">Share Anywhere</h3>
-              <p className="text-gray-600">
-                Share your profile cards or share them directly to social media
-                and professional networks.
-              </p>
-            </div>
+            {features.map((feature, index) => {
+              const IconComponent = feature.icon;
+              return (
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded-lg shadow-md text-gray-800"
+                >
+                  <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4">
+                    <IconComponent className="text-[#e44b37]" size={24} />
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
+      {/* How it works Section */}
       <section className="py-16 px-6 md:px-12 bg-white">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-16">How it works</h2>
           <div className="flex flex-col md:flex-row gap-8">
-            <div className="flex-1 flex flex-col items-center text-center p-6 rounded-lg bg-red-50 border-l-4 border-[#e44b37]">
-              <div className="w-16 h-16 bg-[#e44b37] text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
-                1
+            {steps.map((step, index) => (
+              <div
+                key={index}
+                className="flex-1 flex flex-col items-center text-center p-6 rounded-lg bg-red-50 border-l-4 border-[#e44b37]"
+              >
+                <div className="w-16 h-16 bg-[#e44b37] text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+                  {step.number}
+                </div>
+                <h3 className="text-xl font-bold mb-2">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
               </div>
-              <h3 className="text-xl font-bold mb-2">Choose a template</h3>
-              <p className="text-gray-600">
-                Browse our collection of professional templates for any
-                occasion.
-              </p>
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center p-6 rounded-lg bg-red-50 border-l-4 border-[#e44b37]">
-              <div className="w-16 h-16 bg-[#e44b37] text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-bold mb-2">Customize your card</h3>
-              <p className="text-gray-600">
-                Add your information, photos, and adjust colors to match your
-                style.
-              </p>
-            </div>
-            <div className="flex-1 flex flex-col items-center text-center p-6 rounded-lg bg-red-50 border-l-4 border-[#e44b37]">
-              <div className="w-16 h-16 bg-[#e44b37] text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-bold mb-2">Share everywhere</h3>
-              <p className="text-gray-600">
-                Download your card directly to your networks.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Showcase Section */}
       <section className="py-12 bg-[#e44b37] bg-opacity-10">
         <div className="container mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="md:w-1/2">
-              <img
+              <Image
+                fill
                 src="/api/placeholder/540/400"
                 alt="Profile maker app showcase"
                 className="rounded-lg shadow-lg"
+                loading="lazy"
               />
             </div>
             <div className="md:w-1/2">
@@ -366,30 +338,14 @@ export default function Home() {
                 cards in minutes
               </h2>
               <div className="space-y-4">
-                <div className="flex items-start">
-                  <div className="w-6 h-6 rounded-full bg-[#e44b37] flex items-center justify-center text-white mt-1 mr-3">
-                    ✓
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#e44b37] flex items-center justify-center text-white mt-1 mr-3">
+                      ✓
+                    </div>
+                    <p>{benefit}</p>
                   </div>
-                  <p>Choose from 100+ professionally designed templates</p>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-6 h-6 rounded-full bg-[#e44b37] flex items-center justify-center text-white mt-1 mr-3">
-                    ✓
-                  </div>
-                  <p>Customize with your brand colors and logos</p>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-6 h-6 rounded-full bg-[#e44b37] flex items-center justify-center text-white mt-1 mr-3">
-                    ✓
-                  </div>
-                  <p>Add social media links and contact information</p>
-                </div>
-                <div className="flex items-start">
-                  <div className="w-6 h-6 rounded-full bg-[#e44b37] flex items-center justify-center text-white mt-1 mr-3">
-                    ✓
-                  </div>
-                  <p>Export in multiple formats for any platform</p>
-                </div>
+                ))}
               </div>
               <button className="mt-8 px-6 py-3 bg-[#e44b37] text-white rounded-md hover:bg-opacity-90 transition">
                 Try for Free
@@ -399,85 +355,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
       <section id="testimonials" className="py-16 bg-white">
         <div className="container mx-auto px-6 md:px-12">
           <h2 className="text-3xl font-bold text-center mb-12">
             What our users say
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-[#e44b37] bg-opacity-5 p-6 rounded-lg border border-[#e44b37] border-opacity-20">
-              <div className="flex text-[#e44b37] mb-4">
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-              </div>
-              <p className="text-gray-600 mb-6">
-                "Cardyfile helped me create professional digital business cards
-                that really impressed my clients. The templates are beautiful
-                and so easy to customize!"
-              </p>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#e44b37] flex items-center justify-center text-white mr-3">
-                  <span className="font-bold">JD</span>
+            {testimonials.map((testimonial) => (
+              <div
+                key={testimonial.id}
+                className="bg-[#e44b37] bg-opacity-5 p-6 rounded-lg border border-[#e44b37] border-opacity-20"
+              >
+                <div className="flex text-[#e44b37] mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} size={20} fill="#e44b37" />
+                  ))}
                 </div>
-                <div>
-                  <h4 className="font-bold">Jane Doe</h4>
-                  <p className="text-gray-500 text-sm">Freelance Designer</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#e44b37] bg-opacity-5 p-6 rounded-lg border border-[#e44b37] border-opacity-20">
-              <div className="flex text-[#e44b37] mb-4">
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-              </div>
-              <p className="text-gray-600 mb-6">
-                "I needed profile cards for my team quickly, and Cardyfile
-                delivered. The platform is intuitive and the results look like
-                they were made by professional designers."
-              </p>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#e44b37] flex items-center justify-center text-white mr-3">
-                  <span className="font-bold">RJ</span>
-                </div>
-                <div>
-                  <h4 className="font-bold">Robert Johnson</h4>
-                  <p className="text-gray-500 text-sm">Startup Founder</p>
+                <p className="text-gray-600 mb-6">"{testimonial.text}"</p>
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-[#e44b37] flex items-center justify-center text-white mr-3">
+                    <span className="font-bold">{testimonial.initials}</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold">{testimonial.author}</h4>
+                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-[#e44b37] bg-opacity-5 p-6 rounded-lg border border-[#e44b37] border-opacity-20">
-              <div className="flex text-[#e44b37] mb-4">
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-                <Star size={20} fill="#e44b37" />
-              </div>
-              <p className="text-gray-600 mb-6">
-                "As someone with no design experience, I was able to create
-                stunning profile cards in minutes. The customer support is also
-                excellent!"
-              </p>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#e44b37] flex items-center justify-center text-white mr-3">
-                  <span className="font-bold">SL</span>
-                </div>
-                <div>
-                  <h4 className="font-bold">Sarah Lee</h4>
-                  <p className="text-gray-500 text-sm">Marketing Manager</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Pricing Section with Client Component */}
       <section id="pricing" className="py-16 bg-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#e44b37] opacity-10 rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#e44b37] opacity-10 rounded-full -ml-48 -mb-48"></div>
@@ -491,99 +402,14 @@ export default function Home() {
             profile cards today.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {plans.map((plan, index) => {
-              const isCurrentPlanLoading =
-                loading && selectedPlanId === plan.id;
-
-              return (
-                <div
-                  key={index}
-                  className={`bg-white p-8 rounded-lg shadow-md relative ${
-                    plan.borderColor
-                  } ${plan.highlight ? "shadow-lg" : ""}`}
-                >
-                  <div
-                    className={`w-full h-2 ${plan.barColor} mb-8 rounded`}
-                  ></div>
-                  {plan.highlight && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#e44b37] text-white px-4 py-1 rounded-full text-sm font-bold">
-                      {plan.badge}
-                    </div>
-                  )}
-                  <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-4">{plan.description}</p>
-                  <p className="text-4xl font-bold mb-6">{plan.price}</p>
-                  <ul className="mb-8 space-y-3">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center">
-                        <ShieldCheck
-                          className="text-green-500 mr-2"
-                          size={20}
-                        />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    className={`w-full py-3 rounded-md transition flex items-center justify-center ${
-                      plan.buttonClass
-                    } ${
-                      isCurrentPlanLoading
-                        ? "opacity-80 cursor-not-allowed"
-                        : ""
-                    }`}
-                    // onClick={() => handlePay(plan.id)}
-                    disabled={loading}
-                  >
-                    {isCurrentPlanLoading ? (
-                      <>
-                        <LoadingSpinner />
-                        Loading...
-                      </>
-                    ) : (
-                      plan.button
-                    )}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+          <PricingSection plans={plans} />
         </div>
       </section>
 
-      <section
-        id="contact"
-        className="py-16 bg-gradient-to-r from-[#e44b37] to-red-700 text-white"
-      >
-        <div className="container mx-auto px-6 md:px-12 text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            Ready to create stunning profile cards?
-          </h2>
-          <p className="mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who trust Cardyfile for their
-            digital identity needs.
-          </p>
-          <div className="max-w-md mx-auto">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="email"
-                className="flex-1 px-4 py-3 rounded-md text-gray-800"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button className="px-6 py-3 bg-white text-[#e44b37] font-medium rounded-md hover:bg-gray-100 transition">
-                Get Started
-              </button>
-            </div>
-            <p className="text-sm mt-4 text-white text-opacity-80">
-              No credit card required. Free 14-day trial.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* CTA Section with Client Component */}
+      <ClientCTASection />
 
+      {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 border-t-4 border-[#e44b37]">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-4 gap-8">
@@ -600,36 +426,36 @@ export default function Home() {
               <h4 className="font-bold mb-4">Product</h4>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="#features"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Features
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/templates"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Templates
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="#pricing"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Pricing
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/updates"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Updates
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -637,36 +463,36 @@ export default function Home() {
               <h4 className="font-bold mb-4">Company</h4>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/about"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     About
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/blog"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Blog
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/careers"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Careers
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/contact"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -674,28 +500,28 @@ export default function Home() {
               <h4 className="font-bold mb-4">Legal</h4>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/terms"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Terms
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/privacy"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Privacy
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/cookies"
                     className="text-gray-400 hover:text-[#e44b37] transition"
                   >
                     Cookies
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -706,5 +532,31 @@ export default function Home() {
         </div>
       </footer>
     </>
+  );
+}
+
+// Client component for payment handling
+function ClientCTASection() {
+  return (
+    <section
+      id="contact"
+      className="py-16 bg-gradient-to-r from-[#e44b37] to-red-700 text-white"
+    >
+      <div className="container mx-auto px-6 md:px-12 text-center">
+        <h2 className="text-3xl font-bold mb-6">
+          Ready to create stunning profile cards?
+        </h2>
+        <p className="mb-8 max-w-2xl mx-auto">
+          Join thousands of professionals who trust Cardyfile for their digital
+          identity needs.
+        </p>
+        <div className="max-w-md mx-auto">
+          <EmailSection />
+          <p className="text-sm mt-4 text-white text-opacity-80">
+            No credit card required. Free 14-day trial.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }

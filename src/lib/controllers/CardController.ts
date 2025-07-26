@@ -66,6 +66,7 @@ export async function postCard(req: Request, session) {
     return errorResponse("Terjadi kesalahan pada server", 500, error);
   }
 }
+
 export async function defaultingCard(card_link: string, temp_id: string) {
   try {
     const getTemplate = await getTemplateById(temp_id);
