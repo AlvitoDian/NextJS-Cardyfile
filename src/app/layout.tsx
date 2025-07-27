@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Cardyfile",
   description: "Your Profile, Your Card",
   icons: {
-    icon: "/assets/images/logo.png",
+    icon: "/assets/images/icon.svg",
   },
 };
 
