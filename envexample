@@ -1,0 +1,17 @@
+# Database Config
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_USER=postgres
+# DB_PASSWORD=admin
+# DB_NAME=cardyfile
+
+# NextJS Config
+NEXTAUTH_SECRET=THIS_SECRET
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL =http://localhost:3000/api
+
+# Midtrans Config
+MIDTRANS_SERVER_KEY=SB-XXXXX
+NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=SB-MXXXXX
+MIDTRANS_IS_PRODUCTION=false
+
