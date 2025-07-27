@@ -551,7 +551,7 @@ export default function ManageCard({ params }: PageProps) {
               <h2 className="text-lg font-semibold text-gray-800">
                 Preview Card
               </h2>
-              <div className="flex gap-2">
+              {/*  <div className="flex gap-2">
                 <button
                   className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
                   title="Lihat sebagai pengunjung"
@@ -564,7 +564,7 @@ export default function ManageCard({ params }: PageProps) {
                 >
                   <Smartphone size={18} />
                 </button>
-              </div>
+              </div> */}
             </div>
 
             {isLoading ? (

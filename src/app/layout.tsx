@@ -4,6 +4,7 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import SessionProvider from "@/components/SessionProvider";
 import { Toaster } from "react-hot-toast";
+import ReduxProvider from "@/components/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <Toaster />
-        <SessionProvider session={session}>{children}</SessionProvider>
+        <ReduxProvider>
+          <SessionProvider session={session}>{children}</SessionProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

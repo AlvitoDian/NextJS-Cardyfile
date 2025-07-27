@@ -19,7 +19,7 @@ export default function Home() {
       description: "Start for free with basic features",
       price: "Rp0",
       highlight: false,
-      features: ["1 profile card", "Basic templates", "No export available"],
+      features: ["1 profile card", "Basic templates"],
       button: "Get Started",
       buttonClass: "bg-gray-100 text-gray-800 hover:bg-gray-200",
       borderColor: "border-gray-200",
@@ -32,11 +32,7 @@ export default function Home() {
       price: "Rp50,000/mo",
       highlight: true,
       badge: "Most Popular",
-      features: [
-        "Up to 10 profile cards",
-        "Export to PDF & PNG",
-        "Custom subdomain",
-      ],
+      features: ["Up to 10 profile cards", "Custom link"],
       button: "Get Pro",
       buttonClass: "bg-[#e44b37] text-white hover:bg-opacity-90",
       borderColor: "border-2 border-[#e44b37]",
@@ -50,12 +46,8 @@ export default function Home() {
       highlight: false,
       features: [
         "Unlimited profile cards",
-        "All premium templates",
-        "All export formats",
-        "Custom domain support",
         "Visitor analytics",
         "No watermark",
-        "Personal branding",
         "Priority support",
       ],
       button: "Get Royal",
@@ -137,7 +129,6 @@ export default function Home() {
     "Choose from 10+ professionally designed templates",
     "Customize with your brand colors and logos",
     "Add social media links and contact information",
-    "Export in multiple formats for any platform",
   ];
 
   return (

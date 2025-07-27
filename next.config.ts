@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       "s.gravatar.com",
       "res.cloudinary.com",
       "lh3.googleusercontent.com",
+      "ik.imagekit.io",
     ],
     remotePatterns: [
       {
@@ -37,6 +38,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
       },
     ],
   },

@@ -100,9 +100,9 @@ export default function AccountSettings() {
 
       await axios.put(`/api/user/${formData.usrid}`, formData);
 
-      toast.success("Profil berhasil diperbarui!");
+      toast.success("Profile successfully updated");
 
-      fetchData();
+      window.location.reload();
     } catch (err) {
       await Swal.fire({
         icon: "error",
@@ -135,16 +135,17 @@ export default function AccountSettings() {
                 </h2>
                 <div className="flex items-center space-x-4">
                   <div className="relative">
-                    <Image
-                      src={
-                        formData.primg ||
-                        "https://www.w3schools.com/howto/img_avatar.png"
-                      }
-                      alt="Profile"
-                      width={64}
-                      height={64}
-                      className="rounded-full object-cover border-4 border-gray-100"
-                    />
+                    <div className="w-16 h-16 relative">
+                      <Image
+                        src={
+                          formData.primg ||
+                          "https://www.w3schools.com/howto/img_avatar.png"
+                        }
+                        alt="Profile"
+                        fill
+                        className="rounded-full object-cover border-4 border-gray-100"
+                      />
+                    </div>
 
                     <label className="absolute bottom-0 right-0 bg-[#e44b37] hover:bg-[#d63c2a] text-white p-1.5 rounded-full cursor-pointer transition-colors shadow-md">
                       <Camera className="w-3 h-3" />
