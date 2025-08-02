@@ -37,7 +37,7 @@ export const ClassicLayout = ({
           {/* Profile Image */}
           {profileImage ? (
             <Image
-              className="w-[90px] h-[90px] rounded-full z-10"
+              className="w-[90px] h-[90px] rounded-full z-10 object-cover"
               src={profileImage}
               alt="Profile Avatar"
               width={90}
