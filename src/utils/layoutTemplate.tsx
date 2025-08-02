@@ -216,11 +216,7 @@ export const CreativeLayout = ({
   descriptionTextColor = "#64748b",
 }) => {
   return (
-    <div className="relative">
-      {/* Decorative elements */}
-      <div className="absolute z-[20] top-10 right-4 w-20 h-20 rounded-full bg-gradient-to-br from-blue-400/30 to-purple-400/30"></div>
-      <div className="absolute top-10 bottom-20 left-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-400/20 to-orange-400/20 rotate-12"></div>
-      <div className="absolute top-32 left-6 w-8 h-8 rounded-full bg-yellow-400/40"></div>
+    <div>
       <div className="relative z-10 flex flex-col h-full p-6">
         {/* Profile section - Side layout */}
         <div className="flex items-center gap-4 mb-4 mt-10">
