@@ -29,7 +29,6 @@ export default function PricingSection({ plans }) {
         window.snap.pay(token, {
           onSuccess: async function (result) {
             try {
-              console.log(result, "result");
               toast.loading("Finalizing payment...");
 
               await axios.post("/api/plans", {
@@ -60,11 +59,9 @@ export default function PricingSection({ plans }) {
           },
           onPending: function (result) {
             toast("Payment pending", { icon: "⏳" });
-            console.log(result);
           },
           onError: function (result) {
             toast.error("Payment error");
-            console.log(result);
           },
           onClose: function () {
             toast("Payment window closed", { icon: "🛑" });

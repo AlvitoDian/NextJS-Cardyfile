@@ -84,9 +84,9 @@ export default function ManageCard({ params }: PageProps) {
     descriptionTextColor: "#e11d48",
   });
 
+  const [hasModified, setHasModified] = useState<boolean>(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const platforms: string[] = [
     "Facebook",
@@ -160,7 +160,7 @@ export default function ManageCard({ params }: PageProps) {
             })) || [],
         };
 
-        // setCardData(remappedData);
+        setCardData(remappedData);
 
         const updatedFields = updateCurrentFieldsBasedOnData(remappedData);
         setCurrentFields(updatedFields);
@@ -172,7 +172,7 @@ export default function ManageCard({ params }: PageProps) {
     };
 
     loadAllData();
-  }, [id]);
+  }, []);
   //? Fetch Data End
 
   const handleDragEnd = (
@@ -185,6 +185,7 @@ export default function ManageCard({ params }: PageProps) {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
+    setHasModified(true);
     setCardData((prev) => ({
       ...prev,
       [type]: items,
@@ -221,6 +222,7 @@ export default function ManageCard({ params }: PageProps) {
             ...prev,
             socialMedia: [{ platform: platforms[0], href: "" }],
           }));
+          setHasModified(true);
         }
 
         if (id === "menu" && cardData.menu.length === 0) {
@@ -228,6 +230,7 @@ export default function ManageCard({ params }: PageProps) {
             ...prev,
             menu: [{ label: "Text Here..", href: "" }],
           }));
+          setHasModified(true);
         }
       }
     } catch (error) {
@@ -237,6 +240,7 @@ export default function ManageCard({ params }: PageProps) {
 
   const handleCardDataChange = (field: keyof CardData, value: string): void => {
     setCardData((prevData) => ({ ...prevData, [field]: value }));
+    setHasModified(true);
   };
 
   const handleCardFileImgChange = (
@@ -252,11 +256,13 @@ export default function ManageCard({ params }: PageProps) {
         }));
       };
       reader.readAsDataURL(file);
+      setHasModified(true);
     } else {
       setCardData((prevData) => ({
         ...prevData,
         [field]: "",
       }));
+      setHasModified(true);
     }
   };
 
@@ -274,6 +280,7 @@ export default function ManageCard({ params }: PageProps) {
       };
       return { ...prevData, [type]: updatedItems };
     });
+    setHasModified(true);
   };
 
   const addItem = (type: "menu" | "socialMedia"): void => {
@@ -285,6 +292,7 @@ export default function ManageCard({ params }: PageProps) {
       ...prevData,
       [type]: [...prevData[type], newItem],
     }));
+    setHasModified(true);
   };
 
   const removeItem = (type: "menu" | "socialMedia", index: number): void => {
@@ -294,7 +302,6 @@ export default function ManageCard({ params }: PageProps) {
         [type]: prevData[type].filter((_, i) => i !== index),
       };
 
-      // Remove field from currentFields if no items left
       if (newData[type].length === 0) {
         setCurrentFields((prevFields) =>
           prevFields.filter((field) => field.id !== type)
@@ -303,6 +310,7 @@ export default function ManageCard({ params }: PageProps) {
 
       return newData;
     });
+    setHasModified(true);
   };
 
   const formFields = getFormFields(
@@ -314,24 +322,45 @@ export default function ManageCard({ params }: PageProps) {
     removeItem
   );
 
-  const handleModalSubmit = useCallback(async () => {
-    try {
-      setIsSubmitting(true);
+  // Submit Changed
+  const handleModalSubmit = useCallback(
+    async (isAutoSave = false) => {
+      try {
+        let toastId;
+        if (isAutoSave) {
+          toastId = toast.loading("Autosaving...");
+        }
 
-      await axios.put(`/api/cards/${id}`, cardData);
+        await axios.put(`/api/cards/${id}`, cardData);
 
-      toast.success("Kartu berhasil diperbarui!");
-      fetchCardById(id);
-    } catch (err: any) {
-      toast.error(
-        err.response?.data?.message ||
-          err.message ||
-          "Terjadi kesalahan tak terduga. Silakan coba lagi."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [cardData, id]);
+        if (isAutoSave && toastId) {
+          toast.success("Autosaved!", { id: toastId });
+        } else {
+          toast.success("Kartu berhasil diperbarui!");
+        }
+
+        fetchCardById(id);
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message ||
+            err.message ||
+            "Terjadi kesalahan tak terduga. Silakan coba lagi."
+        );
+      }
+    },
+    [cardData, id]
+  );
+
+  // Auto-save trigger
+  useEffect(() => {
+    if (!hasModified) return;
+
+    const timeout = setTimeout(() => {
+      handleModalSubmit(true);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [cardData, hasModified]);
 
   return (
     <div>
@@ -353,14 +382,14 @@ export default function ManageCard({ params }: PageProps) {
                   icon="ClipboardPlus"
                   variant="secondary"
                 />
-                <Button
+                {/* <Button
                   onClick={handleModalSubmit}
                   variant="primary"
                   icon="CheckCheck"
                   isLoading={isSubmitting}
                   label="Save"
                   className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
-                />
+                /> */}
               </div>
             </div>
 
