@@ -37,7 +37,7 @@ export const ClassicLayout = ({
           {/* Profile Image */}
           {profileImage ? (
             <Image
-              className="w-[90px] h-[90px] rounded-full z-10 object-cover"
+              className="w-[90px] h-[90px] rounded-full z-10"
               src={profileImage}
               alt="Profile Avatar"
               width={90}
@@ -306,10 +306,10 @@ export const SplitScreenLayout = ({
   descriptionTextColor = "#e2e8f0",
   backgroundColor = "#1e293b",
 }) => (
-  <div className="flex h-[640px]">
+  <div className="flex h-full">
     {/* Profile Side */}
     <div
-      className="max-w-1/3 flex flex-col justify-center items-center p-4 relative"
+      className="w-1/3 flex flex-col justify-center items-center p-4 relative"
       style={{ backgroundColor }}
     >
       <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10"></div>
@@ -359,7 +359,7 @@ export const SplitScreenLayout = ({
     </div>
 
     {/* Menu Side */}
-    <div className="max-w-2/3 bg-gray-50 h-full flex flex-col justify-center p-4">
+    <div className="w-2/3 bg-gray-50 h-full flex flex-col justify-center p-4">
       <div className="max-w-xs mx-auto w-full space-y-2">
         {menu.map((item, i) => (
           <MenuInCard
@@ -386,6 +386,8 @@ export const GlassmorphismLayout = ({
   profileImage,
   menu = [],
   socialMedia = [],
+  usernameTextColor = "#1e293b",
+  descriptionTextColor = "#475569",
   backgroundColor,
 }) => {
   function darkenColor(hex: string, percent: number) {
@@ -636,43 +638,3 @@ export const NeonCyberpunkLayout = ({
     </div>
   );
 };
-
-// Update layout templates array dengan 4 template baru
-export const updatedLayoutTemplates = [
-  {
-    id: "classic",
-    name: "Classic",
-    preview: "Traditional layout with banner and centered profile",
-    component: ClassicLayout,
-  },
-  {
-    id: "minimalist",
-    name: "Minimalist",
-    preview: "Clean and simple design with minimal elements",
-    component: MinimalistLayout,
-  },
-  {
-    id: "creative",
-    name: "Creative",
-    preview: "Artistic layout with decorative elements and unique positioning",
-    component: CreativeLayout,
-  },
-  {
-    id: "splitscreen",
-    name: "Split Screen",
-    preview: "Divided layout with profile info on left and menu on right",
-    component: SplitScreenLayout,
-  },
-  {
-    id: "glassmorphism",
-    name: "Glassmorphism",
-    preview: "Modern glass effect with blur and transparency",
-    component: GlassmorphismLayout,
-  },
-  {
-    id: "neoncyberpunk",
-    name: "Neon Cyberpunk",
-    preview: "Futuristic dark theme with neon colors and grid background",
-    component: NeonCyberpunkLayout,
-  },
-];

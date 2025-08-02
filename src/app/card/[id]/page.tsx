@@ -1,8 +1,5 @@
-import Image from "next/image";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import SocialMediaIcon from "@/components/SocialMediaIcon";
-import MenuInCard from "@/components/MenuInCard";
 import { fetchCardById } from "@/lib/api/card";
 import { CardPayload } from "@/types/card";
 import { postView } from "@/lib/api/view";
@@ -14,6 +11,9 @@ import {
   NeonCyberpunkLayout,
   SplitScreenLayout,
 } from "@/utils/layoutTemplate";
+import Image from "next/image";
+import SocialMediaIcon from "@/components/SocialMediaIcon";
+import MenuInCard from "@/components/MenuInCard";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -87,17 +87,275 @@ export default async function CardPreview({ params, searchParams }: PageProps) {
         className="max-w-[400px] w-full rounded-3xl shadow-2xl overflow-hidden relative min-h-[640px]"
         style={{ backgroundColor: cardData.backgroundColor || "#ffffff" }}
       >
-        <SelectedLayout
-          username={cardData.username}
-          description={cardData.description}
-          profileImage={cardData.profileImage}
-          bannerImage={cardData.bannerImage}
-          menu={cardData.menu}
-          socialMedia={cardData.socialMedia}
-          usernameTextColor={cardData.usernameTextColor}
-          descriptionTextColor={cardData.descriptionTextColor}
-          backgroundColor={cardData.backgroundColor}
-        />
+        {cardData.temp_id === "classic" ? (
+          <div className="flex justify-center">
+            {/* Banner Section */}
+            <div className="absolute top-0 left-0 w-full flex justify-center ">
+              {cardData.bannerImage ? (
+                <Image
+                  src={cardData.bannerImage}
+                  alt="Profile Banner"
+                  className="w-[900px] h-[150px] object-cover"
+                  width={900}
+                  height={150}
+                />
+              ) : (
+                <div className="w-full h-[150px] bg-gray-900"></div>
+              )}
+            </div>
+            {/* Banner Section End */}
+
+            <div className="flex flex-col items-center w-full">
+              {/* Image Profile Section */}
+              <div className="pt-[100px] flex justify-center items-center">
+                {/* Profile Image */}
+                {cardData.profileImage ? (
+                  <Image
+                    className="w-[90px] h-[90px] rounded-full z-10 object-cover"
+                    src={cardData.profileImage}
+                    alt="Profile Avatar"
+                    width={90}
+                    height={90}
+                  />
+                ) : (
+                  <div className="w-[90px] h-[90px] rounded-full bg-[#e44b37] flex items-center justify-center z-10">
+                    <svg
+                      className="w-[50px] h-[50px] text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {/* Image Profile Section End */}
+
+              {/* Username Section */}
+              <div className="flex flex-wrap justify-center max-w-full">
+                <span
+                  className="text-center mt-4  font-semibold px-2 text-xl break-words max-w-full"
+                  style={{
+                    color: cardData.usernameTextColor,
+                  }}
+                >
+                  {cardData.username}
+                </span>
+              </div>
+              {/* Username Section End */}
+
+              {/* Description Section */}
+              <div className="flex flex-wrap justify-center max-w-full">
+                <span
+                  className="text-center mt-4 text-sm px-2 font-normal break-words max-w-full"
+                  style={{
+                    color: cardData.descriptionTextColor,
+                  }}
+                >
+                  {cardData.description}
+                </span>
+              </div>
+              {/* Description Section End */}
+
+              {/* Social Media Section */}
+              <div className="mt-4 flex gap-[10px] flex-wrap justify-center">
+                {cardData.socialMedia.map((item, index) => (
+                  <SocialMediaIcon
+                    key={index}
+                    platform={item.platform}
+                    href={item.href}
+                  />
+                ))}
+              </div>
+              {/* Social Media Section End */}
+
+              {/* Menu Section */}
+              <div className="mt-8 flex flex-col gap-[10px] w-full px-6">
+                {cardData.menu.map((item, index) => (
+                  <MenuInCard
+                    key={index}
+                    label={item.label}
+                    href={item.href}
+                    bgColor={item.backgroundColor}
+                    textColor={item.textColor}
+                  />
+                ))}
+              </div>
+              {/* Menu Section End */}
+
+              {/* Footer Section */}
+              <p className="text-center mt-6 mb-8 text-[#67748e] text-sm px-6 font-normal">
+                Made with{" "}
+                <span className="text-[#E44B37] font-semibold">Cardyfile</span>
+              </p>
+              {/* Footer Section End */}
+            </div>
+          </div>
+        ) : cardData.temp_id === "minimalist" ? (
+          <MinimalistLayout
+            username={cardData.username}
+            description={cardData.description}
+            profileImage={cardData.profileImage}
+            bannerImage={cardData.bannerImage}
+            menu={cardData.menu}
+            socialMedia={cardData.socialMedia}
+            usernameTextColor={cardData.usernameTextColor}
+            descriptionTextColor={cardData.descriptionTextColor}
+            backgroundColor={cardData.backgroundColor}
+          />
+        ) : cardData.temp_id === "creative" ? (
+          <CreativeLayout
+            username={cardData.username}
+            description={cardData.description}
+            profileImage={cardData.profileImage}
+            bannerImage={cardData.bannerImage}
+            menu={cardData.menu}
+            socialMedia={cardData.socialMedia}
+            usernameTextColor={cardData.usernameTextColor}
+            descriptionTextColor={cardData.descriptionTextColor}
+            backgroundColor={cardData.backgroundColor}
+          />
+        ) : cardData.temp_id === "splitscreen" ? (
+          <SplitScreenLayout
+            username={cardData.username}
+            description={cardData.description}
+            profileImage={cardData.profileImage}
+            bannerImage={cardData.bannerImage}
+            menu={cardData.menu}
+            socialMedia={cardData.socialMedia}
+            usernameTextColor={cardData.usernameTextColor}
+            descriptionTextColor={cardData.descriptionTextColor}
+            backgroundColor={cardData.backgroundColor}
+          />
+        ) : cardData.temp_id === "glassmorphism" ? (
+          <GlassmorphismLayout
+            username={cardData.username}
+            description={cardData.description}
+            profileImage={cardData.profileImage}
+            bannerImage={cardData.bannerImage}
+            menu={cardData.menu}
+            socialMedia={cardData.socialMedia}
+            usernameTextColor={cardData.usernameTextColor}
+            descriptionTextColor={cardData.descriptionTextColor}
+            backgroundColor={cardData.backgroundColor}
+          />
+        ) : cardData.temp_id === "neoncyberpunk" ? (
+          <NeonCyberpunkLayout
+            username={cardData.username}
+            description={cardData.description}
+            profileImage={cardData.profileImage}
+            bannerImage={cardData.bannerImage}
+            menu={cardData.menu}
+            socialMedia={cardData.socialMedia}
+            usernameTextColor={cardData.usernameTextColor}
+            descriptionTextColor={cardData.descriptionTextColor}
+            backgroundColor={cardData.backgroundColor}
+          />
+        ) : (
+          <div className="flex justify-center">
+            {/* Banner Section */}
+            <div className="absolute top-0 left-0 w-full flex justify-center ">
+              {cardData.bannerImage ? (
+                <Image
+                  src={cardData.bannerImage}
+                  alt="Profile Banner"
+                  className="w-[900px] h-[150px] object-cover"
+                  width={900}
+                  height={150}
+                />
+              ) : (
+                <div className="w-full h-[150px] bg-gray-900"></div>
+              )}
+            </div>
+            {/* Banner Section End */}
+
+            <div className="flex flex-col items-center w-full">
+              {/* Image Profile Section */}
+              <div className="pt-[100px] flex justify-center items-center">
+                {/* Profile Image */}
+                {cardData.profileImage ? (
+                  <Image
+                    className="w-[90px] h-[90px] rounded-full z-10 object-cover"
+                    src={cardData.profileImage}
+                    alt="Profile Avatar"
+                    width={90}
+                    height={90}
+                  />
+                ) : (
+                  <div className="w-[90px] h-[90px] rounded-full bg-[#e44b37] flex items-center justify-center z-10">
+                    <svg
+                      className="w-[50px] h-[50px] text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              {/* Image Profile Section End */}
+
+              {/* Username Section */}
+              <div className="flex flex-wrap justify-center max-w-full">
+                <span
+                  className="text-center mt-4  font-semibold px-2 text-xl break-words max-w-full"
+                  style={{
+                    color: cardData.usernameTextColor,
+                  }}
+                >
+                  {cardData.username}
+                </span>
+              </div>
+              {/* Username Section End */}
+
+              {/* Description Section */}
+              <div className="flex flex-wrap justify-center max-w-full">
+                <span
+                  className="text-center mt-4 text-sm px-2 font-normal break-words max-w-full"
+                  style={{
+                    color: cardData.descriptionTextColor,
+                  }}
+                >
+                  {cardData.description}
+                </span>
+              </div>
+              {/* Description Section End */}
+
+              {/* Social Media Section */}
+              <div className="mt-4 flex gap-[10px] flex-wrap justify-center">
+                {cardData.socialMedia.map((item, index) => (
+                  <SocialMediaIcon
+                    key={index}
+                    platform={item.platform}
+                    href={item.href}
+                  />
+                ))}
+              </div>
+              {/* Social Media Section End */}
+
+              {/* Menu Section */}
+              <div className="mt-8 flex flex-col gap-[10px] w-full px-6">
+                {cardData.menu.map((item, index) => (
+                  <MenuInCard
+                    key={index}
+                    label={item.label}
+                    href={item.href}
+                    bgColor={item.backgroundColor}
+                    textColor={item.textColor}
+                  />
+                ))}
+              </div>
+              {/* Menu Section End */}
+
+              {/* Footer Section */}
+              <p className="text-center mt-6 mb-8 text-[#67748e] text-sm px-6 font-normal">
+                Made with{" "}
+                <span className="text-[#E44B37] font-semibold">Cardyfile</span>
+              </p>
+              {/* Footer Section End */}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
