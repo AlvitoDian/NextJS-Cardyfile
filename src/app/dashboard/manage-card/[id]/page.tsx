@@ -39,49 +39,59 @@ export default function ManageCard({ params }: PageProps) {
   ];
 
   const [cardData, setCardData] = useState<CardPayload>({
-    themename: "neobrutalism-designer",
+    temp_id: "splitscreen",
     menu: [
       {
-        href: "#works",
-        label: "Works",
-        textColor: "#000000",
-        backgroundColor: "#ffcd29",
+        href: "#gallery",
+        label: "Gallery",
+        textColor: "#ffffff",
+        backgroundColor: "#ff6b6b",
       },
       {
-        href: "#bio",
-        label: "Bio",
-        textColor: "#ffffff",
-        backgroundColor: "#111111",
+        href: "#process",
+        label: "Process",
+        textColor: "#0f0f23",
+        backgroundColor: "#4ecdc4",
       },
       {
-        href: "#contact",
-        label: "Let's Talk",
-        textColor: "#ffffff",
-        backgroundColor: "#e11d48",
+        href: "#collaborate",
+        label: "Collaborate",
+        textColor: "#0f0f23",
+        backgroundColor: "#a8e6cf",
+      },
+      {
+        href: "#shop",
+        label: "Shop",
+        textColor: "#0f0f23",
+        backgroundColor: "#ffd93d",
       },
     ],
-    username: "Luca Moreno",
+    username: "Maya Rodriguez",
     bannerImage: "",
     description:
-      "Multidisciplinary designer breaking norms through bold layouts, loud color choices, and unapologetic visuals.",
+      "Creative director & digital artist bringing bold visions to life. Specializing in brand identity, motion graphics, and experimental design.",
     socialMedia: [
       {
-        href: "https://www.behance.net/lucamdesign",
+        href: "https://behance.net/mayarodriguez",
         platform: "Behance",
       },
       {
-        href: "https://www.instagram.com/lucabrutal",
+        href: "https://instagram.com/mayacreates",
         platform: "Instagram",
       },
       {
-        href: "https://www.linkedin.com/in/lucamoreno",
-        platform: "LinkedIn",
+        href: "https://twitter.com/mayacreates",
+        platform: "Twitter",
+      },
+      {
+        href: "https://tiktok.com/@mayacreates",
+        platform: "TikTok",
       },
     ],
     profileImage: "",
-    backgroundColor: "#ffffff",
-    usernameTextColor: "#111111",
-    descriptionTextColor: "#e11d48",
+    backgroundColor: "#0f0f23",
+    usernameTextColor: "#ff6b6b",
+    descriptionTextColor: "#a8e6cf",
   });
 
   const [hasModified, setHasModified] = useState<boolean>(false);
@@ -139,6 +149,7 @@ export default function ManageCard({ params }: PageProps) {
         const [cardsData] = await Promise.all([fetchCardById(id)]);
 
         const remappedData: CardPayload = {
+          temp_id: cardsData.temp_id || "classic",
           backgroundColor: cardsData.backgroundColor || "#ffffff",
           usernameTextColor: cardsData.usernameTextColor || "#000000",
           descriptionTextColor: cardsData.descriptionTextColor || "#000000",
@@ -382,14 +393,6 @@ export default function ManageCard({ params }: PageProps) {
                   icon="ClipboardPlus"
                   variant="secondary"
                 />
-                {/* <Button
-                  onClick={handleModalSubmit}
-                  variant="primary"
-                  icon="CheckCheck"
-                  isLoading={isSubmitting}
-                  label="Save"
-                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg"
-                /> */}
               </div>
             </div>
 
@@ -414,7 +417,10 @@ export default function ManageCard({ params }: PageProps) {
                     if (field.type === "array") {
                       const arrayType = field.id as "menu" | "socialMedia";
                       return (
-                        <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                        <div
+                          key={index}
+                          className="p-4 rounded-lg bg-gray-100/40 shadow-[rgba(0,_0,_0,_0.02)_0px_1px_3px_0px,_rgba(27,_31,_35,_0.1)_0px_0px_0px_1px]"
+                        >
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="text-gray-800 font-semibold flex items-center">
                               {field.icon && (
@@ -552,7 +558,10 @@ export default function ManageCard({ params }: PageProps) {
                     }
 
                     return (
-                      <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                      <div
+                        key={index}
+                        className="bg-gray-100/40 p-4 rounded-lg shadow-[rgba(0,_0,_0,_0.02)_0px_1px_3px_0px,_rgba(27,_31,_35,_0.1)_0px_0px_0px_1px]"
+                      >
                         <CardFormInput
                           label={field.label}
                           id={field.id}
@@ -611,6 +620,7 @@ export default function ManageCard({ params }: PageProps) {
                     socialMedia={cardData.socialMedia}
                     usernameTextColor={cardData.usernameTextColor}
                     descriptionTextColor={cardData.descriptionTextColor}
+                    temp_id={cardData.temp_id}
                   />
                 </div>
 

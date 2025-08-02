@@ -8,10 +8,6 @@ export default function ModalAddField({ onClose, onAdd }) {
 
   useEffect(() => {
     setIsVisible(true);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
   }, []);
 
   useEffect(() => {
@@ -85,8 +81,6 @@ export default function ModalAddField({ onClose, onAdd }) {
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999] transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
-      aria-modal="true"
-      role="dialog"
     >
       <div
         ref={modalRef}

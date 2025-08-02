@@ -81,77 +81,46 @@ export default function ManageCard() {
         imageClassName: "h-40",
         options: [
           {
-            id: "modern",
-            label: "Minimalist Elegance",
-            imageSrc: "/assets/images/basic.png",
-            description: "A minimalist template with elegant simplicity",
+            id: "classic",
+            label: "Classic",
+            imageSrc: "/assets/images/classic.png",
+            description:
+              "A traditional layout with a clean and familiar structure.",
           },
           {
-            id: "classic",
-            label: "Modern Professional",
-            imageSrc: "/assets/images/vintage.png",
-            description: "A modern and professional looking template",
+            id: "minimalist",
+            label: "Minimalist",
+            imageSrc: "/assets/images/minimalist.png",
+            description:
+              "Simple and clean design that emphasizes content without distractions.",
           },
           {
             id: "creative",
-            label: "Creative Vibrant",
+            label: "Creative",
             imageSrc: "/assets/images/creative.png",
-            description: "A vibrant template for creative minds",
-          },
-          {
-            id: "techinnovator",
-            label: "Tech Innovator",
-            imageSrc: "/assets/images/techinnovator.png",
-            description: "A template designed for tech enthusiasts",
-          },
-          {
-            id: "artisticvision",
-            label: "Artistic Vision",
-            imageSrc: "/assets/images/artisticvision.png",
-            description: "A visually rich template for artists",
-          },
-          {
-            id: "academicsage",
-            label: "Academic Sage",
-            imageSrc: "/assets/images/academicsage.png",
-            description: "An intellectual layout for academics",
-          },
-          {
-            id: "creativelens",
-            label: "Creative Lens",
-            imageSrc: "/assets/images/creativelens.png",
-            description: "A fresh creative style with perspective",
-          },
-          {
-            id: "educationalhub",
-            label: "Educational Hub",
-            imageSrc: "/assets/images/educationalhub.png",
-            description: "A perfect template for educators and trainers",
-          },
-          {
-            id: "strategicgrowth",
-            label: "Strategic Growth",
-            imageSrc: "/assets/images/strategicgrowth.png",
-            description: "Ideal for business and growth strategies",
-          },
-          {
-            id: "digitalcreator",
-            label: "Digital Creator",
-            imageSrc: "/assets/images/digitalcreator.png",
-            description: "A modern look for digital content creators",
-          },
-          {
-            id: "corporateprestige",
-            label: "Corporate Prestige",
-            imageSrc: "/assets/images/corporateprestige.png",
-            description: "Professional and prestigious template for corporates",
-          },
-          {
-            id: "neodesign",
-            label: "Neo Design",
-            imageSrc: "/assets/images/neodesign.png",
             description:
-              "Sleek and professional template tailored for modern businesses and corporate portfolios. Clean layout, refined typography, and a strong visual hierarchy.",
+              "A unique and expressive style for a standout appearance.",
+          },
+          {
+            id: "splitscreen",
+            label: "Split Screen",
+            imageSrc: "/assets/images/splitscreen.png",
+            description:
+              "A balanced two-column layout to present content side by side.",
+          },
+          {
+            id: "glassmorphism",
+            label: "Glassmorphism",
+            imageSrc: "/assets/images/glassmorphism.png",
+            description:
+              "Modern look with translucent glass-like effects and soft visuals.",
+          },
+          {
+            id: "neoncyberpunk",
+            label: "Neon Cyberpunk",
+            imageSrc: "/assets/images/neoncyberpunk.png",
+            description:
+              "A futuristic theme with neon colors and a digital, sci-fi vibe.",
           },
         ],
         onChange: (e) => handleChange(e.target.name, e.target.value),

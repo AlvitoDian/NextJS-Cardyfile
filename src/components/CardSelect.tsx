@@ -16,6 +16,7 @@ import {
   Copy,
   Download,
   Share2,
+  IdCardIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -105,9 +106,9 @@ export default function FormCard({
   const getStatusText = (status: string) => {
     switch (status) {
       case "active":
-        return "Aktif";
+        return "Active";
       case "inactive":
-        return "Tidak Aktif";
+        return "Inactive";
       case "draft":
         return "Draft";
       default:
@@ -202,7 +203,7 @@ export default function FormCard({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <ImageIcon className="w-5 h-5 text-gray-400" />
+                  <IdCardIcon className="w-5 h-5 text-gray-400" />
                 </div>
               )}
             </div>
@@ -258,13 +259,13 @@ export default function FormCard({
             {createdAt && (
               <div className="flex items-center gap-1">
                 <Calendar className="w-2.5 h-2.5" />
-                <span>Dibuat: {createdAt}</span>
+                <span>Created Date: {createdAt}</span>
               </div>
             )}
             {lastModified && (
               <div className="flex items-center gap-1">
                 <Clock className="w-2.5 h-2.5" />
-                <span>Diubah: {lastModified}</span>
+                <span>Change Date: {lastModified}</span>
               </div>
             )}
           </div>

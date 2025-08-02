@@ -62,7 +62,7 @@ export default function Modal({
   currentData,
 }: ModalProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef(null);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isChecking, setIsChecking] = useState<Record<string, boolean>>({});
@@ -73,22 +73,6 @@ export default function Modal({
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  /*   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        handleClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []); */
 
   const checkFieldAvailability = async (fieldName: string, value: string) => {
     if (!value || !inputs.find((i) => i.name === fieldName)?.checkUrl) return;

@@ -299,6 +299,7 @@ export default function CardFormInput({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          maxLength={255}
           className="outline-none border border-[#DDDDDD] p-2 w-full rounded-[8px] focus:outline-none focus:shadow-[0_0_8px_rgba(228,75,55,0.3)] focus:ring-0 transition-all duration-500"
         />
         {renderSubInput()}

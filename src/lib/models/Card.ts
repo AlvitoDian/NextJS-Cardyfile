@@ -55,7 +55,7 @@ export async function getCardDetailById(
 
     const contentResult = await client.query(
       `SELECT usrnm AS username, desc1 AS description, primg AS "profileImage",
-              bnimg AS "bannerImage", bgclr AS "backgroundColor", txclr1 AS "usernameTextColor", txclr2 AS "descriptionTextColor"
+              bnimg AS "bannerImage", bgclr AS "backgroundColor", txclr1 AS "usernameTextColor", txclr2 AS "descriptionTextColor", temp_id
        FROM m_card_content
        WHERE card_link = $1`,
       [sanitizedLink]
@@ -151,14 +151,15 @@ export async function upsertCardContentById(card_link, data: CardPayload) {
     const prepare_bgclr = sanitizeInput(data.backgroundColor, "string");
     const prepare_txclr1 = sanitizeInput(data.usernameTextColor, "string");
     const prepare_txclr2 = sanitizeInput(data.descriptionTextColor, "string");
+    const prepare_temp_id = sanitizeInput(data.temp_id, "string");
 
     await client.query("BEGIN");
 
     const result = await client.query(
       `INSERT INTO m_card_content 
-        (card_link, usrnm, desc1, primg, bnimg, bgclr, crtdt, chgdt, txclr1, txclr2)
+        (card_link, usrnm, desc1, primg, bnimg, bgclr, crtdt, chgdt, txclr1, txclr2, temp_id)
        VALUES 
-        ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7, $8)
+        ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, $7, $8, $9)
        ON CONFLICT (card_link) DO UPDATE
        SET 
          usrnm = EXCLUDED.usrnm,
@@ -168,7 +169,8 @@ export async function upsertCardContentById(card_link, data: CardPayload) {
          bgclr = EXCLUDED.bgclr,
          chgdt = CURRENT_TIMESTAMP,
          txclr1 = EXCLUDED.txclr1,
-         txclr2 = EXCLUDED.txclr2
+         txclr2 = EXCLUDED.txclr2,
+         temp_id = EXCLUDED.temp_id
        RETURNING *`,
       [
         prepare_card_link,
@@ -179,6 +181,7 @@ export async function upsertCardContentById(card_link, data: CardPayload) {
         prepare_bgclr,
         prepare_txclr1,
         prepare_txclr2,
+        prepare_temp_id,
       ]
     );
 

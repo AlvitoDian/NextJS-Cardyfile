@@ -13,86 +13,44 @@ export default function Templates() {
   const templates = [
     {
       id: 1,
-      name: "Minimalist Elegance",
-      image: "/assets/images/basic.png",
+      name: "Classic",
+      image: "/assets/images/classic.png",
+      usageCount: 850,
+      rating: 4.6,
+    },
+    {
+      id: 2,
+      name: "Minimalist",
+      image: "/assets/images/minimalist.png",
       usageCount: 1245,
       rating: 4.8,
     },
     {
-      id: 2,
-      name: "Modern Professional",
-      image: "/assets/images/vintage.png", // This one already exists in your original list.
-      usageCount: 982,
-      rating: 4.7,
-    },
-    {
       id: 3,
-      name: "Creative Vibrant",
+      name: "Creative",
       image: "/assets/images/creative.png",
       usageCount: 876,
       rating: 4.5,
     },
     {
       id: 4,
-      name: "Tech Innovator",
-      image: "/assets/images/techinnovator.png",
-      usageCount: 680,
-      rating: 4.7,
-    },
-    {
-      id: 5,
-      name: "Artistic Vision",
-      image: "/assets/images/artisticvision.png",
-      usageCount: 520,
-      rating: 4.5,
-    },
-    {
-      id: 7,
-      name: "Academic Sage",
-      image: "/assets/images/academicsage.png",
-      usageCount: 410,
+      name: "Split Screen",
+      image: "/assets/images/splitscreen.png",
+      usageCount: 710,
       rating: 4.4,
     },
     {
-      id: 8,
-      name: "Creative Lens",
-      image: "/assets/images/creativelens.png",
-      usageCount: 600,
-      rating: 4.8,
-    },
-    {
-      id: 9,
-      name: "Educational Hub",
-      image: "/assets/images/educationalhub.png",
-      usageCount: 550,
-      rating: 4.3,
-    },
-    {
-      id: 10,
-      name: "Strategic Growth",
-      image: "/assets/images/strategicgrowth.png",
-      usageCount: 700,
+      id: 5,
+      name: "Glassmorphism",
+      image: "/assets/images/glassmorphism.png",
+      usageCount: 790,
       rating: 4.7,
     },
     {
-      id: 11,
-      name: "Digital Creator",
-      image: "/assets/images/digitalcreator.png",
-      usageCount: 620,
-      rating: 4.6,
-    },
-    {
-      id: 12,
-      name: "Corporate Prestige",
-      image: "/assets/images/corporateprestige.png",
-      usageCount: 890,
-      rating: 4.9,
-    },
-    {
-      id: 13,
-      name: "Neo Design",
-      image: "/assets/images/neodesign.png",
-      usageCount: 890,
+      id: 6,
+      name: "Neon Cyberpunk",
+      image: "/assets/images/neoncyberpunk.png",
+      usageCount: 900,
       rating: 4.9,
     },
   ];
@@ -118,7 +76,7 @@ export default function Templates() {
             </h1>
             <p className="text-center text-gray-600 max-w-2xl mx-auto">
               Browse our collection of professional templates. Each template
-              shows how many times it's been used by our community.
+              shows how many times its been used by our community.
             </p>
           </div>
 

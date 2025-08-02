@@ -11,6 +11,7 @@ export type MenuItem = {
 };
 
 export type CardData = {
+  temp_id: string;
   backgroundColor: string;
   usernameTextColor: string;
   descriptionTextColor: string;

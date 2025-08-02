@@ -11,12 +11,8 @@ import {
 } from "recharts";
 import {
   Eye,
-  Users,
   CreditCard,
   Share2,
-  ArrowUp,
-  ArrowDown,
-  TrendingUp,
   Calendar,
   Copy,
   ExternalLink,
